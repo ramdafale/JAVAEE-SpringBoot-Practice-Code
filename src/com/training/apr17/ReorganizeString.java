@@ -25,9 +25,9 @@ public class ReorganizeString {
 		System.out.println();
 		d = str.length() - 2;
 		Collections.rotate(characters, -d);
-		
+
 		System.out.print(characters);
-		
+
 	}
 
 }
