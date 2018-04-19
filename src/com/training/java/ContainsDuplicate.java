@@ -16,9 +16,9 @@ public class ContainsDuplicate {
 	        s = "abcdefgh";
 	        System.out.println(s + " " + check(s)); //Calling ther method 
 	        s = "abcdefdh";
-	        System.out.println(s + " " + check(s)); //Calling ther method 
+	        System.out.println(s + " " + check(s)); //Calling ther metho
 	    }
-
+   
 	 
 	 
 	 /************************************************************************************
