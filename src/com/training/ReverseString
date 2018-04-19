@@ -15,6 +15,10 @@ StringReverse srt = new StringReverse(); // Palindrome is tested
 
 // assert statements
 assertEquals("true", srt.isReverse("Hello World"),true);
+
+
+assertEquals("false", srt.isReverse("Hello World"),true);
+
 }
 
 }
