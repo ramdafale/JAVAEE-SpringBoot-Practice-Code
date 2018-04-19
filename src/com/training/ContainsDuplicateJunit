@@ -1,0 +1,84 @@
+package mavenjunit;
+
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
+public class DuplicateTest {
+@Test
+public void testduplicate()
+
+{
+	
+	
+Duplicate dpt = new Duplicate(); // Palindrome is tested
+
+// assert statements
+assertEquals("true", dpt.check("Wardha"),true);
+assertEquals("false", dpt.check("Nagpur"),false);
+}
+}
+//JunitTestCase
+
+package srcpack;
+
+/*
+ * Program Description :   Reverse the input string 
+ * Programmer Name :       Ram dafale
+ * Release Date :       18-april-2018
+ */
+
+
+
+import java.util.Scanner;
+import java.util.logging.Logger;
+
+
+
+public class COntainsDuplicate {
+
+	public static void main(String[] args)
+
+	{
+		// Applying logger
+		final Logger printf = Logger.getLogger(COntainsDuplicate.class.getName());
+		printf.info("Enter a String");
+		final Scanner scan = new Scanner(System.in);
+		final String str = scan.next();
+		boolean value = isStringDuplicate(str);
+		// checking for string duplication
+		if (value == true) {
+			printf.info("String matched");
+		} else {
+			printf.info("No match found");
+		}
+		scan.close();
+	}
+	
+	
+	// method to check string duplication
+
+	public static boolean isStringDuplicate(String string) {
+		final char[] array = string.toCharArray();
+		int count = 0;
+		boolean bool = false;
+		final int length = string.length();
+		for (int i = 0; i < length - 1; i++) {
+			for (int j = i + 1; j < length; j++) {
+
+				if (array[i] == array[j]) {
+					count++;
+				}
+			}
+
+			if (count > 0) {
+				bool = true;
+			} else {
+				bool = false;
+			}
+		}
+		return bool;
+	}
+
+}
+
