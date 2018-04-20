@@ -48,6 +48,20 @@ class Details {
 
 }
 
+
+class Sortbyname implements Comparator<Pbook>
+{
+    // setting record in  Ascending order 
+    public int compare(Details a, Details b)
+    {
+        return a.firstname.compareTo(b.firstname);
+    }
+}
+
+
+
+
+
 public class Person {
 	// public Person(String fname, String lname, int number) {
 	// super(fname, lname, number);
@@ -61,8 +75,8 @@ public class Person {
 			System.out.println("Enter the choice to do");
 
 			System.out.println("1:Add NEw data of Person \n " + "2.Remove data from collection \n "
-					+ "3.Search person by name  \n " + "4.Display All records  \\n " + "5.Search person by number   "
-					+ "6. Search person by number  ");
+					+ "3.Search person by name  \n " + "4.Display All records  \\n " +   
+					"5.Search person by name ");
 
 			Scanner input1 = new Scanner(System.in);
 			choice = input1.nextInt();
@@ -128,7 +142,32 @@ public class Person {
 				}
 
 			}
+				
+				case 5:
+			System.out.println("Sorted list is =>> ");
+		if(list.size()>0)
+		{
+		Collections.sort(list, new Sortbyname());
+ 
+     
+        		for (int i1=0; i1<list.size(); i1++)
+            		System.out.println(list.get(i1));
+ 
+ 
+			}	
+		else
+		{
+  			 System.out.println("Empty List");
 
+		}
+		break;
+           	 default :
+            	System.out.println("Invalid Input");
+
+ 
+
+		}
+				
 			}
 		}
 	}
