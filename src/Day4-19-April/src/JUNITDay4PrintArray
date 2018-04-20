@@ -1,0 +1,38 @@
+package mavenjunit;
+
+import static org.junit.Assert.assertEquals;
+
+import java.util.Arrays;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import srcpack.printArrayOfIntString;
+
+
+public class PrintArray {
+	
+	
+	 @Before
+	    public static String[] initObjects() {
+	       String stringObject[] = {"Naruto","dsd"};
+	       return stringObject;
+	    }
+	
+	
+	@Test
+	public void test() {
+
+		;
+		
+		assertEquals(true,printArrayOfIntString.printarray(PrintArray.initObjects()));
+		
+		
+		//assertEquals(false, printArrays.printarray());
+		
+		
+		
+	}
+
+}
