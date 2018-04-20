@@ -3,12 +3,12 @@ package mavenjunit;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
 
 import org.junit.Test;
 
 import srcpack.CustomException;
 //import srcpack.InputFormatException;
+// import srcpack.InputFormatException;
 
 public class JunitForException {
 	
@@ -16,11 +16,17 @@ public class JunitForException {
 	CustomException v =new CustomException();
 	
 	
-		@Test
-	public  void exceptioncheck() throws InputFormatException {
+	@Test
+	public  void exceptioncheck() //throws InputFormatException 
+	{
 		
-		v.power(0, 0);
-	}
+		
+		
+			
+			assertEquals("true",v.power(2,3),8);
+			
+		
+	
 
 //	@Test
 //	public void testEcxeption() throws IOException {
@@ -29,3 +35,4 @@ public class JunitForException {
 	//	assertEquals(false, test.power(-1, -2));
 
 	}
+}
