@@ -1,0 +1,31 @@
+package mavenjunit;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+
+import org.junit.Test;
+
+import srcpack.CustomException;
+//import srcpack.InputFormatException;
+
+public class JunitForException {
+	
+	
+	CustomException v =new CustomException();
+	
+	
+		@Test
+	public  void exceptioncheck() throws InputFormatException {
+		
+		v.power(0, 0);
+	}
+
+//	@Test
+//	public void testEcxeption() throws IOException {
+
+	//	CustomException test = new CustomException();
+	//	assertEquals(false, test.power(-1, -2));
+
+	}
