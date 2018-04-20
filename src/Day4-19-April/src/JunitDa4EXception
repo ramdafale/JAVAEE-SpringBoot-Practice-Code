@@ -13,7 +13,7 @@ import srcpack.CustomException;
 public class JunitForException  {
 	
 	
-	CustomException v =new CustomException();
+	CustomException persist =new CustomException();
 	
 	
 	@Test
@@ -23,9 +23,9 @@ public class JunitForException  {
 		
 		
 			
-			assertEquals("true",8,v.power(2,3));
+			assertEquals("true",8,persist.power(2,3));
 			
-			assertEquals("true",v.power(0,0));
+			assertEquals("true",persist.power(0,0));
 			
 	
 
