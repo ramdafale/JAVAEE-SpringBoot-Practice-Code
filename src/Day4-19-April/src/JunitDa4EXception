@@ -23,7 +23,7 @@ public class JunitForException {
 		
 		
 			
-			assertEquals("true",v.power(2,3),8);
+			assertEquals("true",8,v.power(2,3));
 			
 		
 	
