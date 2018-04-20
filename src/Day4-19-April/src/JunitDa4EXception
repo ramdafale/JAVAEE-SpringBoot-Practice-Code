@@ -10,14 +10,14 @@ import srcpack.CustomException;
 //import srcpack.InputFormatException;
 // import srcpack.InputFormatException;
 
-public class JunitForException {
+public class JunitForException  {
 	
 	
 	CustomException v =new CustomException();
 	
 	
 	@Test
-	public  void exceptioncheck() //throws InputFormatException 
+	public  void exceptioncheck()  
 	{
 		
 		
@@ -25,7 +25,8 @@ public class JunitForException {
 			
 			assertEquals("true",8,v.power(2,3));
 			
-		
+			assertEquals("true",v.power(0,0));
+			
 	
 
 //	@Test
