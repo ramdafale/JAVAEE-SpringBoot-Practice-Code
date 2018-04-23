@@ -20,7 +20,13 @@ import java.util.Map;
 public class Apps extends Bank {
 
 	public static void main(String[] args) {
-		System.out.println("Welcome To" + name);
+		
+		/*
+		* using log4j
+		*/
+			final  Logger LOGGER = Logger.getLogger(Apps.class.getName());
+		
+		LOGGER.info("Welcome To" + name);
 		// Creating New account for customer
 		Customer cust1 = new Customer("ram", "dafale", "at wardha", 976651934, "ramdafale@gmail.com");
 		// We can use ArrayList too
@@ -57,8 +63,8 @@ public class Apps extends Bank {
 		for (Map.Entry<Integer, Account> entry : hm.entrySet()) {
 			int key = entry.getKey();
 			Account b = entry.getValue();
-			System.out.println(key + " Mini Statement of :");
-			System.out.println("AccountNo:" + b.getAccountNumber() + "Account Balance: " + b.getBalance()
+			LOGGER.info(key + " Mini Statement of :");
+			LOGGER.info("AccountNo:" + b.getAccountNumber() + "Account Balance: " + b.getBalance()
 					+ "Deposit Amt " + depAmnt + "Withdraw Amt:" + withdAmnt);
 
 		}
