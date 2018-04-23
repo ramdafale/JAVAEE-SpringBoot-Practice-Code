@@ -23,8 +23,31 @@ public class Apps extends Bank {
 		((savingAccount) Arr[0]).Withdraw(1000);
 		((savingAccount) Arr[0]).Disp();
 	
+		Customer cust2=new Customer("shyam","dafale","at Delhi", 97665454, "shyamdafale@gmail.com");
+		
+		Arr[1] = new savingAccount(1000,cust2);
+	
+
+		((savingAccount) Arr[1]).Disp();
+		((savingAccount) Arr[1]).Deposit(1000);
+		((savingAccount) Arr[1]).Disp();
+		((savingAccount) Arr[1]).Withdraw(1000);
+		((savingAccount) Arr[1]).Disp();
+		
+		
+		
+		
 		// using collection 
-		List<Account> allObj = new ArrayList<Account>();
+		List<Account> allCustomer = new ArrayList<Account>();
+		allCustomer.add(Arr[0]);
+		allCustomer.add(Arr[1]);
+		
+		
+		
+		
+		
+		
+		
 	
 	//	Statement statementObj1 = new Statement("1st Statement");
 	//	Statement statementObj2 = new Statement("2nd Statement");
