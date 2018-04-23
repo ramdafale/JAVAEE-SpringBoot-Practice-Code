@@ -4,15 +4,18 @@
 package bankapplication;
 
 /**
- * @author trainee
- *
+ * @author trainee Desc: class Customer has all required fields like firstname
+ *         ,lastname etc. this class is sending all field values to the Account
+ *         class
  */
+
 class Customer {
-	String fname = null;
-	String lname = null;
-	String address = null;
-	long number;
-	String email;
+
+	private String fname = null;
+	private String lname = null;
+	private String address = null;
+	private long number;
+	private String email;
 
 	/**
 	 * @param fname
