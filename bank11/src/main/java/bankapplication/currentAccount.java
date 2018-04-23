@@ -39,7 +39,7 @@ class currentAccount extends Account {
 	public void addInterest() {
 
 		balance = interestRate * balance + balance;
-		System.out.println("Salary After adding interest rate is :" + balance);
+		LOGGER.info("Salary After adding interest rate is :" + balance);
 
 	}
 
