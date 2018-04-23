@@ -5,44 +5,54 @@ package bankapplication;
 
 /**
  * @author trainee
+ * @class Account  ->     this class is abstract class which is then inherited by SavingAccount and currentAccount
  *
  */
 
-class savingAccount extends Account {
-Customer customer;
+abstract class Account {
+final private	Customer customer;
+static int id = 0;
+protected	double balance = 0;  // because this field is associated with Saving and FlexibleSaving
+public final	int accountNumber;
+
 	/**
 	 * @param balance
-	 * @param accountNumber
 	 */
-final double interestRate= 0.07; 
-	public savingAccount(double balance,Customer customer) {
-		super(balance,customer);
+	public Account(final double balance, final Customer customer) {
+		// super(fname, lname, address, number, email);
+		this.balance = balance;
+		// this.accountNumber = account;
+		accountNumber = ++id;
 		this.customer=customer;
-		// TODO Auto-generated constructor stub
 	}
 
-	public void Deposit(int amount) {
-		balance = balance + amount;
+	/**
+	 * @return the balance
+	 */
+	public double getBalance() {
+		return balance;
 	}
 
-	public void Withdraw(int amount) {
-		if (balance - amount > 0) {
-			balance = balance - amount;
-		} else {
-			System.out.println("Not enough balance to withdraw " + amount);
-		}
+	/**
+	 * @param balance
+	 *            the balance to set
+	 */
+	public void setBalance(final double balance) {
+		this.balance = balance;
 	}
+
+	/**
+	 * @return the accountNumber
+	 */
+	public int getAccountNumber() {
+		return accountNumber;
+	}
+
 	
-	public void addInterest()
-	{
-		
-		balance = interestRate * balance+balance ;
-		System.out.println("Salary After adding interest rate is :"+balance);
-		
-	}
 
-	public void Disp() {
-		System.out.println(" \n Account no:" + accountNumber + "\n Balance:" + balance+" \n Name:"+customer.getFname()+" \n Surname:"+customer.getLname());
+	@Override
+	public String toString() {
+		return "Account [balance=" + balance + ", accountNumber=" + accountNumber + "]";
 	}
 
 }
