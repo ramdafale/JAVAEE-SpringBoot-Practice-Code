@@ -12,7 +12,7 @@ class Bank {
 
 	public void bankName() {
 
-		System.out.println(name);
+		LOGGER.info(name);
 
 	}
 
