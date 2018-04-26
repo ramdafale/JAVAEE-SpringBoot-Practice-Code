@@ -4,17 +4,16 @@
  * DateOF Completion : 4/42/2018
  */
 package junitpackage;
+
 import model.Customer;
 import model.SavingAccountM;
-import repository.SavingAccountImpl;
+import model.Statements;
 
 
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-
-
 
 /*
  * class Name: BankAppJunit
@@ -27,7 +26,6 @@ import org.junit.Test;
 * 6. checking if addInterest method running or not
 */
 public class BankAppJunit {
-
 
   private final String str = null;
 
@@ -53,11 +51,11 @@ public class BankAppJunit {
     assertNotEquals("null not allowed ", str, cust.getNumber());
   }
 
-  SavingAccountImpl li = new SavingAccountImpl();
-  SavingAccountM savingacc = new SavingAccountM(1000, 5, cust);
+  Statements st = new Statements();
+  service.SavingAccountImpl li = new service.SavingAccountImpl();
+  SavingAccountM savingacc = new SavingAccountM(1000, 5, cust, st);
   private final double amount = 1000;
-  
-  
+
   @Test
   public void testDeposit() {
     // double balance =2000;
@@ -65,20 +63,12 @@ public class BankAppJunit {
     SavingAccountM a = li.Deposit(amount);
     assertTrue(savingacc.getBalance() == 1000);
   }
-  
-  
-  
-  
-  
+
   @Test
   public void testWithdraw() {
 
     final SavingAccountM a = li.Withdraw(amount);
     assertTrue(savingacc.getBalance() == 1000);
   }
-
-  
-  
-  
 
 }

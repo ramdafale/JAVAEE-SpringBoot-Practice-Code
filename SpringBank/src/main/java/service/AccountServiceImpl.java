@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 import bankapplication.Apps;
 import model.SavingAccountM;
-import repository.IAccountDAO;
+
 
 /**
  * @author trainee
@@ -19,7 +19,7 @@ public class AccountServiceImpl implements IAccountService {
 
   final Logger logMe = Logger.getLogger(Apps.class.getName());
 
-  public IAccountDAO accountDao = new repository.SavingAccountImpl();
+  public IAccountDAO accountDao = new SavingAccountImpl();
   SavingAccountM aAct = new SavingAccountM();
   // Map<accountNumber,SavingAccountM> list = new HashMap();
 

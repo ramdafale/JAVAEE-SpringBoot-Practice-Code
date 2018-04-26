@@ -16,20 +16,37 @@ public class SavingAccountM {
 
   static int id = 0;
   Customer customer;
-
+  Statements statement;
   /*
    * @param balance
    * @param accountNumber
    * @param customer
    */
-  public SavingAccountM(double balance, int accountNumber, Customer customer) {
+  public SavingAccountM(double balance, int accountNumber, Customer customer,Statements statement) {
     super();
     this.balance = balance;
     this.accountNumber = ++id;
     this.customer = customer;
+    this.statement=statement;
   }
   
   
+  /**
+   * @return the statement
+   */
+  public Statements getStatement() {
+    return statement;
+  }
+
+
+  /**
+   * @param statement the statement to set
+   */
+  public void setStatement(Statements statement) {
+    this.statement = statement;
+  }
+
+
   public SavingAccountM(double balance, Customer customer) {
     super();
     this.balance = balance;
