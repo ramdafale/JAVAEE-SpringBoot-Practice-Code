@@ -3,8 +3,9 @@
  */
 package repository;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import model.SavingAccountM;
@@ -28,6 +29,13 @@ public class SavingAccountImpl implements IAccountDAO {
     // list.add("Amount Deposit from saving account is" + amount);
     System.out.println("Amount Deposit in saving account is" + amount);
     System.out.println("Current Balance after deposit is : " + balance);
+    
+    
+    final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+    final LocalDateTime now = LocalDateTime.now();  
+    System.out.println("Deposit made at Time "+dtf.format(now)); 
+    
+    //System.out.println("Deposit amde at Time : " date.format(now));
 
     return savingAccount;
   }
@@ -40,13 +48,12 @@ public class SavingAccountImpl implements IAccountDAO {
     System.out.println("Current Balance" + savingAccount.getBalance());
 
     balance = balance - amount;
-    // Date date = new Date();
-    // List list = new ArrayList();
-    // list.add(date);
-    // list.add(amount);
+ 
     System.out.println("Amount withdraw from saving account is" + amount);
     System.out.println("Current Balance after withdrawl is : " + balance);
-
+    final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+    final LocalDateTime now = LocalDateTime.now();  
+    System.out.println("Withdraw is made at Time "+dtf.format(now)); 
     return savingAccount;
   }
 

@@ -7,10 +7,10 @@ import java.util.logging.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-
 import model.Bank;
 import model.Customer;
 import model.SavingAccountM;
+import repository.SavingAccountImpl;
 
 public class App extends Bank {
 
@@ -36,6 +36,15 @@ public class App extends Bank {
 
     final SavingAccountM mySaving = (SavingAccountM) ctx.getBean("savingAccount1");
 
+    
+    SavingAccountImpl savingImpl = new SavingAccountImpl();
+    
+    System.out.println(savingImpl.Deposit(36));
+    
+    System.out.println(savingImpl.Withdraw(99));
+    
+    
+    
     final List<SavingAccountM> listSavingAccount = new ArrayList<SavingAccountM>();
 
     listSavingAccount.add(mySaving);
@@ -44,6 +53,10 @@ public class App extends Bank {
       logMe.info("retrieved element: " + item);
     }
 
+    
+    
+    
+    
     mySaving.getAccountNumber();
     mySaving.getBalance();
     mySaving.getCustomer();
@@ -53,6 +66,8 @@ public class App extends Bank {
     logMe.info("Your balance is: " + mySaving.getBalance());
     
     
+    
+  
 
     logMe.info("Update my Account");
 
