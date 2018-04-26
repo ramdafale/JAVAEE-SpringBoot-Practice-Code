@@ -5,7 +5,7 @@ package repository;
 
 import java.util.List;
 
-
+import model.SavingAccountM;
 
 /**
  * @author trainee
@@ -13,16 +13,10 @@ import java.util.List;
  */
 public interface IAccountDAO {
 
-	
-	
-	public List Withdraw(double amount);
-	public List Deposit(double amount);
-	
-	
-	
-//	public List<SavingAccount> getStatment(List list);
-	
-	
-	
-	
+  public SavingAccountM Deposit(double amount);
+
+  public SavingAccountM Withdraw(double amount);
+
+  // public List<SavingAccount> getStatment(List list);
+
 }

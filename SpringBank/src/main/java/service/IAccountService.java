@@ -5,11 +5,14 @@ package service;
 
 import java.util.List;
 
+import model.SavingAccountM;
+
 /**
  * @author trainee
  *
  */
 public interface IAccountService {
-  public List Withdraw(double amount);
-  public List Deposit(double amount);
+  public SavingAccountM Deposit(double amount);
+  public SavingAccountM Withdraw(double amount) throws WithdrawException;
+ 
 }

@@ -5,41 +5,43 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.context.ApplicationContext;
-
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import bankapplication.Apps;
+
 import model.Bank;
 import model.Customer;
 import model.SavingAccountM;
 
 public class App extends Bank {
 
-  /**
-   * Returns an nothing
+  /*
+   * Returns nothing
    */
-  @SuppressWarnings({ "PMD.SystemPrintln", "PMD.LawOfDemeter" })
   public static void main(final String[] args) {
 
-    final Logger LOGGER = Logger.getLogger(Apps.class.getName());
+    final Logger logMe = Logger.getLogger(App.class.getName());
 
     final ApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
+
+    Bank bank = ctx.getBean("bank", Bank.class);
+
+    List<Bank> banklist = new ArrayList<Bank>();
+    System.out.println();
+    service.IBankService bankService = ctx.getBean("bankService", service.BankServiceImpl.class);
+    banklist = bankService.addBank(bank);
+    
+    
 
     final Customer customer1 = ctx.getBean(Customer.class);
 
     final SavingAccountM mySaving = (SavingAccountM) ctx.getBean("savingAccount1");
 
-    // Resource r=new ClassPathResource("beans.xml");
-    // BeanFactory factory=new XmlBeanFactory(r);
+    final List<SavingAccountM> listSavingAccount = new ArrayList<SavingAccountM>();
 
-    // Customer s=(Customer)factory.getBean("customer");
+    listSavingAccount.add(mySaving);
 
-    final List<Customer> listSavingAccount = new ArrayList<Customer>();
-
-    listSavingAccount.add(customer1);
-
-    for (Customer item : listSavingAccount) {
-      LOGGER.info("retrieved element: " + item);
+    for (final SavingAccountM item : listSavingAccount) {
+      logMe.info("retrieved element: " + item);
     }
 
     mySaving.getAccountNumber();
@@ -47,10 +49,36 @@ public class App extends Bank {
     mySaving.getCustomer();
     mySaving.getInterestRate();
 
-    // final Logger LOGGER = Logger.getLogger(App.class.getName());
+    logMe.info("Welcome To Bank : " + customer1.getFname());
+    logMe.info("Your balance is: " + mySaving.getBalance());
+    
+    
 
-    System.out.println("Welcome To Bank" + customer1.getFname()); // Creating New account for cust
-                                                                  
+    logMe.info("Update my Account");
+
+    customer1.setEmail("newEmailID@example.com");
+
+    logMe.info("After  Update ");
+    System.out.println(customer1.getEmail());
+
+    
+    
+    if (listSavingAccount.contains(mySaving)) {
+      logMe.info("Account found");
+    } else {
+      logMe.info("Account not found");
+    }
+
+    
+    
+    //Remove my account
+    listSavingAccount.remove(mySaving);
+    
+    if (listSavingAccount.contains(mySaving)) {
+      logMe.info("Account found");
+    } else {
+      logMe.info("Account not found");
+    }
 
   }
 

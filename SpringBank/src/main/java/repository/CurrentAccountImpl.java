@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import HelloSpring2.HelloSpring2.service.Account;
+import model.CurrentAccountM;
 import model.Customer;
 import model.SavingAccountM;
 
@@ -15,38 +16,39 @@ import model.SavingAccountM;
  * @author ram dafale This class create a current account and perform basic
  *         deposit and witrdraw operations.
  */
-class CurrentAccountImpl implements IAccountDAO {
+ class CurrentAccountImpl implements AccountDaoCurrrent {
 
 	
 
 
 
-	public List Withdraw(double amount) {
+	public CurrentAccountM Withdraw1(double amount) {
 
-		SavingAccountM savingAccount = new SavingAccountM();
+	  CurrentAccountM currAccount = new CurrentAccountM();
 
-		double balance = savingAccount.getBalance();
+		double balance = currAccount.getBalance();
 
 		balance = balance - amount;
 		Date date = new Date();
 		List list = new ArrayList();
-		list.add(date);
+		// list.add(date);
 		list.add("Amount withdraw from current account  is" + amount);
-		return list;
+		return currAccount;
 	}
 
-	public List Deposit(double amount) {
+	public CurrentAccountM Deposit1(double amount) {
 
-		SavingAccountM savingAccount = new SavingAccountM();
-
-		double balance = savingAccount.getBalance();
+	  CurrentAccountM currAccount = new CurrentAccountM();
+		double balance = currAccount.getBalance();
 
 		balance = balance + amount;
 		Date date = new Date();
 		List list = new ArrayList();
 		list.add(date);
 		list.add("Amount Deposit from current account is" + amount);
-		return list;
+		return currAccount;
 	}
+
+
 	
 }

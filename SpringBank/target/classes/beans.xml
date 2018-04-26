@@ -8,11 +8,30 @@
     http://www.springframework.org/schema/context/spring-context.xsd">
 
 
+
+
+ 
+	<bean id="bank" class="model.Bank">
+		<constructor-arg type="String" value="MyBank@Capg"></constructor-arg>
+	</bean>
+	<bean id="bankDao" class="repository.BankDaoImpl"></bean>
+	<bean id="bankService" class="service.BankServiceImpl">
+		<constructor-arg index="0" ref="bankDao"></constructor-arg>
+	</bean>
+ 
+
+
+
+
+
+
+
+
+
+
 	<bean name="customer" class="model.Customer" scope="prototype">
 
-	
 
-	
 
 		<constructor-arg value="Bryan" type="String"></constructor-arg>
 		<constructor-arg value="Adams" type="String"></constructor-arg>
@@ -27,9 +46,11 @@
 	<bean id="savingAccount1" class="model.SavingAccountM">
 
 		<constructor-arg value="5555" type="double"></constructor-arg>
-		<!-- <constructor-arg value="2" type="int"></constructor-arg> -->
+		<!-- <constructor-arg value="2" type="int"></constructor-arg>  --> 
 
-		<constructor-arg ref="model.Customer" type="Customer"></constructor-arg>
+		<constructor-arg index="1">
+			<ref bean="customer"></ref>
+		</constructor-arg>
 
 
 	</bean>

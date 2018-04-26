@@ -8,95 +8,102 @@ package model;
  *
  */
 public class CurrentAccountM {
-	Customer customer;
-	double interestRate = 0.08;
-	double balance;
+  Customer customer;
+  double interestRate = 0.08;
+  double balance;
 
-	static int id = 100;
+  static int id = 100;
 
-	int accountNumber;
+  int accountNumber;
 
-	/**
-	 * @param customer
-	 * @param interestRate
-	 * @param balance
-	 * @param accountNumber
-	 */
-	public CurrentAccountM(Customer customer, double interestRate, double balance, int accountNumber) {
-		super();
-		this.customer = customer;
-		this.interestRate = interestRate;
-		this.balance = balance;
-		this.accountNumber = accountNumber;
-	}
+  /**
+   * @param customer
+   * @param interestRate
+   * @param balance
+   * @param accountNumber
+   */
+  public CurrentAccountM(final Customer customer, final double interestRate, final double balance,
+      final int accountNumber) {
+    super();
+    this.customer = customer;
+    this.interestRate = interestRate;
+    this.balance = balance;
+    this.accountNumber = accountNumber;
+  }
 
-	/**
-	 * @return the customer
-	 */
-	public Customer getCustomer() {
-		return customer;
-	}
+  public CurrentAccountM() {
 
-	/**
-	 * @param customer the customer to set
-	 */
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
+  }
 
-	/**
-	 * @return the interestRate
-	 */
-	public double getInterestRate() {
-		return interestRate;
-	}
+  /**
+   * @return the customer
+   */
+  public Customer getCustomer() {
+    return customer;
+  }
 
-	/**
-	 * @param interestRate the interestRate to set
-	 */
-	public void setInterestRate(double interestRate) {
-		this.interestRate = interestRate;
-	}
+  /**
+   * @param customer
+   *          the customer to set
+   */
+  public void setCustomer(final Customer customer) {
+    this.customer = customer;
+  }
 
-	/**
-	 * @return the balance
-	 */
-	public double getBalance() {
-		return balance;
-	}
+  /**
+   * @return the interestRate
+   */
+  public double getInterestRate() {
+    return interestRate;
+  }
 
-	/**
-	 * @param balance the balance to set
-	 */
-	public void setBalance(double balance) {
-		this.balance = balance;
-	}
+  /**
+   * @param interestRate
+   *          the interestRate to set
+   */
+  public void setInterestRate(final double interestRate) {
+    this.interestRate = interestRate;
+  }
 
-	/**
-	 * @return the accountNumber
-	 */
-	public int getAccountNumber() {
-		return accountNumber;
-	}
+  /**
+   * @return the balance
+   */
+  public double getBalance() {
+    return balance;
+  }
 
-	/**
-	 * @param accountNumber the accountNumber to set
-	 */
-	public void setAccountNumber(int accountNumber) {
-		this.accountNumber = accountNumber;
-	}
+  /**
+   * @param balance
+   *          the balance to set
+   */
+  public void setBalance(final double balance) {
+    this.balance = balance;
+  }
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "CurrentAccountM customer=" + customer + ", interestRate=" + interestRate + ", balance=" + balance
-				+ ", accountNumber=" + accountNumber + "";
-	}
-	
-	
-	
-	
+  /**
+   * @return the accountNumber
+   */
+  public int getAccountNumber() {
+    return accountNumber;
+  }
+
+  /**
+   * @param accountNumber
+   *          the accountNumber to set
+   */
+  public void setAccountNumber(final int accountNumber) {
+    this.accountNumber = accountNumber;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return "CurrentAccountM customer=" + customer + ", interestRate=" + interestRate + ", balance="
+        + balance + ", accountNumber=" + accountNumber + "";
+  }
 
 }

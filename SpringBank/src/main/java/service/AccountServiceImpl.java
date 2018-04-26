@@ -1,12 +1,13 @@
-/**
- * 
- */
+
 package service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
-
+import bankapplication.Apps;
 import model.SavingAccountM;
 import repository.IAccountDAO;
 
@@ -16,43 +17,44 @@ import repository.IAccountDAO;
  */
 public class AccountServiceImpl implements IAccountService {
 
-  public IAccountDAO accountDao=new repository.SavingAccountImpl();
-SavingAccountM aAct=new SavingAccountM();
-  List list=new ArrayList();
+  final Logger logMe = Logger.getLogger(Apps.class.getName());
 
-  public List Withdraw(double amtToDepo) {
-   
-   
-     if(amtToDepo<0)
-    {
-      
-      try {
-        throw new WithdrawException("amt can not be less that zero of  ", aAct.getAccountNumber(), aAct.getBalance());
-      } catch (WithdrawException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-      
-      //LOGGER.info("Negative amount is not possible");
+  public IAccountDAO accountDao = new repository.SavingAccountImpl();
+  SavingAccountM aAct = new SavingAccountM();
+  // Map<accountNumber,SavingAccountM> list = new HashMap();
+
+  public SavingAccountM Withdraw(double amtToWithdraw) throws WithdrawException {
+
+    if (amtToWithdraw > aAct.getBalance() ) {
+
+      throw new WithdrawException("Insufficient Balance in your Account : Do deposit first ", aAct.getAccountNumber(),
+          aAct.getBalance());
+
+
+    } else {
+
+     //  list=accountDao.Withdraw(amtToWithdraw);
+
     }
-    else
-    {
-      
-      list=accountDao.Withdraw(amtToDepo);
-     
-    }
-    return list;
-  
+    return aAct;
+
+  }
+
+  public SavingAccountM Deposit(double amount) {
+
     
+    
+   // public SavingAccountM Deposit(double amtToDeposit) throws WithdrawException {
 
-}
+   //   if (amtToDeposit > aAct.getBalance() ) {
+
+       // throw new WithdrawException("Insufficient Balance in your Account : Do deposit first ", aAct.getAccountNumber(),
+            //aAct.getBalance());
 
 
-
-
-  public List Deposit(double amount) {
-    // TODO Auto-generated method stub
-    return null;
+     // }
+    
+   return null;
   }
 
 }

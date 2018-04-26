@@ -4,11 +4,7 @@
  * DateOF Completion : 4/42/2018
  */
 
-
-
 package junitpackage;
-
-
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -17,8 +13,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import model.Customer;
+import model.SavingAccountM;
 import repository.SavingAccountImpl;
-
 
 /*
  * class Name: BankAppJunit
@@ -29,72 +25,63 @@ import repository.SavingAccountImpl;
  * 				4. checking if deposit method running or not
  * 				5.	 checking if withdraw method running or not
  * 				6. checking if addInterest method running or not
- */			
-public class BankAppJunit  {
+ */
+public class BankAppJunit {
 
 	
-	//Creating a customer class object
-	Customer cust = new Customer("ram", "dafale", "wardha", 97546545, "ramdafale@gmail.com");
 	
- 
+  private final String str = null;
+
+  // Creating a customer class object
+  final Customer cust = new Customer("ram", "dafale", "wardha", 97546545, "ramdafale@gmail.com");
+
+  // 1. Null values are not allowed in Name
+  @Test
+  public void checknullInFirstName() {
+
+    assertNotEquals("null not allowed ", str, cust.getFname());
+  }
+
+  @Test
+  public void checknullInLastName() {
+
+    assertNotEquals("null not allowed ", str, cust.getLname());
+  }
+
+  @Test
+  public void checknullInMobile() {
+
+    assertNotEquals("null not allowed ", str, cust.getNumber());
+  }
+
+  SavingAccountImpl li = new SavingAccountImpl();
+  SavingAccountM savingacc = new SavingAccountM(1000, 5, cust);
+  private final double amount = 1000;
   
   
   
-	// 1. Null values are not allowed in Name
-	@Test
-	public void checknullInFirstName()
-	{
-		String  str= null;
-		assertNotEquals("null not allowed ",str,cust.getFname());
-	}
-	
-	
+  
+  @Test
+  public void testDeposit() {
+    // double balance =2000;
 
-	@Test
-	public void checknullInLastName()
-	{
-		String  str1= null;
-		assertNotEquals("null not allowed ",str1,cust.getLname());
-	}
-	
-	
-	@Test
-	public void checknullInMobile()
-	{
-		String  str2= null;
-		assertNotEquals("null not allowed ",str2,cust.getNumber());
-	}
-	
-	
-SavingAccountImpl li = new SavingAccountImpl();
+    SavingAccountM a = li.Deposit(amount);
+    assertTrue(savingacc.getBalance() == 1000);
+  }
+  
+  
+  
+  
+  
+  @Test
+  public void testWithdraw() {
 
-	   @Test
-	   public void testWithdraw(){
-		   double balance =2000;
-		   double   amount = 1000;
-	      assertTrue(  (li.Withdraw(amount)) == 1000);
-	   }
+    final SavingAccountM a = li.Withdraw(amount);
+    assertTrue(savingacc.getBalance() == 1000);
+  }
 
+  
+  
+  
 
-	 
-
-
-	
-	
-		}
-	   
-	   
-	 
-	 
-
-
-
-
-
- 
-
-
-
-
-
-
+}
