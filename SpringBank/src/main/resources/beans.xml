@@ -8,11 +8,11 @@
     http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-	<bean name="customer" class="model.Customer" scope="prototype"  >
+	<bean name="customer" class="model.Customer" scope="prototype">
 
+	
 
-
-		<!-- <bean name="savingaccount" class="repository.savingAccount"> -->
+	
 
 		<constructor-arg value="Bryan" type="String"></constructor-arg>
 		<constructor-arg value="Adams" type="String"></constructor-arg>
@@ -22,25 +22,23 @@
 			type="String"></constructor-arg>
 
 	</bean>
-	
-	
-	 <bean id = "savingAccount1" class = "model.savingAccountM">
-	 
-		<constructor-arg value="" type="String"></constructor-arg>
-		<constructor-arg value="Adams" type="String"></constructor-arg>
-		<constructor-arg value="US" type="String"></constructor-arg>
-		<constructor-arg value="955846451" type="long"></constructor-arg>
-		<constructor-arg value="bryanadmas@gmail.com"
-			type="String"></constructor-arg>
-	 
-	 
-	 </bean>
-	
-	
-	
-	
-	
-	
-	
+
+
+	<bean id="savingAccount1" class="model.SavingAccountM">
+
+		<constructor-arg value="5555" type="double"></constructor-arg>
+		<!-- <constructor-arg value="2" type="int"></constructor-arg> -->
+
+		<constructor-arg ref="model.Customer" type="Customer"></constructor-arg>
+
+
+	</bean>
+
+
+
+
+
+
+
 
 </beans>

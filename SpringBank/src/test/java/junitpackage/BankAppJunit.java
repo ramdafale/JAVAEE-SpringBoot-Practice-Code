@@ -17,6 +17,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import model.Customer;
+import repository.SavingAccountImpl;
 
 
 /*
@@ -35,7 +36,10 @@ public class BankAppJunit  {
 	//Creating a customer class object
 	Customer cust = new Customer("ram", "dafale", "wardha", 97546545, "ramdafale@gmail.com");
 	
-
+ 
+  
+  
+  
 	// 1. Null values are not allowed in Name
 	@Test
 	public void checknullInFirstName()
@@ -62,39 +66,28 @@ public class BankAppJunit  {
 	}
 	
 	
+SavingAccountImpl li = new SavingAccountImpl();
+
 	   @Test
 	   public void testWithdraw(){
 		   double balance =2000;
-		   int   amount = 1000;
-	      assertTrue(  (balance =  balance - amount) == 1000);
+		   double   amount = 1000;
+	      assertTrue(  (li.Withdraw(amount)) == 1000);
 	   }
 
 
 	 
 
-	   @Test
-	   public void testDeposit(){
-		   double balance = 0;
-		   int   amount = 1000;
-	     
-	   }
 
 	
-	   
-	   @Test
-	   public void addInterest() {
-		   	int balance=100;
-		   double	interestRate=0.087;
-			
-		   assertFalse(  ( balance = (int) (interestRate * balance + balance)) == 1000); ;
-
+	
 		}
 	   
 	   
 	 
 	 
 
-}
+
 
 
 
