@@ -22,10 +22,10 @@ public class SavingAccountM {
    * @param accountNumber
    * @param customer
    */
-  public SavingAccountM(double balance, int accountNumber, Customer customer,Statements statement) {
+  public SavingAccountM(double balance,  Customer customer,Statements statement) {
     super();
     this.balance = balance;
-    this.accountNumber = ++id;
+//    this.accountNumber = ++id;
     this.customer = customer;
     this.statement=statement;
   }

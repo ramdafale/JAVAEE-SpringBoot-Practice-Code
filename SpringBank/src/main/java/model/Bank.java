@@ -5,7 +5,7 @@ package model;
 
 import java.util.logging.Logger;
 
-import bankapplication.Apps;
+
 
 /**
  * @author trainee

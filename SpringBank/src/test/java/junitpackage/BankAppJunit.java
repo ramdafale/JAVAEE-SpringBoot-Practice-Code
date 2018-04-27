@@ -53,7 +53,7 @@ public class BankAppJunit {
 
   Statements st = new Statements();
   service.SavingAccountImpl li = new service.SavingAccountImpl();
-  SavingAccountM savingacc = new SavingAccountM(1000, 5, cust, st);
+  SavingAccountM savingacc = new SavingAccountM(1000,  cust, st);
   private final double amount = 1000;
 
   @Test

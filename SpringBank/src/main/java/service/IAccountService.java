@@ -3,8 +3,7 @@
  */
 package service;
 
-import java.util.List;
-
+import model.Customer;
 import model.SavingAccountM;
 
 /**
@@ -12,7 +11,7 @@ import model.SavingAccountM;
  *
  */
 public interface IAccountService {
-  public SavingAccountM Deposit(double amount);
-  public SavingAccountM Withdraw(double amount) throws WithdrawException;
- 
+  SavingAccountM Deposit(double amount);
+   SavingAccountM Withdraw(double amount) throws WithdrawException;
+  void UpdateDetails(Customer customer, String checkAccountNumber, int newChange) ;
 }

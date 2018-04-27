@@ -9,9 +9,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import model.Bank;
 import model.Customer;
+import model.SavingAccountCollection;
 import model.SavingAccountM;
 
-public class BankController  {
+public class BankController {
 
   /*
    * Returns nothing
@@ -29,17 +30,21 @@ public class BankController  {
     service.IBankService bankService = ctx.getBean("bankService", service.BankServiceImpl.class);
     banklist = bankService.addBank(bank);
 
-    final Customer customer1 = ctx.getBean(Customer.class);
+    final Customer customer1 = ctx.getBean("customer1", Customer.class);
 
     final SavingAccountM mySaving = (SavingAccountM) ctx.getBean("savingAccount1");
 
+     SavingAccountCollection jc=(SavingAccountCollection)ctx.getBean("savingsaccountcollection",SavingAccountCollection.class);
+
+    System.out.println(jc.getAddressList());
+ 
     service.SavingAccountImpl savingImpl = new service.SavingAccountImpl();
 
     System.out.println(savingImpl.Deposit(36));
 
     System.out.println(savingImpl.Withdraw(99));
-    
-   //  System.out.println(savingImpl.());
+
+    // System.out.println(savingImpl.());
 
     final List<SavingAccountM> listSavingAccount = new ArrayList<SavingAccountM>();
 

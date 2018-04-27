@@ -1,13 +1,10 @@
 
 package service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 import java.util.logging.Logger;
 
-import bankapplication.Apps;
+import model.Customer;
 import model.SavingAccountM;
 
 
@@ -17,7 +14,7 @@ import model.SavingAccountM;
  */
 public class AccountServiceImpl implements IAccountService {
 
-  final Logger logMe = Logger.getLogger(Apps.class.getName());
+  final Logger logMe = Logger.getLogger(AccountServiceImpl.class.getName());
 
   public IAccountDAO accountDao = new SavingAccountImpl();
   SavingAccountM aAct = new SavingAccountM();
@@ -40,21 +37,19 @@ public class AccountServiceImpl implements IAccountService {
 
   }
 
+ 
+ 
+    
+  
   public SavingAccountM Deposit(double amount) {
 
+    return null;
+   }
+
+
+  public void UpdateDetails(Customer customer, String checkAccountNumber, int newChange) {
+    // TODO Auto-generated method stub
     
-    
-   // public SavingAccountM Deposit(double amtToDeposit) throws WithdrawException {
-
-   //   if (amtToDeposit > aAct.getBalance() ) {
-
-       // throw new WithdrawException("Insufficient Balance in your Account : Do deposit first ", aAct.getAccountNumber(),
-            //aAct.getBalance());
-
-
-     // }
-    
-   return null;
   }
 
 }

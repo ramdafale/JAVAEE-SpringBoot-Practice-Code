@@ -5,9 +5,8 @@ package service;
 
 import java.util.List;
 
-import repository.IBankDao;
-
 import model.Bank;
+import repository.IBankDao;
 
 /**
  * @author trainee
