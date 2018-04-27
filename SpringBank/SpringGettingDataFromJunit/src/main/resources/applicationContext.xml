@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+
+
+
+
+
+	<bean id="bank" class="model.Bank">
+		<constructor-arg type="String" value="MyBank@Capg"></constructor-arg>
+			<constructor-arg type="String" value="MyBank@Capg"></constructor-arg>
+		
+		
+		
+		
+		
+	</bean>
+	
+
+
+	<bean name="customer" class="model.Customer" scope="prototype">
+		<constructor-arg value="Bryan" type="String"></constructor-arg>
+		<constructor-arg value="Adams" type="String"></constructor-arg>
+		<constructor-arg value="US" type="String"></constructor-arg>
+		<constructor-arg value="955846451" type="long"></constructor-arg>
+		<constructor-arg value="bryanadmas@gmail.com"
+			type="String"></constructor-arg>
+
+	</bean>
+
+
+
+
+
+
+
+
+
+
+
+	<!-- <bean id="savingAccount1" class="model.SavingAccountM">
+
+		<constructor-arg value="5555" type="double"></constructor-arg>
+		<constructor-arg value="2" type="int"></constructor-arg>
+
+		<constructor-arg index="1">
+			<ref bean="customer"></ref>
+		</constructor-arg>
+	</bean>
+
+
+	<bean name="customer1" class="model.Customer" scope="prototype">
+		<constructor-arg value="Ram" type="String"></constructor-arg>
+		<constructor-arg value="Dafale" type="String"></constructor-arg>
+		<constructor-arg value="Wardha" type="String"></constructor-arg>
+		<constructor-arg value="548154" type="long"></constructor-arg>
+		<constructor-arg value="ramdafale@gmail.com"
+			type="String"></constructor-arg>
+
+	</bean>
+
+
+	<bean id="savingAccount2" class="model.SavingAccountM">
+
+		<constructor-arg value="6666" type="double"></constructor-arg>
+		<constructor-arg value="2" type="int"></constructor-arg>
+
+		<constructor-arg>
+			<ref bean="customer1"></ref>
+		</constructor-arg>
+
+	</bean>
+
+
+	<bean id="savingsaccountcollection" class="model.SavingAccountCollection">
+
+		<property name="addressList">
+			<list>
+				<value>savingAccount1</value>
+				<value>savingAccount2</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>
+
+ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</beans>
