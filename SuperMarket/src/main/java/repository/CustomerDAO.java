@@ -1,12 +1,11 @@
 package repository;
 
+import model.Customer;
+
 public interface CustomerDAO {
 
-	int addCustomer(int customerId, String customerName,
-			String customerAddress, String paymentMode);
-
-	String removeCustomer(int customerId);
-
-	String updateCustomer(int customerId);
-
+	
+	public int addCustomer(Customer e);
+	public int updateCustomer(int customerID, String name);
+	public int removeCustomer(int id);
 }

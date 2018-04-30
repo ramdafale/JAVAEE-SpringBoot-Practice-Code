@@ -2,12 +2,16 @@ package repository;
 
 public interface SupplierDAO {
 
-	int addSupplier(int supplierId, String supplierName,
+	public int addSupplier(int supplierId, String supplierName,
 			String supplierAddress, int quantityOrder, int orderId,
 			double amount);
 
-	String removeSupplier(int supplierId);
-
-	String updateSupplier(int supplierId);
+	public int removeSupplier(int supplierId);
+/*
+	public int updateSupplier(int supplierId, String supplierName,
+			String supplierAddress, int quantityOrder, int orderId,
+			double amount);
+*/	
+	public int updateSupplier(int supplierId, String supplierName);
 
 }

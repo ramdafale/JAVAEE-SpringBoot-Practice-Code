@@ -1,67 +1,40 @@
 package repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.sql.DataSource;
+import model.Customer;
 
 public class CustomerDAOImpl implements CustomerDAO {
+	
+	private JdbcTemplate jdbcTemplate;
 
-	private DataSource dataSource;
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
-	@Override
-	public int addCustomer(int customerId, String customerName,
-			String customerAddress, String paymentMode) {
-		Connection connection = null;
-		int addData = 0;
-		try {
-			connection = dataSource.getConnection();
-			Statement statement = connection.createStatement();
-			addData = statement.executeUpdate("INSERT INTO Customer values(customerId,customerName,customerAddress,paymentMode)");
-			statement.close();
-			connection.close();
-		} catch (SQLException e) {
-			System.out.println(e);
-		}
-		return addData;
+	public int addCustomer(Customer e) {
+
+		String query = "insert into customer values('" + e.getCustomerId() + "','" + e.getCustomerName() + "','"
+				+ e.getCustomerAddress() + "','" + e.getPaymentMode() + "')";
+		System.out.println(query);
+		return jdbcTemplate.update(query);
 
 	}
 
-	@Override
-	public String removeCustomer(int customerId) {
-		Connection connection = null;
-		try {
-			connection = dataSource.getConnection();
-			String sql = "DELETE FROM Customer where customerId=?";
-			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setInt(1, customerId);
-			statement.executeUpdate();
-			statement.close();
-			connection.close();
-		} catch (SQLException e) {
-			System.out.println(e);
-		}
-		return "Data deleted";
+	public int updateCustomer(int customerID, String name) {
+
+		String query = "update customer set customerName=" + "'" + name + "'" + " where customerId=" + customerID;
+		// String query = "update customer set customerName="+name+" where customerId="+
+		// customerID;
+
+		System.out.println(query);
+		return jdbcTemplate.update(query);
 
 	}
 
-	@Override
-	public String updateCustomer(int customerId) {
-		Connection connection = null;
-		try {
-			connection = dataSource.getConnection();
-			String sql = "UPDATE Customer set paymentMode='Cash' where customerId=?";
-			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setInt(1, customerId);
-			statement.executeUpdate();
-			statement.close();
-			connection.close();
-		} catch (SQLException e) {
-			System.out.println(e);
-		}
-		return "Data updated";
+	public int removeCustomer(int id) {
+		String query = "delete from customer where customerId="+id;
+		System.out.println(query);
+		return jdbcTemplate.update(query);
 	}
-
 }

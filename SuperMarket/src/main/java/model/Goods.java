@@ -21,6 +21,10 @@ public class Goods {
 		this.goodsPrice = goodsPrice;
 	}
 
+	public Goods() {
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * @return the goodsId
 	 */

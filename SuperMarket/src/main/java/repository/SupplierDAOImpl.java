@@ -7,61 +7,54 @@ import java.sql.Statement;
 
 import javax.sql.DataSource;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+
 public class SupplierDAOImpl implements SupplierDAO {
 
 	private DataSource dataSource;
 
+	JdbcTemplate jdbcTemplate;
+
 	@Override
-	public int addSupplier(int supplierId, String supplierName,
-			String supplierAddress, int quantityOrder, int orderId,
+	public int addSupplier(int supplierId, String supplierName, String supplierAddress, int quantityOrder, int orderId,
 			double amount) {
-
-		Connection connection = null;
-		int addData = 0;
-		try {
-			connection = dataSource.getConnection();
-			Statement statement = connection.createStatement();
-			addData = statement.executeUpdate("INSERT INTO Supplier values(supplierId,supplierName,supplierAddress,quantityOrder,orderId,amount)");
-			statement.close();
-			connection.close();
-		} catch (SQLException e) {
-			System.out.println(e);
-		}
-		return addData;
+		String Query = "insert into supplier values(" + supplierId + "," + "'" + supplierName + "'" + "," + "'"
+				+ supplierAddress + "'" + "," + quantityOrder + "," + orderId + "," + amount + ")";
+		System.out.println(Query);
+		return jdbcTemplate.update(Query);
 	}
 
 	@Override
-	public String removeSupplier(int supplierId) {
-		Connection connection = null;
-		try {
-			connection = dataSource.getConnection();
-			String sql = "DELETE FROM Supplier where supplierId=?";
-			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setInt(1, supplierId);
-			statement.executeUpdate();
-			statement.close();
-			connection.close();
-		} catch (SQLException e) {
-			System.out.println(e);
-		}
-		return "Data deleted";
+	public int removeSupplier(int supplierId) {
+
+		String query = "delete from supplier where supplierId=" + supplierId;
+		System.out.println(query);
+		return jdbcTemplate.update(query);
 	}
 
+
 	@Override
-	public String updateSupplier(int supplierId) {
-		Connection connection = null;
-		try {
-			connection = dataSource.getConnection();
-			String sql = "UPDATE Supplier set quantityOrder=1 where supplierId=?";
-			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setInt(1, supplierId);
-			statement.executeUpdate();
-			statement.close();
-			connection.close();
-		} catch (SQLException e) {
-			System.out.println(e);
-		}
-		return "Data updated";
+	public int updateSupplier(int supplierId, String supplierName) {
+
+		String query = "update supplier set supplierName="+"'" +supplierName+"'"+ "where supplierId="+supplierId;
+
+		System.out.println(query);
+		return jdbcTemplate.update(query);
+	}
+
+	/**
+	 * @return the jdbcTemplate
+	 */
+	public JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+
+	/**
+	 * @param jdbcTemplate
+	 *            the jdbcTemplate to set
+	 */
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
 	}
 
 }

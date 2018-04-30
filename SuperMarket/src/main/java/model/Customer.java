@@ -19,12 +19,21 @@ public class Customer {
 	 * @param customerAddress
 	 * @param paymentMode
 	 */
-	public Customer(int customerId, String customerName,
-			String customerAddress, String paymentMode) {
+	public Customer(int customerId, String customerName, String customerAddress, String paymentMode) {
 		this.customerId = customerId;
 		this.customerName = customerName;
 		this.customerAddress = customerAddress;
 		this.paymentMode = paymentMode;
+	}
+
+	public Customer(String customerName) {
+		this.customerId = customerId;
+		this.customerName = customerName;
+
+	}
+
+	public Customer() {
+
 	}
 
 	/**
