@@ -1,0 +1,47 @@
+create database mydb;
+
+
+CREATE TABLE Customer (
+    customerId int primary key auto_increment,
+    customerName varchar(255),
+    customerAddress varchar(255),
+    paymentMode varchar(20)
+);
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE `mydb1`.`goods` (
+  `goodsId` INT NOT NULL AUTO_INCREMENT,
+  `goodsName` VARCHAR(45) NOT NULL,
+  `goodsQuantity` VARCHAR(45) NOT NULL,
+  `goodsPrice` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`goodsId`));
+
+
+
+
+
+
+
+CREATE TABLE `mydb1`.`supplier` (
+  `supplierId` INT NOT NULL AUTO_INCREMENT,
+  `supplierName` VARCHAR(45) NOT NULL,
+  `supplierAddress` VARCHAR(45) NOT NULL,
+  `quantityOrder` INT NOT NULL,
+  `orderId` INT NOT NULL,
+  `amount` DOUBLE NOT NULL,
+  PRIMARY KEY (`supplierId`));
+
+
+
+CREATE TABLE `mydb1`.`retailer` (
+  `retailerName` VARCHAR(25) NOT NULL,
+  `retailerAddress` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`retailerName`));
