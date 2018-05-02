@@ -2,6 +2,7 @@ package model;
 
 public class Goods {
 
+	
 	private int goodsId;
 	private String goodsName;
 	private int goodsQuantity;
@@ -13,8 +14,8 @@ public class Goods {
 	 * @param goodsQuantity
 	 * @param goodsPrice
 	 */
-	public Goods(int goodsId, String goodsName, int goodsQuantity,
-			double goodsPrice) {
+	public Goods(final int goodsId, final String goodsName, final int goodsQuantity,
+			final double goodsPrice) {
 		this.goodsId = goodsId;
 		this.goodsName = goodsName;
 		this.goodsQuantity = goodsQuantity;

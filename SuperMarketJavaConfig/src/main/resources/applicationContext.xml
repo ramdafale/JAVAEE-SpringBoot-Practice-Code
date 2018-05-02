@@ -49,6 +49,28 @@
 
 
 
+	<bean id="cudao" class="service.CustomerServiceImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+	</bean>
+
+	<bean id="godao" class="service.GoodsServiceImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+	</bean>
+
+	<bean id="sudao" class="service.SupplierServiceImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+	</bean>
+
+<bean id="redao" class="service.RetailerServiceImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+	</bean>
+
+
+
+
+
+
+
 
 </beans>
     

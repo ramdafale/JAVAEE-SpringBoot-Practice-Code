@@ -1,16 +1,39 @@
 package model;
 
-import java.util.List;
-
 /**
  * @author Ram
- *
+ * 
+ */
+
+
+
+
+/**
+ * @class  this class represent a customer entity 
+ * 
  */
 public class Customer {
 
+	/**
+	 * @field this is use to provide particular id which will represent a whole
+	 *        record in table
+	 */
 	private int customerId;
+
+	/**
+	 * @field this is use to provide particular id which will represent a whole
+	 *        record in table
+	 */
 	private String customerName;
+	/**
+	 * @field this is use to represent a name of the customer
+	 * 
+	 */
 	private String customerAddress;
+	/**
+	 * @field this is use to represent a payment of the customer
+	 * 
+	 */
 	private String paymentMode;
 
 	/**
@@ -19,19 +42,30 @@ public class Customer {
 	 * @param customerAddress
 	 * @param paymentMode
 	 */
-	public Customer(int customerId, String customerName, String customerAddress, String paymentMode) {
+	public Customer(final int customerId, final String customerName, final String customerAddress,
+			final String paymentMode) {
 		this.customerId = customerId;
 		this.customerName = customerName;
 		this.customerAddress = customerAddress;
 		this.paymentMode = paymentMode;
 	}
 
-	public Customer(String customerName) {
-		this.customerId = customerId;
+	/**
+	 * 
+	 * @param customerName
+	 * 
+	 */
+	public Customer(final String customerName) {
+
 		this.customerName = customerName;
 
 	}
 
+	/**
+	 * 
+	 * @constructor this is default constructor
+	 * 
+	 */
 	public Customer() {
 
 	}
@@ -47,7 +81,7 @@ public class Customer {
 	 * @param customerId
 	 *            the customerId to set
 	 */
-	public void setCustomerId(int customerId) {
+	public void setCustomerId(final int customerId) {
 		this.customerId = customerId;
 	}
 
@@ -62,7 +96,7 @@ public class Customer {
 	 * @param customerName
 	 *            the customerName to set
 	 */
-	public void setCustomerName(String customerName) {
+	public void setCustomerName(final String customerName) {
 		this.customerName = customerName;
 	}
 
@@ -77,7 +111,7 @@ public class Customer {
 	 * @param customerAddress
 	 *            the customerAddress to set
 	 */
-	public void setCustomerAddress(String customerAddress) {
+	public void setCustomerAddress(final String customerAddress) {
 		this.customerAddress = customerAddress;
 	}
 
@@ -92,7 +126,7 @@ public class Customer {
 	 * @param paymentMode
 	 *            the paymentMode to set
 	 */
-	public void setPaymentMode(String paymentMode) {
+	public void setPaymentMode(final String paymentMode) {
 		this.paymentMode = paymentMode;
 	}
 

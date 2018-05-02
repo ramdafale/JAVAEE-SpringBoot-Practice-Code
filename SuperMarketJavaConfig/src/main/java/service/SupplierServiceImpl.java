@@ -1,32 +1,48 @@
 package service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import repository.SupplierDAO;
 
+/**
+ * this class implementing methods of its parent interface
+ */
 public class SupplierServiceImpl implements SupplierService {
 
-	@Override
-	public int addSupplier(int supplierId, String supplierName,
-			String supplierAddress, int quantityOrder, int orderId,
-			double amount) {
+	/**
+	 * @param supplierDAO
+	 *            this will be used to access DAO methods
+	 */
+	@Autowired
+	 private SupplierDAO supplierDAO;
 
-		SupplierDAO supplierDAO = null;
-		int addData = supplierDAO.addSupplier(supplierId, supplierName,
-				supplierAddress, quantityOrder, orderId, amount);
+	/**
+	 * @param supplierDAO
+	 */
+	
+
+	@Override
+	public int addSupplier(final int supplierId, final String supplierName, final String supplierAddress,
+			final int quantityOrder, final int orderId, final double amount) {
+
+		// SupplierDAO supplierDAO = null;
+		final int addData = supplierDAO.addSupplier(supplierId, supplierName, supplierAddress, quantityOrder, orderId,
+				amount);
 		return addData;
 
 	}
 
 	@Override
-	public String removeSupplier(int supplierId) {
-		SupplierDAO supplierDAO = null;
-		String removeData = supplierDAO.removeSupplier(supplierId);
+	public int removeSupplier(final int supplierId) {
+	//	final SupplierDAO supplierDAO = null;
+		final int removeData = supplierDAO.removeSupplier(supplierId);
 		return removeData;
 	}
 
 	@Override
-	public String updateSupplier(int supplierId) {
-		SupplierDAO supplierDAO = null;
-		String removeData = supplierDAO.updateSupplier(supplierId);
+	public int updateSupplier(final int supplierId, final String supplierName) {
+		final SupplierDAO supplierDAO = null;
+		int removeData = supplierDAO.updateSupplier(supplierId, supplierName);
 		return removeData;
 	}
 

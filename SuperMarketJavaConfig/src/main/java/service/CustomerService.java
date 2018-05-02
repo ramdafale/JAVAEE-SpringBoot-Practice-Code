@@ -5,7 +5,10 @@ import model.Customer;
 public interface CustomerService {
 
 
-	public int addCustomer(Customer e);
-	public int updateCustomer(int customerID, String name);
-	public int removeCustomer(int id);
+	//public String addCustomer(Customer e);
+//	public String updateCustomer(int customerID, String name);
+	//public int removeCustomer(int id);
+	int addCustomer(Customer c);
+	int updateCustomer(int customerId, String customerName);
+	int removeCusotmer(int customerId);
 }

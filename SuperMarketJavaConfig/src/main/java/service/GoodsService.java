@@ -2,9 +2,26 @@ package service;
 
 public interface GoodsService {
 
-	public int addGoods( int goodsId,String goodsName,int goodsQuantity,double goodsPrice);
-	public String removeGoods(int goodsId);
-	public String updateGoods(int goodsId);
-	//public String orderGoods(int goodsId);
-		
+	/**
+	 * @method this method is calling a Repository Goods which connect to database
+	 *         table Goods and adding goodsID, name,quantity,price
+	 * 
+	 */
+	int addGoods(int goodsId, String goodsName, int goodsQuantity, double goodsPrice);
+
+	/**
+	 * @method this method is calling a Repository Goods which connect to database
+	 *         table Goods and removing a perticular Goods from table
+	 * 
+	 */
+	int removeGoods(int goodsId);
+
+	/**
+	 * @method this method is calling a Repository Goods which connect to database
+	 *         table Goods and updating a perticular Goods
+	 * 
+	 */
+	int updateGoods(int goodsId, String goodsName);
+	// public String orderGoods(int goodsId);
+
 }

@@ -1,32 +1,48 @@
 package service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import model.Customer;
+import repository.CustomerDAO;
 
 /**
  * @author Ram
  *
  */
+@Service("customerService")
 public class CustomerServiceImpl implements CustomerService {
 
-	@Override
-	public int addCustomer(Customer e) {
-		
-		
-		
-		return 0;
+	@Autowired
+	private CustomerDAO customerDAO;
+
+	/**
+	 * @param customerDAO
+	 */
+	public CustomerServiceImpl(final CustomerDAO customerDAO) {
+		super();
+		this.customerDAO = customerDAO;
+	}
+
+	public CustomerServiceImpl() {
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public int addCustomer(final Customer c) {
+		final int addData = customerDAO.addCustomer(c);
+		return addData;
+	}
+
+	public int updateCustomer(int customerId, String customerName) {
+		int updateData = customerDAO.updateCustomer(customerId, customerName);
+		return updateData;
 	}
 
 	@Override
-	public int updateCustomer(int customerID, String name) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int removeCusotmer(int customerId) {
+		int removeData = customerDAO.removeCustomer(customerId);
+		return removeData;
 	}
 
-	@Override
-	public int removeCustomer(int id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	
 }

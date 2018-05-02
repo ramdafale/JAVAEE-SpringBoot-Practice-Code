@@ -41,7 +41,9 @@ public class Supplier {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Supplier(int i, String string, String string2, int j, int k, double d) {
+	public Supplier(int supplierId, String supplierName,
+			String supplierAddress, int quantityOrder, int orderId,
+			double amount) {
 		this.supplierId = supplierId;
 		this.supplierName = supplierName;
 		this.supplierAddress = supplierAddress;
@@ -154,5 +156,18 @@ public class Supplier {
 	public void setGoodsList(List<Goods> goodsList) {
 		this.goodsList = goodsList;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Supplier [supplierId=" + supplierId + ", supplierName=" + supplierName + ", supplierAddress="
+				+ supplierAddress + ", quantityOrder=" + quantityOrder + ", orderId=" + orderId + ", amount=" + amount
+				+ ", goodsList=" + goodsList + "]";
+	}
+	
+	
+	
 
 }

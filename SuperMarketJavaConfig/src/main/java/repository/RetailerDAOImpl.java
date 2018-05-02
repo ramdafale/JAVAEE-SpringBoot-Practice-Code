@@ -24,41 +24,38 @@ public class RetailerDAOImpl implements RetailerDAO {
 
 	private JdbcTemplate jdbcTemplate;
 
-	/*@Override
-	public int viewGoods() {
-		// TODO Auto-generated method stub
-		String query = "select * from goods";
-		System.out.println(query);
-		return jdbcTemplate.update(query);
+	/*
+	 * @Override public int viewGoods() { // TODO Auto-generated method stub String
+	 * query = "select * from goods"; System.out.println(query); return
+	 * jdbcTemplate.update(query);
+	 * 
+	 * }
+	 */
 
-	}*/
+	public List<Goods> getAllGoods() {
+		return jdbcTemplate.query("select * from goods", new ResultSetExtractor<List<Goods>>() {
+			@Override
+			public List<Goods> extractData(ResultSet rs) throws SQLException, DataAccessException {
 
-	
-	public List<Goods> getAllGoods(){  
-		 return jdbcTemplate.query("select * from goods",new ResultSetExtractor<List<Goods>>(){  
-		    @Override  
-		     public List<Goods> extractData(ResultSet rs) throws SQLException,  
-		            DataAccessException {  
-		      
-		        List<Goods> list=new ArrayList<Goods>();  
-		        while(rs.next()){  
-		        Goods e=new Goods();  
-		        e.setGoodsId(rs.getInt(1));  
-		        e.setGoodsName(rs.getString(2));  
-		        e.setGoodsQuantity(rs.getInt(3));
-		        e.setGoodsPrice(rs.getInt(4));
-		        list.add(e); 
-		        System.out.println(e.getGoodsName());
-		        System.out.println(e.getGoodsPrice());
-		        System.out.println(e.getGoodsQuantity());
-		       
-		        
-		        }  
-		        
-		        return list;  
-		        }  
-		    });  
-		  }  
+				List<Goods> list = new ArrayList<Goods>();
+				while (rs.next()) {
+					Goods e = new Goods();
+					e.setGoodsId(rs.getInt(1));
+					e.setGoodsName(rs.getString(2));
+					e.setGoodsQuantity(rs.getInt(3));
+					e.setGoodsPrice(rs.getInt(4));
+					list.add(e);
+					
+					System.out.println(e.getGoodsName());
+					System.out.println(e.getGoodsPrice());
+					System.out.println(e.getGoodsQuantity());
+
+				}
+
+				return list;
+			}
+		});
+	}
 
 	/**
 	 * @return the jdbcTemplate
@@ -77,33 +74,31 @@ public class RetailerDAOImpl implements RetailerDAO {
 
 	@Override
 	public List<Customer> viewCustomer(int customerId) {
-		
+
 		String query = "select * from customer where customerId=" + customerId;
 		System.out.println(query);
-		 return jdbcTemplate.query(query,new ResultSetExtractor<List<Customer>>(){  
-			    @Override  
-			     public List<Customer> extractData(ResultSet rs) throws SQLException,  
-			            DataAccessException {  
-			      
-			        List<Customer> list=new ArrayList<Customer>();  
-			        while(rs.next()){  
-			        Customer c=new Customer(); 
-			        c.setCustomerAddress(rs.getString(3));
-			       c.setCustomerId(rs.getInt(1));
-			       c.setCustomerName(rs.getString(2));
-			       c.setPaymentMode(rs.getString(4));
-			        list.add(c); 
-			        System.out.println(c.getCustomerId());
-			        System.out.println(c.getCustomerName());
-			        System.out.println(c.getCustomerAddress());
-			        System.out.println(c.getPaymentMode());
-			       
-			        
-			        }  
-			        
-			        return list;  
-			        }  
-			    });  
+		return jdbcTemplate.query(query, new ResultSetExtractor<List<Customer>>() {
+			@Override
+			public List<Customer> extractData(final ResultSet rs) throws SQLException, DataAccessException {
+
+				final List<Customer> list = new ArrayList<Customer>();
+				while (rs.next()) {
+					final Customer c = new Customer();
+					c.setCustomerAddress(rs.getString(3));
+					c.setCustomerId(rs.getInt(1));
+					c.setCustomerName(rs.getString(2));
+					c.setPaymentMode(rs.getString(4));
+					list.add(c);
+					System.out.println(c.getCustomerId());
+					System.out.println(c.getCustomerName());
+					System.out.println(c.getCustomerAddress());
+					System.out.println(c.getPaymentMode());
+
+				}
+
+				return list;
+			}
+		});
 
 	}
 
@@ -111,37 +106,33 @@ public class RetailerDAOImpl implements RetailerDAO {
 	public List<Supplier> viewSupplier(int supplierId) {
 		String query = "select * from supplier where supplierId=" + supplierId;
 		System.out.println(query);
-		 return jdbcTemplate.query(query,new ResultSetExtractor<List<Supplier>>(){  
-			    @Override  
-			     public List<Supplier> extractData(ResultSet rs) throws SQLException,  
-			            DataAccessException {  
-			      
-			        List<Supplier> list=new ArrayList<Supplier>();  
-			        while(rs.next()){  
-			        	Supplier c=new Supplier(); 
-			        c.setSupplierId(rs.getInt(1));
-			       c.setSupplierName(rs.getString(2));
-			       c.setSupplierAddress(rs.getString(3));
-			       c.setQuantityOrder(rs.getInt(4));
-			       c.setOrderId(rs.getInt(5));
-			       c.setAmount(rs.getDouble(6));
-			        list.add(c); 
-			        System.out.println(c.getSupplierId());
-			        System.out.println(c.getSupplierName());
-			        System.out.println(c.getSupplierAddress());
-			        System.out.println(c.getQuantityOrder());
-			        System.out.println(c.getOrderId());
-			        System.out.println(c.getAmount());
-			       
-			        
-			        }  
-			        
-			        return list;  
-			        }  
-			    });  
+		return jdbcTemplate.query(query, new ResultSetExtractor<List<Supplier>>() {
+			@Override
+			public List<Supplier> extractData(ResultSet rs) throws SQLException, DataAccessException {
 
-		
-		
+				List<Supplier> list = new ArrayList<Supplier>();
+				while (rs.next()) {
+					Supplier c = new Supplier();
+					c.setSupplierId(rs.getInt(1));
+					c.setSupplierName(rs.getString(2));
+					c.setSupplierAddress(rs.getString(3));
+					c.setQuantityOrder(rs.getInt(4));
+					c.setOrderId(rs.getInt(5));
+					c.setAmount(rs.getDouble(6));
+					list.add(c);
+					System.out.println(c.getSupplierId());
+					System.out.println(c.getSupplierName());
+					System.out.println(c.getSupplierAddress());
+					System.out.println(c.getQuantityOrder());
+					System.out.println(c.getOrderId());
+					System.out.println(c.getAmount());
+
+				}
+
+				return list;
+			}
+		});
+
 	}
 
 	@Override
@@ -151,17 +142,12 @@ public class RetailerDAOImpl implements RetailerDAO {
 	}
 
 	@Override
-	public int addRetailer(String name, String address) {
-		
-		String query = "insert into retailer values ("+ "'"+name+"'"+","+"'" + address +"'"+")";
+	public int addRetailer(Supplier s) {
+
+		String query = "insert into retailer values (" + "'" + s.getSupplierName() + "'" + "," + "'"
+				+ s.getSupplierAddress() + "'" + ")";
 		System.out.println(query);
 		return jdbcTemplate.update(query);
 	}
-		
-		
-	
-	}
 
-
-
-
+}

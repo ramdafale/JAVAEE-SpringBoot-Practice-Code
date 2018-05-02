@@ -7,5 +7,5 @@ public interface GoodsDAO {
 
 	public int removeGoods(int goodsId);
 
-	public int updateGoods(int goodsId,String goodsName );
+	public int updateGoods(int goodsId,String goodsName);
 }
