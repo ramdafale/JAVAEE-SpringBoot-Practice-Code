@@ -82,6 +82,100 @@ public class AppTest {
 	assertNotEquals("Enter valid Id", orderId, supplier.getOrderId());
 	assertNotEquals("Enter valid amount", amount, supplier.getAmount());
 }
+	
+	
+	// Testing Addcustomer method
+	/*
+	 * @Test public void addCustomerToDAtabase() { final long id = 0; final String
+	 * name = null; final String address = null; final String payment = null; final
+	 * String retailer = null;
+	 * 
+	 * final Customer customer = new Customer(7, "mukund", "melbern", "credit"); //
+	 * assertNotEquals("Invalid id",id,customer.getCustomerId()); //
+	 * assertNotEquals("Invalid name",name,customer.getCustomerName());
+	 * 
+	 * final long value = customerService.addCustomer(customer);
+	 * 
+	 * assertEquals("", 1, value);
+	 * 
+	 * }
+	 */
+
+	// Junit for deleting a customer
+	/*
+	 * @Test public void deleteCustomer() {
+	 * 
+	 * final long value = customerService.removeCusotmer(102); assertEquals("",1,
+	 * value); }
+	 */
+
+	// Junit for updating Name of customer
+	/*
+	 * @Test public void updateCustomer() {
+	 * 
+	 * //customer.setPaymentMode("credit"); final long
+	 * value=customerService.updateCustomer(2, "Ramesh"); assertEquals("",1, value);
+	 * }
+	 */
+
+	// Junit for adding a goodIntoDB
+
+	 // @Test
+	 /*  public void addGoods()
+	   {
+		   Goods goods=new Goods(1002,"kitkat",5,12.00);
+		   long value=goodsService.addGoods(goods);
+		   assertEquals("",1002,value);
+	   }
+
+	   
+		// Junit for remove a good IntoDB
+	   //@Test
+	   public void removeGoods()
+	   {
+		   long value=goodsService.removeGoods(1001);
+		   assertEquals(1,value);
+	   }
+	   
+		// Junit for updating a goodIntoDB
+	 //  @Test
+	   public void updateGoods() {
+		   long value=goodsService.updateGoods(1, "apple");
+		   assertEquals(1,value);
+	   }
+	   */
+	   
+	   
+	   
+	   // @Test
+		/*public void viewCustomer()
+		{
+			
+			final List<Customer> list=retailerService.viewCustomer("R2");
+			assertThat( list,hasItems((new Customer(5,"sona","chennai","credit","R2")),new Customer(3,"sona","chennai","credit","R2")));
+			
+		}
+		
+//		@Test
+		public void viewSupplier()
+		{
+			final List<Supplier> list=retailerService.viewSupplier("R1");
+			assertThat(list,hasItems((new Supplier(103,"Sonam","Chennai",20,112,20,"R1")),(new Supplier(101,"Pooja","Chennai",20,112,40,"R1"))));
+		}
+		
+		//@Test
+		public void viewGoods()
+		{
+			final List<Goods> list=retailerService.viewGoods("R1");
+			assertThat(list,hasItems(new Goods(1002,"kitkat",12,40,101)));
+		}
+		*/
+	   
+	   
+	
+	
+	
+	
 	/*
 	 * @Test public void InsertCustomerIntoDatabase() {
 	 * 
