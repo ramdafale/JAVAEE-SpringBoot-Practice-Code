@@ -1,9 +1,10 @@
 package repository;
 
+import model.Goods;
+
 public interface GoodsDAO {
 
-	public int addGoods(int goodsId, String goodsName, int goodsQuantity,
-			double goodsPrice);
+	public int addGoods(Goods goods);
 
 	public int removeGoods(int goodsId);
 

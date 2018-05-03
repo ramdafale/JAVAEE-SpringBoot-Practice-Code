@@ -13,6 +13,13 @@ public class Retailer {
 	 * @param retailerName
 	 * @param retailerAddres
 	 */
+	
+	public Retailer ()
+	{
+		
+	}
+	
+	
 	public Retailer(String retailerName, String retailerAddres) {
 		this.retailerName = retailerName;
 		this.retailerAddres = retailerAddres;
@@ -49,4 +56,13 @@ public class Retailer {
 	}
 
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

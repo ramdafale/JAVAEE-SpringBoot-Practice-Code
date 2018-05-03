@@ -1,12 +1,15 @@
 package service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import repository.SupplierDAO;
 
 /**
  * this class implementing methods of its parent interface
  */
+
+@Service("supplierService")
 public class SupplierServiceImpl implements SupplierService {
 
 	/**
@@ -14,12 +17,11 @@ public class SupplierServiceImpl implements SupplierService {
 	 *            this will be used to access DAO methods
 	 */
 	@Autowired
-	 private SupplierDAO supplierDAO;
+	private SupplierDAO supplierDAO;
 
 	/**
 	 * @param supplierDAO
 	 */
-	
 
 	@Override
 	public int addSupplier(final int supplierId, final String supplierName, final String supplierAddress,
@@ -34,7 +36,7 @@ public class SupplierServiceImpl implements SupplierService {
 
 	@Override
 	public int removeSupplier(final int supplierId) {
-	//	final SupplierDAO supplierDAO = null;
+		// final SupplierDAO supplierDAO = null;
 		final int removeData = supplierDAO.removeSupplier(supplierId);
 		return removeData;
 	}

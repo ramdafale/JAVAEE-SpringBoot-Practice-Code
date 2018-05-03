@@ -39,6 +39,9 @@ public class GroceryMain {
 		// Customer e=new Customer();
 		// e.setCustomerId(520);
 		/*
+		 * 
+		 * 
+		 * 
 		 * int status2=dao.removeCustomer(104);
 		 * 
 		 * System.out.println(status2);

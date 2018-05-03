@@ -1,23 +1,28 @@
 package repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
+
+@Repository()
+@Qualifier("supplierDAO")
 public class SupplierDAOImpl implements SupplierDAO {
 
 	private DataSource dataSource;
 
 	JdbcTemplate jdbcTemplate;
 
+
+	
+	
+	
+	
 	@Override
-	public int addSupplier(int supplierId, String supplierName, String supplierAddress, int quantityOrder, int orderId,
-			double amount) {
+	public int addSupplier(final int supplierId, final String supplierName, final String supplierAddress, final int quantityOrder, final int orderId,
+			final double amount) {
 		String Query = "insert into supplier values(" + supplierId + "," + "'" + supplierName + "'" + "," + "'"
 				+ supplierAddress + "'" + "," + quantityOrder + "," + orderId + "," + amount + ")";
 		System.out.println(Query);

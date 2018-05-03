@@ -3,6 +3,7 @@ package service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import model.Goods;
 import repository.GoodsDAO;
 
 @Service("goodsService")
@@ -21,9 +22,9 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 
 	@Override
-	public int addGoods(int goodsId, String goodsName, int goodsQuantity, double goodsPrice) {
+	public int addGoods(Goods goods) {
 		// GoodsDAO goodsDAO = null;
-		int addData = goodsdao.addGoods(goodsId, goodsName, goodsQuantity, goodsPrice);
+		int addData = goodsdao.addGoods(goods);
 		return addData;
 	}
 

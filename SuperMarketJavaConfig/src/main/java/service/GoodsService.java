@@ -1,5 +1,7 @@
 package service;
 
+import model.Goods;
+
 public interface GoodsService {
 
 	/**
@@ -7,7 +9,7 @@ public interface GoodsService {
 	 *         table Goods and adding goodsID, name,quantity,price
 	 * 
 	 */
-	int addGoods(int goodsId, String goodsName, int goodsQuantity, double goodsPrice);
+	int addGoods(Goods goods);
 
 	/**
 	 * @method this method is calling a Repository Goods which connect to database
