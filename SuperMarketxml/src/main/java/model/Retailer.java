@@ -18,6 +18,10 @@ public class Retailer {
 		this.retailerAddres = retailerAddres;
 	}
 
+	public Retailer() {
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * @return the retailerName
 	 */

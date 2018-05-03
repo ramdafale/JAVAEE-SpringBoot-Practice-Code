@@ -17,16 +17,16 @@ public class SupplierServiceImpl implements SupplierService {
 	}
 
 	@Override
-	public String removeSupplier(int supplierId) {
+	public int removeSupplier(int supplierId) {
 		SupplierDAO supplierDAO = null;
-		String removeData = supplierDAO.removeSupplier(supplierId);
+		int removeData = supplierDAO.removeSupplier(supplierId);
 		return removeData;
 	}
 
 	@Override
-	public String updateSupplier(int supplierId) {
+	public int updateSupplier(int supplierId) {
 		SupplierDAO supplierDAO = null;
-		String removeData = supplierDAO.updateSupplier(supplierId);
+		int removeData = supplierDAO.updateSupplier(supplierId);
 		return removeData;
 	}
 

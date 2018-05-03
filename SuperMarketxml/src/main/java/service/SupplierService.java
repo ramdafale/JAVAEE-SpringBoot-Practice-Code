@@ -6,8 +6,8 @@ public interface SupplierService {
 			String supplierAddress, int quantityOrder, int orderId,
 			double amount);
 
-	public String removeSupplier(int supplierId);
+	public int removeSupplier(int supplierId);
 
-	public String updateSupplier(int supplierId);
+	public int updateSupplier(int supplierId);
 
 }
