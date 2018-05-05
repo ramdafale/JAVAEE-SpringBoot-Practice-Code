@@ -3,6 +3,7 @@
  */
 package service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import model.Goods;
 import model.Supplier;
 import repository.CustomerDAO;
 import repository.RetailerDAO;
+import repository.RetailerDAOImpl;
 
 /**
  * @author trainee
@@ -29,10 +31,10 @@ public class RetailerServiceImpl implements RetailerService {
 
 	}
 
-	@Override
-	public List<Customer> viewCustomer(final int customerId) {
-		
-		return retailerDao.viewCustomer(customerId);
+	public List<Customer> viewCustomer(int customerId ) {
+		List customerList = new ArrayList<Customer>();
+		customerList = retailerDao.viewCustomer(customerId);
+		return customerList;
 	}
 
 	@Override

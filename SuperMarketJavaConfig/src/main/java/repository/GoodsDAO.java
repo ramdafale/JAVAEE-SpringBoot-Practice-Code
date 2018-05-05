@@ -4,7 +4,8 @@ import model.Goods;
 
 public interface GoodsDAO {
 
-	public int addGoods(Goods goods);
+	public int addGoods(int goodsId, String goodsName, int goodsQuantity,
+			double goodsPrice);
 
 	public int removeGoods(int goodsId);
 

@@ -30,9 +30,10 @@ public class GoodsDAOImpl implements GoodsDAO {
 	}
 
 	@Override
-	public int addGoods(Goods goods) {
-		String query = "insert into goods values(" + goods.getGoodsId() + "," + "'" + goods.getGoodsName() + "'" + "," + goods.getGoodsQuantity() + ","
-				+ goods.getGoodsPrice() + ")";
+	public int addGoods(int goodsId, String goodsName, int goodsQuantity,
+			double goodsPrice) {
+		String query = "insert into goods values(" + goodsId + "," + "'" + goodsName + "'" + "," + goodsQuantity+ ","
+				+ goodsPrice + ")";
 		System.out.println(query);
 
 		return jdbcTemplate.update(query);

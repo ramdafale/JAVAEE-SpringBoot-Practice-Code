@@ -22,9 +22,10 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 
 	@Override
-	public int addGoods(Goods goods) {
-		// GoodsDAO goodsDAO = null;
-		int addData = goodsdao.addGoods(goods);
+	public int addGoods(int goodsId, String goodsName, int goodsQuantity,
+			double goodsPrice) {
+		
+		int addData = goodsdao.addGoods(goodsId,goodsName,goodsQuantity,goodsPrice);
 		return addData;
 	}
 

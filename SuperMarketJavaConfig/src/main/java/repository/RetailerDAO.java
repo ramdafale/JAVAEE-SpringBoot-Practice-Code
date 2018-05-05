@@ -20,7 +20,7 @@ public interface RetailerDAO {
 	
 public  List<Goods> viewGoods();
 
-public List<Customer>  viewCustomer(int customerId);
+public List<Customer>  viewCustomer(int customerId );
 
 public  List<Supplier>  viewSupplier(int supplierId);
 	

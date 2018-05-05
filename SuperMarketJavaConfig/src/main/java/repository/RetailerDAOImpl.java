@@ -73,7 +73,7 @@ public class RetailerDAOImpl implements RetailerDAO {
 	}
 
 	@Override
-	public List<Customer> viewCustomer(int customerId) {
+	public List<Customer> viewCustomer(int customerId ) {
 
 		String query = "select * from customer where customerId=" + customerId;
 		System.out.println(query);
