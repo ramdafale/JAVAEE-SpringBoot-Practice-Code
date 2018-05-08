@@ -49,38 +49,17 @@ public class RetailerDAOImpl implements RetailerDAO {
 		return list;
 	}
 
+	
 	@Override
-	public List<Supplier> viewSupplier(int supplierId) {
-		String query = "select * from supplier where supplierId=" + supplierId;
-		System.out.println(query);
-		return jdbcTemplate.query(query, new ResultSetExtractor<List<Supplier>>() {
-			@Override
-			public List<Supplier> extractData(ResultSet rs) throws SQLException, DataAccessException {
-
-				List<Supplier> list = new ArrayList<Supplier>();
-				while (rs.next()) {
-					Supplier c = new Supplier();
-					c.setSupplierId(rs.getInt(1));
-					c.setSupplierName(rs.getString(2));
-					c.setSupplierAddress(rs.getString(3));
-					c.setQuantityOrder(rs.getInt(4));
-					c.setOrderId(rs.getInt(5));
-					c.setAmount(rs.getDouble(6));
-					list.add(c);
-					System.out.println(c.getSupplierId());
-					System.out.println(c.getSupplierName());
-					System.out.println(c.getSupplierAddress());
-					System.out.println(c.getQuantityOrder());
-					System.out.println(c.getOrderId());
-					System.out.println(c.getAmount());
-
-				}
-
-				return list;
-			}
-		});
-
+	public List<Supplier> viewSupplier(final int supplierId) {
+		// TODO Auto-generated method stub
+		List<Supplier> list = (List<Supplier>) jdbcTemplate.query(
+				"SELECT * FROM supplier where supplierID  = '" + supplierId + "' ",
+				new BeanPropertyRowMapper<Supplier>(Supplier.class));
+		System.out.println("In supplier view");
+		return list;
 	}
+	
 
 	public List<Goods> viewGoods() {
 		// TODO Auto-generated method stub
