@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.training.springbootjpa.exception.ManagedException;
 import com.training.springbootjpa.model.Customer;
 import com.training.springbootjpa.repository.CustomerDAO;
 
@@ -52,7 +54,21 @@ public class CustomerServiceImpl implements CustomerService {
 		return (List<Customer>) customerDAO.findAll();
 	}
 
+	@Override
+	public Optional<Customer>  getCustomerDetail(Long id) throws ManagedException {
+	
+		
+		Optional<Customer>  customerData = customerDAO.findById(id);
+		if (customerData.isPresent()) {
+		return customerData;
+		}
+		 else
+				throw new ManagedException("ID is not found");
+		
+	}
+	}
+
 	
 	
 	
-}
+
