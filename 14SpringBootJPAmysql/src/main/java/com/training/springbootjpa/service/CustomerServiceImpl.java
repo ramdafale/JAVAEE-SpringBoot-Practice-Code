@@ -22,11 +22,23 @@ public class CustomerServiceImpl implements CustomerService {
 	private CustomerDAO customerDAO;
 
 	@Override
-	public Customer addCustomer(Customer customer) {
+	public Customer addCustomer(Customer customer) throws ManagedException {
 		Customer customerData = customerDAO.save(customer);
-		return customerData;
+		if ( customerData.getCustomerName()==null || customerData.getPaymentMode() == null )
+		{
+			throw new ManagedException("provide correct details");
+		}
+		else
+			
+			return customerData;
 	}
 
+	
+	
+	
+	
+	
+	
 	@Override
 	public List deleteCustomerById(long deleteById) {
 		List<Customer> customerList = (List<Customer>) customerDAO.findAll();

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +28,9 @@ import com.training.springbootjpa.service.SupplierService;
 @RestController
 public class MainController {
 
-	
-	/*with help of this annonation we can access all the proporties of bean
-	 * we can access all method of CustomerService. 
+	/*
+	 * with help of this annonation we can access all the proporties of bean we can
+	 * access all method of CustomerService.
 	 */
 	@Autowired
 	private CustomerService customerService;
@@ -76,22 +77,22 @@ public class MainController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/searchCustomer/{customerName}")
 
-	public ResponseEntity<String> searchCustomer(@PathVariable String customerName) throws ManagedException {
-		ResponseEntity<String> customerData = null;
+	public ResponseEntity searchCustomer(@PathVariable String customerName) throws ManagedException {
+		Customer customerData = null;
 
 		customerData = cdao.findByCustomerName(customerName);
 		if (customerData == null)
-			return new ResponseEntity<String>("Data not found", HttpStatus.OK);
+			return new ResponseEntity("Data not found", HttpStatus.OK);
 		else
-			return new ResponseEntity<String>("Data found", HttpStatus.OK);
+			return new ResponseEntity("Data  found", (MultiValueMap) customerData, HttpStatus.OK);
+
 	}
 
-	
-	
 	@RequestMapping(method = RequestMethod.GET, value = "/getAllCustomer")
 	// @PostMapping(path = "/addCustomer")
 	public ResponseEntity<List<Customer>> getAllCustomer() {
 		final List<Customer> customerData;
+
 		customerData = customerService.getCustomer();
 
 		return new ResponseEntity(customerData, HttpStatus.OK);
@@ -100,9 +101,19 @@ public class MainController {
 	@RequestMapping(method = RequestMethod.POST, value = "/addCustomer", produces = MediaType.APPLICATION_JSON_VALUE)
 	// @PostMapping(path = "/addCustomer")
 	public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
-		final Customer customerData;
-		customerData = customerService.addCustomer(customer);
-		return new ResponseEntity(customerData, HttpStatus.OK);
+		Customer customerData = null;
+
+		try {
+			customerData = customerService.addCustomer(customer);
+			return new ResponseEntity(customerData, HttpStatus.OK);
+			
+		} catch (ManagedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new ResponseEntity("Provide valid input", HttpStatus.OK);
+		}
+
+		
 	}
 
 	@RequestMapping(value = "/deleteCustomer/{deleteById}", method = RequestMethod.GET)
@@ -118,10 +129,7 @@ public class MainController {
 		return new ResponseEntity(customer, HttpStatus.OK);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/addGoods", produces = MediaType.APPLICATION_JSON_VALUE) // @PostMapping(path
-																													// =
-																													// "/addGoods")
-																													// public
+	@RequestMapping(method = RequestMethod.POST, value = "/addGoods", produces = MediaType.APPLICATION_JSON_VALUE) 
 	ResponseEntity<Goods> createGoods(@RequestBody Goods goods) {
 		System.out.println(goods);
 		final Goods goodsData;

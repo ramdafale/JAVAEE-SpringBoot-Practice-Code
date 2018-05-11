@@ -7,7 +7,7 @@ import com.training.springbootjpa.model.Customer;
 
 public interface CustomerService {
 
-	Customer addCustomer(Customer customer);
+	Customer addCustomer(Customer customer) throws  ManagedException;
 
 	List<Customer> deleteCustomerById(long deleteById);
 

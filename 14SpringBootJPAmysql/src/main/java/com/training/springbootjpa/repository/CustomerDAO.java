@@ -12,7 +12,7 @@ public interface CustomerDAO extends CrudRepository<Customer, Long> {
 
 	// this method find your name in database and return the details if name found
 	// also this method internally fire a select query based on parameter you pass to it.
-    ResponseEntity<String> findByCustomerName(String customerName) throws ManagedException;
+	Customer findByCustomerName(String customerName) throws ManagedException;
 	
     
     // this method find your name & database in database and return the details if name & address is found
