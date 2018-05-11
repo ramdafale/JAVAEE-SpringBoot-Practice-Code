@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.training.springbootjpa.exception.ManagedException;
 import com.training.springbootjpa.model.Customer;
+import com.training.springbootjpa.model.Goods;
+import com.training.springbootjpa.model.Retailer;
+import com.training.springbootjpa.model.Supplier;
 import com.training.springbootjpa.repository.CustomerDAO;
 import com.training.springbootjpa.service.CustomerService;
 import com.training.springbootjpa.service.GoodsService;
@@ -24,6 +27,10 @@ import com.training.springbootjpa.service.SupplierService;
 @RestController
 public class MainController {
 
+	
+	/*with help of this annonation we can access all the proporties of bean
+	 * we can access all method of CustomerService. 
+	 */
 	@Autowired
 	private CustomerService customerService;
 
@@ -39,36 +46,48 @@ public class MainController {
 	@Autowired
 	CustomerDAO cdao;
 
-	// Get Customer Details using Id
-
+	/*
+	 * Get Customer Details using Id Handling the exception using Custom Exception
+	 */
 	@RequestMapping(value = "/customer/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Optional<Customer>> getCustomerById(@PathVariable Long id) throws ManagedException {
+	public ResponseEntity<String> getCustomerById(@PathVariable Long id) throws ManagedException {
 
-		Optional<Customer> customer = null;
+		String customer = null;
 
 		try {
 			customer = customerService.getCustomerDetail(id);
 		} catch (ManagedException e) {
-			
-			e.printStackTrace();
+
+			e.getMessage();
 		}
 		System.out.println(customer);
-	
-			return new ResponseEntity<Optional<Customer>>(customer, HttpStatus.OK);
-		}
 
-	
-
-	//
-
-	@RequestMapping(method = RequestMethod.GET, value = "/searchCustomer/{customerName}", produces = MediaType.APPLICATION_JSON_VALUE)
-	// @PostMapping(path = "/addCustomer")
-	public List<Customer> searchCustomer(String customerName) {
-		// final Customer customerData;
-		List<Customer> customerData = cdao.findByCustomerName(customerName);
-		return customerData;
+		return new ResponseEntity<String>(customer, HttpStatus.OK);
 	}
 
+	// Get Customer Details using Name
+	// Handling the exception
+	/*
+	 * Also we can send your whole Customer Details to UI using
+	 * ResponseEntity<Customer> For now this method is just telling user that your
+	 * data is being get added succesfully.
+	 * 
+	 */
+
+	@RequestMapping(method = RequestMethod.GET, value = "/searchCustomer/{customerName}")
+
+	public ResponseEntity<String> searchCustomer(@PathVariable String customerName) throws ManagedException {
+		ResponseEntity<String> customerData = null;
+
+		customerData = cdao.findByCustomerName(customerName);
+		if (customerData == null)
+			return new ResponseEntity<String>("Data not found", HttpStatus.OK);
+		else
+			return new ResponseEntity<String>("Data found", HttpStatus.OK);
+	}
+
+	
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/getAllCustomer")
 	// @PostMapping(path = "/addCustomer")
 	public ResponseEntity<List<Customer>> getAllCustomer() {
@@ -99,66 +118,74 @@ public class MainController {
 		return new ResponseEntity(customer, HttpStatus.OK);
 	}
 
-	/*
-	 * @RequestMapping(method = RequestMethod.POST, value = "/addGoods", produces =
-	 * 
-	 * MediaType.APPLICATION_JSON_VALUE) // @PostMapping(path = "/addGoods") public
-	 * ResponseEntity<Goods> createGoods(@RequestBody Goods goods) {
-	 * System.out.println(goods); final Goods goodsData; goodsData =
-	 * goodsService.addGoods(goods); return new ResponseEntity(goodsData,
-	 * HttpStatus.OK); }
-	 * 
-	 * @RequestMapping(value = "/deleteGoods/{deleteById}", method =
-	 * RequestMethod.GET) public ResponseEntity<Goods>
-	 * deleteGoods(@PathVariable("deleteById") long deleteById) { final List
-	 * goodsList; goodsList = goodsService.deleteGoodsById(deleteById); return new
-	 * ResponseEntity(goodsList, HttpStatus.OK); }
-	 * 
-	 * @RequestMapping(value = "/updateGoods/{updateById}", method =
-	 * RequestMethod.GET) public ResponseEntity<Goods>
-	 * updateGoods(@PathVariable("updateById") long updateById) { final Goods goods
-	 * = goodsService.updateGoodsById(updateById); return new ResponseEntity(goods,
-	 * HttpStatus.OK); }
-	 * 
-	 * @RequestMapping(method = RequestMethod.POST, value = "/addSupplier", produces
-	 * =
-	 * 
-	 * MediaType.APPLICATION_JSON_VALUE) // @PostMapping(path = "/addSupplier")
-	 * public ResponseEntity<Supplier> createSupplier(@RequestBody Supplier
-	 * supplier) { System.out.println(supplier); final Supplier supplierData;
-	 * supplierData = supplierService.addSupplier(supplier); return new
-	 * ResponseEntity(supplierData, HttpStatus.OK); }
-	 * 
-	 * @RequestMapping(value = "/deleteSupplier/{deleteById}", method =
-	 * RequestMethod.GET) public ResponseEntity<Supplier>
-	 * deleteSupplier(@PathVariable("deleteById") long deleteById) { final List
-	 * supplierList; supplierList = supplierService.deleteSupplierById(deleteById);
-	 * return new ResponseEntity(supplierList, HttpStatus.OK); }
-	 * 
-	 * @RequestMapping(value = "/updateSupplier/{updateById}", method =
-	 * RequestMethod.GET) public ResponseEntity<Supplier>
-	 * updateSupplier(@PathVariable("updateById") long updateById) { final Supplier
-	 * supplier = supplierService.updateSupplierById(updateById); return new
-	 * ResponseEntity(supplier, HttpStatus.OK); }
-	 * 
-	 * @RequestMapping(method = RequestMethod.POST, value = "/addRetailer", produces
-	 * = MediaType.APPLICATION_JSON_VALUE) // @PostMapping(path = "/addRetailer")
-	 * public ResponseEntity<Retailer> createRetailer(@RequestBody Retailer
-	 * retailer) { System.out.println(retailer); final Retailer retailerData;
-	 * retailerData = retailerService.addRetailer(retailer); return new
-	 * ResponseEntity(retailerData, HttpStatus.OK); }
-	 * 
-	 * @RequestMapping(value = "/deleteRetailer/{deleteById}", method =
-	 * RequestMethod.GET) public ResponseEntity<Retailer>
-	 * deleteRetailer(@PathVariable("deleteById") long deleteById) { final List
-	 * retailerList; retailerList = retailerService.deleteRetailerById(deleteById);
-	 * return new ResponseEntity(retailerList, HttpStatus.OK); }
-	 * 
-	 * @RequestMapping(value = "/updateRetailer/{updateById}", method =
-	 * RequestMethod.GET) public ResponseEntity<Retailer>
-	 * updateRetailer(@PathVariable("updateById") long updateById) { final Retailer
-	 * retailer = retailerService.updateRetailerById(updateById); return new
-	 * ResponseEntity(retailer, HttpStatus.OK); }
-	 */
+	@RequestMapping(method = RequestMethod.POST, value = "/addGoods", produces = MediaType.APPLICATION_JSON_VALUE) // @PostMapping(path
+																													// =
+																													// "/addGoods")
+																													// public
+	ResponseEntity<Goods> createGoods(@RequestBody Goods goods) {
+		System.out.println(goods);
+		final Goods goodsData;
+		goodsData = goodsService.addGoods(goods);
+		return new ResponseEntity(goodsData, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/deleteGoods/{deleteById}", method = RequestMethod.GET)
+	public ResponseEntity<Goods> deleteGoods(@PathVariable("deleteById") long deleteById) {
+		final List goodsList;
+		goodsList = goodsService.deleteGoodsById(deleteById);
+		return new ResponseEntity(goodsList, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/updateGoods/{updateById}", method = RequestMethod.GET)
+	public ResponseEntity<Goods> updateGoods(@PathVariable("updateById") long updateById) {
+		final Goods goods = goodsService.updateGoodsById(updateById);
+		return new ResponseEntity(goods, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/addSupplier", produces =
+
+	MediaType.APPLICATION_JSON_VALUE) // @PostMapping(path = "/addSupplier")
+	public ResponseEntity<Supplier> createSupplier(@RequestBody Supplier supplier) {
+		System.out.println(supplier);
+		final Supplier supplierData;
+		supplierData = supplierService.addSupplier(supplier);
+		return new ResponseEntity(supplierData, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/deleteSupplier/{deleteById}", method = RequestMethod.GET)
+	public ResponseEntity<Supplier> deleteSupplier(@PathVariable("deleteById") long deleteById) {
+		final List supplierList;
+		supplierList = supplierService.deleteSupplierById(deleteById);
+		return new ResponseEntity(supplierList, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/updateSupplier/{updateById}", method = RequestMethod.GET)
+	public ResponseEntity<Supplier> updateSupplier(@PathVariable("updateById") long updateById) {
+		final Supplier supplier = supplierService.updateSupplierById(updateById);
+		return new ResponseEntity(supplier, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/addRetailer", produces = MediaType.APPLICATION_JSON_VALUE) // @PostMapping(path
+																														// =
+																														// "/addRetailer")
+	public ResponseEntity<Retailer> createRetailer(@RequestBody Retailer retailer) {
+		System.out.println(retailer);
+		final Retailer retailerData;
+		retailerData = retailerService.addRetailer(retailer);
+		return new ResponseEntity(retailerData, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/deleteRetailer/{deleteById}", method = RequestMethod.GET)
+	public ResponseEntity<Retailer> deleteRetailer(@PathVariable("deleteById") long deleteById) {
+		final List retailerList;
+		retailerList = retailerService.deleteRetailerById(deleteById);
+		return new ResponseEntity(retailerList, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/updateRetailer/{updateById}", method = RequestMethod.GET)
+	public ResponseEntity<Retailer> updateRetailer(@PathVariable("updateById") long updateById) {
+		final Retailer retailer = retailerService.updateRetailerById(updateById);
+		return new ResponseEntity(retailer, HttpStatus.OK);
+	}
 
 }

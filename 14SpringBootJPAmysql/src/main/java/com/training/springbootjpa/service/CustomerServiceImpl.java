@@ -11,7 +11,7 @@ import com.training.springbootjpa.model.Customer;
 import com.training.springbootjpa.repository.CustomerDAO;
 
 /**
- * @author  RamDAfale
+ * @author RamDAfale
  *
  */
 
@@ -44,31 +44,24 @@ public class CustomerServiceImpl implements CustomerService {
 	public Customer updateCustomerById(long updateById) {
 		Optional<Customer> customer = customerDAO.findById(updateById);
 		Customer customerDummy = customer.get();
-		customerDummy.setCustomerAddress("California");
+		customerDummy.setCustomerAddress("Newyork");
 		return customerDummy;
 	}
 
 	@Override
 	public List<Customer> getCustomer() {
-		
+
 		return (List<Customer>) customerDAO.findAll();
 	}
 
 	@Override
-	public Optional<Customer>  getCustomerDetail(Long id) throws ManagedException {
-	
-		
-		Optional<Customer>  customerData = customerDAO.findById(id);
+	public String getCustomerDetail(Long id) throws ManagedException {
+
+		Optional<Customer> customerData = customerDAO.findById(id);
 		if (customerData.isPresent()) {
-		return customerData;
-		}
-		 else
-				throw new ManagedException("ID is not found");
-		
-	}
+			return "Data Found";
+		} else
+			return "Not Found";
 	}
 
-	
-	
-	
-
+}
