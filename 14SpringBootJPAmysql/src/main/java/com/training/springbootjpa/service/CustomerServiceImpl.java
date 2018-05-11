@@ -40,17 +40,22 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	
 	@Override
-	public List deleteCustomerById(long deleteById) {
-		List<Customer> customerList = (List<Customer>) customerDAO.findAll();
-		Iterator iterator = customerList.iterator();
-		while (iterator.hasNext()) {
-			Customer customer = (Customer) iterator.next();
-			if (customer.getCustomerId() == deleteById) {
-				customerDAO.deleteById(deleteById);
-			}
+	public Customer deleteCustomerById(long deleteById) throws ManagedException {
+		
+		Optional<Customer> customer=customerDAO.findById(deleteById);
+		if(customer.isPresent())
+		{
+		 customerDAO.deleteById(deleteById);		
 		}
-		return customerList;
-	}
+		else
+		{
+			throw new ManagedException("Id not Found");
+			
+		}
+		return null;
+			}
+		
+	
 
 	@Override
 	public Customer updateCustomerById(long updateById) {

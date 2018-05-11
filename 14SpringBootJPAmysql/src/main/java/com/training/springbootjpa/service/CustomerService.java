@@ -9,7 +9,7 @@ public interface CustomerService {
 
 	Customer addCustomer(Customer customer) throws  ManagedException;
 
-	List<Customer> deleteCustomerById(long deleteById);
+	Customer deleteCustomerById(long deleteById)throws ManagedException ;
 
 	Customer updateCustomerById(long updateById);
 

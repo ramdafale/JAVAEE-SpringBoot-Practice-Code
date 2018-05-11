@@ -1,7 +1,7 @@
 package com.training.springbootjpa.controller;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.training.springbootjpa.exception.ManagedException;
@@ -28,6 +29,9 @@ import com.training.springbootjpa.service.SupplierService;
 @RestController
 public class MainController {
 
+	
+	
+	private static final Logger LOGGER = Logger.getLogger( MainController.class.getName() );
 	/*
 	 * with help of this annonation we can access all the proporties of bean we can
 	 * access all method of CustomerService.
@@ -52,7 +56,7 @@ public class MainController {
 	 */
 	@RequestMapping(value = "/customer/{id}", method = RequestMethod.GET)
 	public ResponseEntity<String> getCustomerById(@PathVariable Long id) throws ManagedException {
-
+		LOGGER.info("Inside Get Customer By Id");
 		String customer = null;
 
 		try {
@@ -78,6 +82,8 @@ public class MainController {
 	@RequestMapping(method = RequestMethod.GET, value = "/searchCustomer/{customerName}")
 
 	public ResponseEntity searchCustomer(@PathVariable String customerName) throws ManagedException {
+		LOGGER.info("Inside Get Customer By Name");
+		
 		Customer customerData = null;
 
 		customerData = cdao.findByCustomerName(customerName);
@@ -88,9 +94,13 @@ public class MainController {
 
 	}
 
+	/*this method shows all customers to admin if requested
+	 */
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/getAllCustomer")
 	// @PostMapping(path = "/addCustomer")
 	public ResponseEntity<List<Customer>> getAllCustomer() {
+		LOGGER.info("Inside Get All Customers ");
 		final List<Customer> customerData;
 
 		customerData = customerService.getCustomer();
@@ -98,9 +108,16 @@ public class MainController {
 		return new ResponseEntity(customerData, HttpStatus.OK);
 	}
 
+	
+	/*
+	 * This method add new customer to database 
+	 * Exception Handling-  if users provides Null to Textbox then it will throw Proper Message to user .  
+	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/addCustomer", produces = MediaType.APPLICATION_JSON_VALUE)
 	// @PostMapping(path = "/addCustomer")
 	public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
+		
+		LOGGER.info("Inside Add New Customer ");
 		Customer customerData = null;
 
 		try {
@@ -115,14 +132,68 @@ public class MainController {
 
 		
 	}
+	
+	
 
-	@RequestMapping(value = "/deleteCustomer/{deleteById}", method = RequestMethod.GET)
-	public ResponseEntity<Customer> deleteCustomer(@PathVariable("deleteById") long deleteById) {
-		final List<Customer> customerList;
-		customerList = customerService.deleteCustomerById(deleteById);
-		return new ResponseEntity(customerList, HttpStatus.OK);
-	}
+	
+	
+	/**
+	  * GET /delete  Delete a customer details from the database.
+	  * 
+	  * 
+	  */
+	 @RequestMapping("/delete/{customerId}")
+	 public ResponseEntity<Customer> deleteCustomerRecord(@PathVariable Long customerId) {
+		 
+		 Customer cust =null;
+			LOGGER.info("Inside Delete Customer ");
+		 try {
+			cust = 	customerService.deleteCustomerById(customerId);
+		} catch (ManagedException e) {
+			
+			
+			e.printStackTrace();
+			return new ResponseEntity("Given Id not found", HttpStatus.OK);
+		}
+	   
+		 return new ResponseEntity("Given Id deleted successfully ", HttpStatus.OK);
+	 }
+	
+	 
+	 /**
+	  * 
+	  * Another Implementation
+	  * GET /delete  Delete a customer details from the database.
+	  * 
+	  * 
+	  */
 
+
+/**
+	  * GET /delete  Delete a booking from the database.
+	  */
+	 @RequestMapping("/delete/{customerId}")
+	 public String deletecustomer(@PathVariable Long customerId) {
+		 
+			LOGGER.info("Inside Delete Customer ");
+		 try {
+			customerService.deleteCustomerById(customerId);
+		} catch (ManagedException e) {
+			
+			
+			e.printStackTrace();
+			  return "CustomerID #"+customerId+" Not Found";
+		}
+	   
+	     return "CustomerID #"+customerId+" deleted successfully";
+	 }
+
+
+
+	 
+	 
+	 
+	 
 	@RequestMapping(value = "/updateCustomer/{updateById}", method = RequestMethod.GET)
 	public ResponseEntity<Customer> updateCustomer(@PathVariable("updateById") long updateById) {
 		final Customer customer = customerService.updateCustomerById(updateById);

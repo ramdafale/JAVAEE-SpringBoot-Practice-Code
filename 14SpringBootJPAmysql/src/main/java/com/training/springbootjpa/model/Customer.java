@@ -18,13 +18,13 @@ public class Customer {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long customerId;
 	private String customerName;
-	private String customerAddress;
-	private String paymentMode;
+	 private String customerAddress;
+	 private String paymentMode;
 	
 
 
 	/**
-	 * 
+	 * Default constructor which will help spring Mapper to map all entitites.
 	 */
     public Customer() {
 		super();
