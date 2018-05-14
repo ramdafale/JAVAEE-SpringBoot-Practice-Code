@@ -28,4 +28,5 @@ https://dzone.com/articles/introduction-to-jaxb-20
 
 #Scenario in Serialization 
 http://javabeginnerstutorial.com/core-java-tutorial/transient-vs-static-variable-java/#comment-2998
-
+#Call Rest End Services in main method class using RestTemplate
+https://howtodoinjava.com/spring/spring-restful/spring-restful-client-resttemplate-example/
