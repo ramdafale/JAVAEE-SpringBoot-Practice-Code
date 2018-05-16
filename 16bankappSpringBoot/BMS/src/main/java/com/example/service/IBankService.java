@@ -3,6 +3,9 @@
  */
 package com.example.service;
 
+import java.math.BigDecimal;
+import java.util.Optional;
+
 import com.example.model.Bank;
 
 /**
@@ -14,6 +17,8 @@ interface IBankService {
 	
 	int addBank(Bank bank);
 	
-	Object getBankDetails(Bank bank);
+	Optional<Bank> getBankDetails(BigDecimal id);
+	
+	
 	
 }

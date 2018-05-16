@@ -1,16 +1,17 @@
 /**
  * 
- */
+ *//*
 package com.example.service;
 
 import java.math.BigDecimal;
 
 import com.example.model.Account;
 
-/**
+*//**
  * @author trainee
  *
- */
+ *//*
+
 public interface IAccountService {
 
 	
@@ -21,3 +22,4 @@ public interface IAccountService {
 	
 	
 }
+*/

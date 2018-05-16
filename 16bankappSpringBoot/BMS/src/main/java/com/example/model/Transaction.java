@@ -1,4 +1,4 @@
-package com.example.model;
+/*package com.example.model;
 
 import java.math.BigDecimal;
 
@@ -76,3 +76,4 @@ public class Transaction {
 	}
 
 }
+*/

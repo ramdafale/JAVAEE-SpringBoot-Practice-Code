@@ -1,16 +1,17 @@
 /**
  * 
- */
+ *//*
 package com.example.service;
 
 import java.math.BigDecimal;
 
 import com.example.model.Account;
 
-/**
+*//**
  * @author trainee
  *
- */
+ *//*
+@Service
 public class AccountServiceImpl implements IAccountService {
 
 	@Override
@@ -44,3 +45,4 @@ public class AccountServiceImpl implements IAccountService {
 	
 	
 }
+*/

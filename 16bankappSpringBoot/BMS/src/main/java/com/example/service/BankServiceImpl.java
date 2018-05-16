@@ -3,9 +3,11 @@
  */
 package com.example.service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.dao.BankRepository;
 import com.example.model.Bank;
@@ -17,7 +19,7 @@ import com.example.model.Customer;
  */
 
 
-
+@Service
 public class BankServiceImpl  implements IBankService {
 
 	
@@ -35,12 +37,11 @@ public class BankServiceImpl  implements IBankService {
 	}
 
 	@Override
-	public Object getBankDetails(Bank bank) {
+	public Optional<Bank> getBankDetails(BigDecimal id) {
 
-		Optional<Bank> ob = bankrepository.findById(bank.getBankId());
-		Bank obj = ob.get();
+		 return this.bankrepository.findById(id);
 		
-		return obj;
+		
 	}
 
 }

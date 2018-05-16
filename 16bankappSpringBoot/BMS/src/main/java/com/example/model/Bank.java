@@ -27,7 +27,7 @@ public class Bank {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "bank_Id")
-	private long bankId;
+	private BigDecimal bankId;
 
 	@Column(name = "bank_Name")
 	private String bankName;
@@ -44,7 +44,7 @@ public class Bank {
 		this.bankName = bankName;
 	}
 
-	@OneToMany(targetEntity=Customer.class,mappedBy="bank_Id")
+	@OneToMany(targetEntity=Customer.class,mappedBy="bankId")
 	private List<Customer> bankCustomerList = new ArrayList<>();
 	/**
 	 * @return the bankName
@@ -56,7 +56,7 @@ public class Bank {
 	/**
 	 * @return the bankId
 	 */
-	public long getBankId() {
+	public BigDecimal getBankId() {
 		return bankId;
 	}
 
@@ -64,7 +64,7 @@ public class Bank {
 	 * @param bankId
 	 *            the bankId to set
 	 */
-	public void setBankId(long bankId) {
+	public void setBankId(BigDecimal bankId) {
 		this.bankId = bankId;
 	}
 
