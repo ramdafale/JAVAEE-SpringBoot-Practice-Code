@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: transactionInBank
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: trainee
+Implementation-Vendor-Id: com.bankApplication
+Build-Jdk: 1.8.0_171
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/transactionInBank
+Created-By: Maven Integration for Eclipse
+
