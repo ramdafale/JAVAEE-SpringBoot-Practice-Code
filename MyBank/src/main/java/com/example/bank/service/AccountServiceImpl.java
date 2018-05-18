@@ -2,10 +2,12 @@ package com.example.bank.service;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.bank.exception.ManagedException;
 import com.example.bank.model.Account;
 import com.example.bank.model.Bank;
 import com.example.bank.model.Customer;
@@ -23,17 +25,25 @@ import com.example.bank.request.AccountWithdrawDetails;
 
 @Service("accountService")
 public class AccountServiceImpl implements IAccountService {
+	
+	
+	 static Logger logger = Logger.getLogger(AccountServiceImpl.class.getName());
+	
+	
 	@Autowired
 	private AccountRepository accountRepository;
 
 	@Autowired
 	private BankRepository bankrepo;
-	@Autowired
-	private CustomerRepository custRepo;
 
 	/*
 	 * @Autowired private CustomerRepository customerrepository;
 	 */
+	@Autowired
+	private CustomerRepository custRepo;
+
+	@Autowired
+	private TransactionServiceImpl transactionservice;
 
 	/*
 	 * @see
@@ -65,35 +75,43 @@ public class AccountServiceImpl implements IAccountService {
 		BigDecimal newvalue = oldvalue.add(creditAmount);
 
 		Optional<Account> accountObject = accountRepository.findById(accountId);
-		Account accountTrueobject = accountObject.get();
-		accountTrueobject.setAmount(newvalue);
+		Account accountobject = accountObject.get();
+		accountobject.setAmount(newvalue);
 		bankTrueobject.setAmount(newvalue);
 
 		bankrepo.save(bankTrueobject);
 		custRepo.save(customertrueobject);
-		accountRepository.save(accountTrueobject);
-		
-		TransactionOperation tr = new TransactionOperation(customerId, accountId, creditAmount, "deposit");
-		itransact.save(tr);
-		
+		accountRepository.save(accountobject);
 
+		TransactionOperation transaction = new TransactionOperation(customertrueobject, accountobject, newvalue,
+				"Deposite");
+		try {
+			transactionservice.createTransaction(transaction);
+		} catch (ManagedException e) {
+			// TODO Auto-generated catch block
+			logger.info("Transaction not created for deposit .. plz check ");
+			e.printStackTrace();
+			
+		}
+		bankTrueobject.setAmount(newvalue);
+		bankrepo.save(bankTrueobject);
+		logger.info("Transaction created ");
 		return "Amount added Succesfully";
-
 	}
 
 	@Override
-	public String withdrawlMoney(AccountWithdrawDetails a) {
+	public String withdrawlMoney(final AccountWithdrawDetails account) {
 
-		Long bankId = a.getBankId();
+		Long bankId = account.getBankId();
 		Optional<Bank> ob = bankrepo.findById(bankId);
 		Bank bankTrueobject = ob.get();
 
-		Long customerId = a.getCustomerId();
+		Long customerId = account.getCustomerId();
 		Optional<Customer> customerob = custRepo.findById(customerId);
 		Customer customertrueobject = customerob.get();
 
-		Long accountId = a.getAccountId();
-		BigDecimal creditAmount = a.getAmount();
+		Long accountId = account.getAccountId();
+		BigDecimal creditAmount = account.getAmount();
 		BigDecimal oldvalue = bankTrueobject.getAmount();
 
 		BigDecimal newvalue = oldvalue.subtract(creditAmount);
@@ -107,6 +125,17 @@ public class AccountServiceImpl implements IAccountService {
 		custRepo.save(customertrueobject);
 		accountRepository.save(accountTrueobject);
 
+		TransactionOperation transaction = new TransactionOperation(customertrueobject, accountTrueobject, newvalue,
+				"Withdraw");
+		try {
+			transactionservice.createTransaction(transaction);
+		} catch (ManagedException e) {
+			logger.info("Transaction not created for withdraw.. plz check ");
+			e.printStackTrace();
+		}
+		bankTrueobject.setAmount(newvalue);
+		bankrepo.save(bankTrueobject);
+		logger.info("Transaction  created succesfully ");
 		return "Amount added Succesfully";
 
 	}
@@ -115,6 +144,7 @@ public class AccountServiceImpl implements IAccountService {
 	public Account getAccountDetails(Long id) {
 		// TODO Auto-generated method stub
 		Account account = accountRepository.findById(id).get();
+		logger.info("Account Details are>>>>>>>>>>>>>:");
 		return account;
 	}
 

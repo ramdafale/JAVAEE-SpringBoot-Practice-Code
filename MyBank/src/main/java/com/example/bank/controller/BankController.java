@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.bank.model.Bank;
 import com.example.bank.service.IBankService;
 
+
+
+
+/*
+ * @Class this class handles all the  request from client 
+ */
 @RestController
 @RequestMapping("/bank")
 public class BankController {

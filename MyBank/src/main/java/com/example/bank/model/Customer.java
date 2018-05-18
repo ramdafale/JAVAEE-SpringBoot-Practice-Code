@@ -47,6 +47,13 @@ public class Customer {
 		this.pin = pin;
 		this.bank = bank;
 	}
+	
+	public Customer( String customerName, Long pin) {
+		this.customerId = customerId;
+		this.customerName = customerName;
+		this.pin = pin;
+		this.bank = bank;
+	}
 
 	public Customer() {
 		// TODO Auto-generated constructor stub

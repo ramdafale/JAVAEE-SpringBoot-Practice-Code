@@ -21,16 +21,39 @@ import com.example.bank.service.IAccountService;
 import com.example.bank.service.IBankService;
 import com.example.bank.service.ICustomerService;
 
-@RestController
+
+
+/*
+ * RestController  this controller conatins all rest end points 
+ */
+
+ @RestController
 public class AccountController {
 
+	 //used for injecting an services of IAccountService
 	@Autowired
 	IAccountService accountService;
+	
+	//used for injecting an services of ICustomerService
 	@Autowired
 	ICustomerService customerService;
 	@Autowired
+	
+	//used for injecting an services of IBankService
 	IBankService bankService;
 
+	
+	
+	
+	
+	
+	
+	/*
+	 * when you hit the request from url this method will get invoke and
+	 * will create a  new account inside the databse
+	 */
+	
+	
 	@PostMapping("/accountCreate")
 	public ResponseEntity<?> createAccount(@RequestBody final AccountRequest accountRe) {
 		Account response = null;
@@ -54,6 +77,12 @@ public class AccountController {
 
 	}
 
+	
+	/*
+	 * this rest end point is used to get getails of perticular customer  
+	 */
+	
+	
 	@GetMapping("/getCustomerDetails/{id}")
 	public ResponseEntity<Customer> getCustomer(@PathVariable Long id) {
 		Customer cust = customerService.getCustomerDetails(id);
@@ -75,6 +104,13 @@ public class AccountController {
 
 	}
 
+	
+	
+	/*
+	 *this method debits money from bank of that custonmer
+	 */
+	
+	
 	@PostMapping("/withdrawMoney")
 	public ResponseEntity<?> withdrawMoneyToAccount(@RequestBody final AccountWithdrawDetails accountRe) {
 

@@ -13,10 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-/**
- * author name : Pooja Jain application name : Transaction in bank description :
- * to perform multiple transcation
- */
 
 @Table(name = "bank_details")
 @Entity

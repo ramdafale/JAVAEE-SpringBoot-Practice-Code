@@ -1,71 +1,50 @@
 package com.example.bank.model;
 
+
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.springframework.stereotype.Component;
+/**
+ * @author Ram
+ * 
+ *
+ */
 
-@Table(name = "transaction_details")
 @Entity
-@Component
+@Table(name = "transaction")
 public class TransactionOperation {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "transaction_id")
-	private Long transactionId;
-	@Column(name = "amount")
-	private BigDecimal amount;
-	@Column(name = "transaction_type")
-	private String transactionType;
 
+	private Long transactionId;
 	@ManyToOne(targetEntity = Customer.class)
 	private Customer customer;
+	@ManyToOne(targetEntity = Account.class)
+	private Account account;
+	private BigDecimal amount;
+	private String transactionType;
 
+	/**
+	 * 
+	 */
 	public TransactionOperation() {
-
+		super();
 	}
 
 	/**
-	 * @param customerId
-	 * @param accountId
+	 * @param transactionId
+	 * @param customer
+	 * @param account
 	 * @param amount
 	 * @param transactionType
 	 */
-
-	public TransactionOperation(BigDecimal amount, String transactionType) {
-		super();
-		/*
-		 * this.customerId = customerId; this.accountId = accountId;
-		 */
+	public TransactionOperation(Customer customer, Account account, BigDecimal amount, String transactionType) {
+		this.customer = customer;
+		this.account = account;
 		this.amount = amount;
 		this.transactionType = transactionType;
 	}
-
-	/**
-	 * @param customer
-	 *            the customer to set
-	 */
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
-
-	/**
-	 * @param account
-	 *            the account to set
-	 */
-	public void setAccount(Account account) {
-		this.account = account;
-	}
-
-	@ManyToOne(targetEntity = Account.class)
-	private Account account;
 
 	/**
 	 * @return the transactionId
@@ -78,12 +57,42 @@ public class TransactionOperation {
 	 * @param transactionId
 	 *            the transactionId to set
 	 */
-	public void setTransactionId(final Long transactionId) {
+	public void setTransactionId(Long transactionId) {
 		this.transactionId = transactionId;
 	}
 
 	/**
-	 * @return the customerId
+	 * @return the customer
+	 */
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	/**
+	 * @param customer
+	 *            the customer to set
+	 */
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+	/**
+	 * @return the account
+	 */
+	public Account getAccount() {
+		return account;
+	}
+
+	/**
+	 * @param account
+	 *            the account to set
+	 */
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	/**
+	 * @return the amount
 	 */
 	public BigDecimal getAmount() {
 		return amount;
@@ -93,7 +102,7 @@ public class TransactionOperation {
 	 * @param amount
 	 *            the amount to set
 	 */
-	public void setAmount(final BigDecimal amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
@@ -108,8 +117,18 @@ public class TransactionOperation {
 	 * @param transactionType
 	 *            the transactionType to set
 	 */
-	public void setTransactionType(final String transactionType) {
+	public void setTransactionType(String transactionType) {
 		this.transactionType = transactionType;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Transaction [transactionId=" + transactionId + ", customer=" + customer + ", account=" + account
+				+ ", amount=" + amount + ", transactionType=" + transactionType + "]";
+	}
 }

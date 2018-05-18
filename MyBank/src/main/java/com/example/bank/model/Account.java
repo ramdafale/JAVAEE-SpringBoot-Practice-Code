@@ -12,26 +12,40 @@ import javax.persistence.Table;
 
 
 
-
+/*
+ * @class Account class use  to  create new account and deposit money  withdraw money
+ * save state of your obejct to database. 
+ */
 
 @Table(name="account_details")
 @Entity
 public class Account {
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "Account [accountId=" + accountId + ", amount=" + amount + ", customer=" + customer + ", bank=" + bank
-				+ "]";
-	}
+	
+	
+	
+	
+	
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)	
 	@Column(name="account_id")
 	private Long accountId;
 	@Column(name="amount")
 	private  BigDecimal amount;
+	
+	
+	
+	
+	
+	public Account() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+	
+	
+	
 	
 	
 	@ManyToOne(targetEntity=Customer.class)
@@ -79,13 +93,13 @@ public class Account {
 	 * @return the bankId
 	 */
 	
-	public Account() {
-		// TODO Auto-generated constructor stub
-	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	
+
+	@Override
+	public String toString() {
+		return "Account [accountId=" + accountId + ", amount=" + amount + ", customer=" + customer + ", bank=" + bank
+				+ "]";
+	}
 	
 	
 	

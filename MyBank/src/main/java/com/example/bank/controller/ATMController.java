@@ -22,15 +22,25 @@ import com.example.bank.service.ATMServiceImpl;
 
 
 /**
- * @author 
- *
+ * @author ram dafale  
+ * RestEnd controller handles all the request and responce 
  */
 @RestController
 public class ATMController {
 
+	
+	
+	//Injects  all the operation of ATMSERVICES
 	@Autowired
 	ATMServiceImpl atmService;
 
+	
+	
+	
+	/*
+	 * this rest end will create instance of ATM associated with BAnk
+	 */
+	
 	@PostMapping(value = "/createATM")
 	public ResponseEntity<ATM> createATM(@RequestBody DetailsBankATM wrapperBankATM) throws ManagedException {
 		ATM atmData = null;
@@ -45,6 +55,13 @@ public class ATMController {
 			return new ResponseEntity<ATM>(atmData, HttpStatus.OK);
 	}
 
+	
+	/*
+	 * this Rest end will add money to ATM from bank.
+	 * 
+	 */
+	
+	
 	@PostMapping(value = "/addMoneyFromBank/{atmId}/{bankId}/{moneyToBeAddedToATM}")
 	public ResponseEntity<ATM> addMoneyFromBank(@PathVariable Long atmId, Long bankId, BigDecimal moneyToBeAddedToATM)
 			throws ManagedException {
@@ -59,6 +76,14 @@ public class ATMController {
 		else
 			return new ResponseEntity<ATM>(atmData, HttpStatus.OK);
 	}
+	
+	
+	
+	/*
+	 * this Rest end will withdraw money to ATM from bank.
+	 * 
+	 */
+	
 	
 	@PostMapping(value = "/withdrawMoney/{atmId}/{bankId}/{moneyToBeAddedToATM}")
 	public ResponseEntity<ATM> withdrawMoney(@PathVariable Long atmId, Long bankId, BigDecimal moneyToBeAddedToATM)
