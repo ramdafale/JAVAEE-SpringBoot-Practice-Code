@@ -4,6 +4,7 @@ package com.example.bank.model;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -12,11 +13,10 @@ import javax.persistence.Table;
  * 
  *
  */
-
-@Entity
 @Table(name = "transaction")
+@Entity
 public class TransactionOperation {
-
+    @Id
 	private Long transactionId;
 	@ManyToOne(targetEntity = Customer.class)
 	private Customer customer;
@@ -32,6 +32,15 @@ public class TransactionOperation {
 		super();
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * @param transactionId
 	 * @param customer

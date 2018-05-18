@@ -59,6 +59,10 @@ public class Customer {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Customer(int i, String string, int j) {
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * @return the customerId
 	 */

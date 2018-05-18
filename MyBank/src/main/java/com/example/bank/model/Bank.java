@@ -29,6 +29,11 @@ public class Bank {
 	public Bank() {
 	
 	}
+	
+	public Bank(BigDecimal amount) {
+		this.amount=amount;
+	}
+	
 
 	/**
 	 * method name : getBankId() return type : Long decription : it we get all bank

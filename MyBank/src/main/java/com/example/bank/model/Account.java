@@ -2,6 +2,7 @@ package com.example.bank.model;
 
 import java.math.BigDecimal;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +22,7 @@ import javax.persistence.Table;
 @Entity
 public class Account {
 
-	
+	 static Logger logger = Logger.getLogger(Account.class.getName());
 	
 	
 	
@@ -37,7 +38,7 @@ public class Account {
 	
 	
 	
-	
+	logger.info("");
 	public Account() {
 		// TODO Auto-generated constructor stub
 	}

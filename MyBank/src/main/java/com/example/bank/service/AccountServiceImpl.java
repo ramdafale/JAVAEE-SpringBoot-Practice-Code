@@ -25,11 +25,9 @@ import com.example.bank.request.AccountWithdrawDetails;
 
 @Service("accountService")
 public class AccountServiceImpl implements IAccountService {
-	
-	
-	 static Logger logger = Logger.getLogger(AccountServiceImpl.class.getName());
-	
-	
+
+	static Logger logger = Logger.getLogger(AccountServiceImpl.class.getName());
+
 	@Autowired
 	private AccountRepository accountRepository;
 
@@ -91,7 +89,7 @@ public class AccountServiceImpl implements IAccountService {
 			// TODO Auto-generated catch block
 			logger.info("Transaction not created for deposit .. plz check ");
 			e.printStackTrace();
-			
+
 		}
 		bankTrueobject.setAmount(newvalue);
 		bankrepo.save(bankTrueobject);
@@ -142,7 +140,7 @@ public class AccountServiceImpl implements IAccountService {
 
 	@Override
 	public Account getAccountDetails(Long id) {
-		// TODO Auto-generated method stub
+
 		Account account = accountRepository.findById(id).get();
 		logger.info("Account Details are>>>>>>>>>>>>>:");
 		return account;
