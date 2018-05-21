@@ -1,0 +1,23 @@
+<<<<<<< HEAD
+Manifest-Version: 1.0
+Implementation-Title: bank
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: Lohit
+Implementation-Vendor-Id: com.springboot
+Build-Jdk: 1.8.0_121
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/bank
+Created-By: Maven Integration for Eclipse
+
+=======
+Manifest-Version: 1.0
+Implementation-Title: bank
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: Lohit
+Implementation-Vendor-Id: com.springboot
+Build-Jdk: 1.8.0_121
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/bank
+Created-By: Maven Integration for Eclipse
+
+>>>>>>> a53b592d6e45294abf4d2c1a52bb4a8929e5f30e
