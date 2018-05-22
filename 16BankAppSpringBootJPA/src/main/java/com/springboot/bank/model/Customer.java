@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import org.springframework.lang.NonNull;
 
 /**
- * @author Sumit
+ * @author Ram
  *It will represents the CUstomer Entity.
  */
 

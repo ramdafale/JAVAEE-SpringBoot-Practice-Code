@@ -6,7 +6,7 @@ package com.springboot.bank.dto;
 import java.math.BigDecimal;
 
 /**
- * @author Sumit
+ * @author Ram
  *
  */
 public class AccountDetails {

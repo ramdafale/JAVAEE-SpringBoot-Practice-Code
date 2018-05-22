@@ -4,7 +4,7 @@
 package com.springboot.bank.exception;
 
 /**
- * @author Sumit
+ * @author Ram
  *
  */
 public class BankException extends Exception {

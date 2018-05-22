@@ -20,7 +20,7 @@ import com.springboot.bank.model.ATM;
 import com.springboot.bank.service.ATMService;
 
 /**
- * @author Sumit
+ * @author Ram
  *
  */
 

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.springboot.bank.model.Customer;
 
 /**
- * @author Sumit
+ * @author Ram
  *
  */
 public interface CustomerDAO extends JpaRepository<Customer, Long> {

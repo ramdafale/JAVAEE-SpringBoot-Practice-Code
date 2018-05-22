@@ -6,7 +6,7 @@ package com.springboot.bank.dto;
 import com.springboot.bank.model.ATM;
 
 /**
- * @author Sumit
+ * @author Ram
  *
  */
 public class WrapperBankATM {

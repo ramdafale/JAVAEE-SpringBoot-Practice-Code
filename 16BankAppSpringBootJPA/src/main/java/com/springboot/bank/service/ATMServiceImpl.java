@@ -19,7 +19,7 @@ import com.springboot.bank.repository.AccountDAO;
 import com.springboot.bank.repository.BankDAO;
 
 /**
- * @author Sumit
+ * @author Ram
  *
  */
 @Service("ATMService")

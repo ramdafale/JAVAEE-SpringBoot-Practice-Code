@@ -6,7 +6,7 @@ package com.springboot.bank.dto;
 import com.springboot.bank.model.Customer;
 
 /**
- * @author trainee
+ * @author Ram
  *
  */
 public class WrapperBankCustomer {

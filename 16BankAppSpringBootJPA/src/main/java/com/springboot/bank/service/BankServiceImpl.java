@@ -13,7 +13,7 @@ import com.springboot.bank.model.Bank;
 import com.springboot.bank.repository.BankDAO;
 
 /**
- * @author Sumit
+ * @author Ram
  * @Service("bankService")  
  * Description : It provide implementation for BankServices method. 
  *           	1.It Helps to create new bank

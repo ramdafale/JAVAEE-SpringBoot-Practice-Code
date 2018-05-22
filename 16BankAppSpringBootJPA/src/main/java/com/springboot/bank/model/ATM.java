@@ -15,7 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * @author Sumit
+ * @author Ram
  *It will represents the ATM entity
  */
 @Entity

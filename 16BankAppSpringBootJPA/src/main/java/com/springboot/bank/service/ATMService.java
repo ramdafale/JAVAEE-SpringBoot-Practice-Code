@@ -11,7 +11,7 @@ import com.springboot.bank.exception.BankException;
 import com.springboot.bank.model.ATM;
 
 /**
- * @author trainee
+ * @author Ram
  *
  */
 public interface ATMService {

@@ -14,13 +14,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * @author Sumit
- *It will represents the Account Entity.
+ * @author Ram It will represents the Account Entity.
  */
 @Entity
 @Table(name = "account")
 public class Account {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long accountId;
@@ -30,10 +29,11 @@ public class Account {
 	private Customer customer;
 	private BigDecimal amount;
 
-	
-	
-	private static final Logger LOGGER = Logger.getLogger( Account.class.getName() );
-	
+	/*
+	 * @Entity This is logger used instead of Sysout.
+	 */
+	private static final Logger LOGGER = Logger.getLogger(Account.class.getName());
+
 	/**
 	 * 
 	 */
@@ -42,12 +42,13 @@ public class Account {
 	}
 
 	/**
-	 * @param accountId acted as primary key of the table account
+	 * @param accountId
+	 *            acted as primary key of the table account
 	 * @param bank
 	 * @param customer
 	 * @param amount
 	 */
-	public Account(Bank bank, Customer customer, BigDecimal amount) {
+	public Account(final Bank bank, final Customer customer, final BigDecimal amount) {
 		this.bank = bank;
 		this.customer = customer;
 		this.amount = amount;
@@ -65,7 +66,7 @@ public class Account {
 	 * @param accountId
 	 *            the accountId to set
 	 */
-	public void setAccountId(Long accountId) {
+	public void setAccountId(final Long accountId) {
 		this.accountId = accountId;
 	}
 
@@ -80,7 +81,7 @@ public class Account {
 	 * @param bank
 	 *            the bank to set
 	 */
-	public void setBank(Bank bank) {
+	public void setBank(final Bank bank) {
 		this.bank = bank;
 	}
 
@@ -95,7 +96,7 @@ public class Account {
 	 * @param customer
 	 *            the customer to set
 	 */
-	public void setCustomer(Customer customer) {
+	public void setCustomer(final Customer customer) {
 		this.customer = customer;
 	}
 
@@ -110,12 +111,12 @@ public class Account {
 	 * @param amount
 	 *            the amount to set
 	 */
-	public void setAmount(BigDecimal amount) {
+	public void setAmount(final BigDecimal amount) {
 		this.amount = amount;
 	}
 
 	/*
-	 * @return toString() representation of given object 
+	 * @return toString() representation of given object
 	 */
 	@Override
 	public String toString() {

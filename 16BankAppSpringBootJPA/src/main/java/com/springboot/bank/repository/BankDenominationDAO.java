@@ -4,13 +4,13 @@
 package com.springboot.bank.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.springboot.bank.model.BankDenomination;
+import com.springboot.bank.model.Denomination;
 
 /**
- * @author Sumit
+ * @author Ram
  *
  */
 
-public interface BankDenominationDAO extends JpaRepository<BankDenomination, Long> {
+public interface BankDenominationDAO extends JpaRepository<Denomination, Long> {
 
 }

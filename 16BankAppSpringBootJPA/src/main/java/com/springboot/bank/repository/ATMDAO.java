@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.springboot.bank.model.ATM;
 
 /**
- * @author trainee
+ * @author Ram
  *
  */
 public interface ATMDAO extends JpaRepository<ATM, Long> {
