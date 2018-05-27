@@ -7,27 +7,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.springboot.bank.dto.WrapperBankDenomination;
+import com.springboot.bank.dto.WrapperDenomination;
 import com.springboot.bank.exception.BankException;
+import com.springboot.bank.model.Account;
 import com.springboot.bank.model.Bank;
-import com.springboot.bank.model.BankDenomination;
-import com.springboot.bank.model.BankDenomination;
+import com.springboot.bank.model.Denomination;
+import com.springboot.bank.model.Denomination;
 import com.springboot.bank.repository.BankDAO;
 import com.springboot.bank.repository.BankDenominationDAO;
 
 /**
- * @author Sumit
+ * @author Ram
  *
  */
 @Service("bankDenominationService")
 public class BankDenominationServiceImpl implements BankDenominationService {
 
+	
+	
+	private static final Logger LOGGER = Logger.getLogger( Account.class.getName() );
+	
+	
+	
 	@Autowired
 	private BankDenominationDAO bankDenominationDAO;
 
+	
 	@Autowired
 	BankDAO bankDao;
 
@@ -57,27 +67,29 @@ public class BankDenominationServiceImpl implements BankDenominationService {
 	 */
 
 	@Override
-	public void addDenominationNew(Integer amount) throws BankException {
+	public void addDenominationNew(final Integer amount) throws BankException {
 
-		List<Integer> list1 = new ArrayList<Integer>();
+		final	List<Integer> list1 = new ArrayList<Integer>();
 		list1.add(2000);
 		list1.add(500);
 		list1.add(100);
 		list1.add(200);
-		Random rand = new Random();
+		final	Random rand = new Random();
 		Integer remainder = amount;
-		System.out.println("list >>>>" + list1);
+		//System.out.println("list >>>>" + list1);
+		LOGGER.info("list >>>>" + list1);
 		for (int i = 0; i <= list1.size(); i++) {
-			Integer randomIndex = rand.nextInt(list1.size());
+			final Integer randomIndex = rand.nextInt(list1.size());
 			// System.out.println("randomIndex >>" + randomIndex);
-			Integer randomElement = list1.get(randomIndex);
+			final Integer randomElement = list1.get(randomIndex);
 			// System.out.println("randomElement >>" + randomElement);
 			if (randomElement.compareTo(remainder) == 0 || randomElement.compareTo(remainder) == -1) {
-				BankDenomination bankDenominationNew = new BankDenomination();
+				final	Denomination bankDenominationNew = new Denomination();
 				bankDenominationNew.setNoOfDenomination(remainder / randomElement);
 				bankDenominationNew.setDenomination(randomElement);
 				remainder = remainder % randomElement;
-				System.out.println(bankDenominationNew);
+				//System.out.println(bankDenominationNew);
+				LOGGER.info(">>>> Denomination"+bankDenominationNew);
 				if (remainder == 0) {
 					break;
 				}

@@ -14,7 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * @author Sumit
+ * @author Ram
  *It will represents the BANK entity
  */
 @Table(name = "bank")

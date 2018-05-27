@@ -8,7 +8,7 @@ import com.springboot.bank.exception.BankException;
 import com.springboot.bank.model.Customer;
 
 /**
- * @author Sumit
+ * @author Ram
  *@entity CustomerService 
  *Desc: It has 2 methods declared which helps to create customer and get customer details.
  */

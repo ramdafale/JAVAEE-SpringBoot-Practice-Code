@@ -3,12 +3,12 @@
  */
 package com.springboot.bank.service;
 
-import com.springboot.bank.dto.WrapperBankDenomination;
+import com.springboot.bank.dto.WrapperDenomination;
 import com.springboot.bank.exception.BankException;
-import com.springboot.bank.model.BankDenomination;
+import com.springboot.bank.model.Denomination;
 
 /**
- * @author Sumit
+ * @author Ram
  *
  */
 public interface BankDenominationService {
