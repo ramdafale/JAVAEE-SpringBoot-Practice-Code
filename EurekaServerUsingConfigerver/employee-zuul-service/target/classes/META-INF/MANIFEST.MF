@@ -4,8 +4,8 @@ Implementation-Version: 0.0.1-SNAPSHOT
 Built-By: trainee
 Implementation-Vendor-Id: com.javainuse
 Build-Jdk: 1.8.0_171
-Implementation-URL: http://projects.spring.io/spring-boot/employee-zuu
- l-service/
+Implementation-URL: http://projects.spring.io/spring-boot/zuul-service
+ 1/
 Created-By: Maven Integration for Eclipse
 Implementation-Vendor: Pivotal Software, Inc.
 

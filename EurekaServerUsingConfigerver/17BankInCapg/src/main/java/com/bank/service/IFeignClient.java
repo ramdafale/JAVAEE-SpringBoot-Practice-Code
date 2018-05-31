@@ -11,7 +11,7 @@ import com.bank.model.AuditLog;
  * @author trainee
  *
  */
-@FeignClient("bank-zuul-service")
+@FeignClient("mongo-client")
 public interface IFeignClient {
 
 	@PostMapping(path = "/auditLog")
