@@ -1,0 +1,29 @@
+Install RabbitMQ on windows:
+
+1. Download RabbitMQ:
+https://www.rabbitmq.com/install-windows.html
+
+2. Download and install Erlang:
+http://www.erlang.org/downloads
+
+select the link: "OTP 20.3 Windows 64-bit Binary File (99142192)" 
+
+3. Install the Server:
+Run the RabbitMQ installer, rabbitmq-server-3.7.5.exe. It installs RabbitMQ as a Windows service and 
+starts it using the default configuration.
+
+4. Run RabbitMQ Service:
+The service will run fine using its default settings. The RabbitMQ service starts automatically. You can 
+stop/reinstall/start the RabbitMQ service from the Start Menu.
+
+5. Maven Dependency:
+
+	<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+	</dependency>
+
+6. Following to be added in application.properties of spring boot:
+
+spring.rabbitmq.host = 127.0.0.1
+spring.rabbitmq.port = 5672
