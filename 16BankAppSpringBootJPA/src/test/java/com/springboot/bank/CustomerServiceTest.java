@@ -18,7 +18,7 @@ import com.springboot.bank.repository.CustomerDAO;
 import com.springboot.bank.service.CustomerService;
 
 /**
- * @author Sumit
+ * @author ram
  *
  */
 public class CustomerServiceTest {
