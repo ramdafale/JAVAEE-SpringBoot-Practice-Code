@@ -1,0 +1,12 @@
+com/tennis/entity/MatchPrediction.class
+com/tennis/controller/TennisPredictionController.class
+com/tennis/TennisPredictionApplication.class
+com/tennis/repository/MatchRepository.class
+com/tennis/entity/HeadToHead.class
+com/tennis/service/DataInitializationService.class
+com/tennis/entity/Player.class
+com/tennis/entity/Match.class
+com/tennis/repository/HeadToHeadRepository.class
+com/tennis/service/PredictionService.class
+com/tennis/repository/PlayerRepository.class
+com/tennis/repository/MatchPredictionRepository.class
