@@ -3,6 +3,7 @@ package com.tennis.controller;
 import com.tennis.entity.*;
 import com.tennis.repository.*;
 import com.tennis.service.PredictionService;
+import com.tennis.service.LiveDataSyncService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +32,83 @@ public class TennisPredictionController {
     private final MatchRepository matchRepository;
     private final MatchPredictionRepository predictionRepository;
     private final HeadToHeadRepository headToHeadRepository;
+    private final LiveDataSyncService liveDataSyncService;
     
 
+    
+    // ==================== LIVE DATA ENDPOINTS ====================
+    
+    /**
+     * Trigger manual sync of live data from FlashScore API
+     */
+    @PostMapping("/sync/live-data")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> syncLiveData() {
+        log.info("Manual live data sync triggered");
+        
+        try {
+            liveDataSyncService.triggerManualSync();
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Live data sync completed successfully");
+            response.put("timestamp", LocalDateTime.now());
+            response.put("status", "success");
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            log.error("Error during live data sync: {}", e.getMessage());
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Error during live data sync: " + e.getMessage());
+            response.put("timestamp", LocalDateTime.now());
+            response.put("status", "error");
+            
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+    
+    /**
+     * Get live matches with real-time data
+     */
+    @GetMapping("/matches/live/realtime")
+    @ResponseBody
+    public ResponseEntity<List<Match>> getLiveMatchesRealtime() {
+        log.info("Getting real-time live matches");
+        
+        List<Match> liveMatches = liveDataSyncService.getLiveMatches();
+        return ResponseEntity.ok(liveMatches);
+    }
+    
+    /**
+     * Mark match as completed
+     */
+    @PutMapping("/matches/{matchId}/complete")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> markMatchAsCompleted(@PathVariable Long matchId) {
+        log.info("Marking match {} as completed", matchId);
+        
+        try {
+            liveDataSyncService.markMatchAsCompleted(matchId);
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Match marked as completed");
+            response.put("matchId", matchId);
+            response.put("timestamp", LocalDateTime.now());
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            log.error("Error marking match as completed: {}", e.getMessage());
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Error marking match as completed: " + e.getMessage());
+            response.put("matchId", matchId);
+            response.put("timestamp", LocalDateTime.now());
+            
+            return ResponseEntity.status(500).body(response);
+        }
+    }
     
     // ==================== PREDICTION ENDPOINTS ====================
     
