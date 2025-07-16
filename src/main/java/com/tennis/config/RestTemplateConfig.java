@@ -4,6 +4,8 @@ import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.ssl.TrustStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,16 +38,27 @@ public class RestTemplateConfig {
                 null, 
                 NoopHostnameVerifier.INSTANCE);
 
-        // Create HTTP client with SSL configuration
+        // Create connection manager with pooling
+        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+        connectionManager.setMaxTotal(100);
+        connectionManager.setDefaultMaxPerRoute(20);
+
+        // Create request config with timeouts
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(10000) // 10 seconds
+                .setSocketTimeout(30000) // 30 seconds
+                .build();
+
+        // Create HTTP client with SSL configuration and timeouts
         CloseableHttpClient httpClient = HttpClients.custom()
                 .setSSLSocketFactory(csf)
+                .setConnectionManager(connectionManager)
+                .setDefaultRequestConfig(requestConfig)
                 .build();
 
         // Create request factory with custom HTTP client
         HttpComponentsClientHttpRequestFactory requestFactory = 
                 new HttpComponentsClientHttpRequestFactory(httpClient);
-        requestFactory.setConnectTimeout(10000); // 10 seconds
-        requestFactory.setReadTimeout(30000); // 30 seconds
         
         return new RestTemplate(requestFactory);
     }
