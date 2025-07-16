@@ -1,6 +1,6 @@
-com/tennis/config/RestTemplateConfig.class
 com/tennis/entity/MatchPrediction.class
 com/tennis/controller/TennisPredictionController.class
+com/tennis/TennisMatchPredictionApplication.class
 com/tennis/TennisPredictionApplication.class
 com/tennis/repository/MatchRepository.class
 com/tennis/entity/HeadToHead.class
