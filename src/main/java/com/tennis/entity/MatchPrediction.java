@@ -1,5 +1,6 @@
 package com.tennis.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class MatchPrediction {
     
     @ManyToOne
     @JoinColumn(name = "match_id", nullable = false)
+    @JsonIgnore
     private Match match;
     
     @Column(name = "prediction_type")

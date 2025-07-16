@@ -32,35 +32,7 @@ public class TennisPredictionController {
     private final MatchPredictionRepository predictionRepository;
     private final HeadToHeadRepository headToHeadRepository;
     
-    // ==================== DASHBOARD ENDPOINTS ====================
-    
-    /**
-     * Main dashboard page
-     */
-    @GetMapping("/")
-    public String dashboard(Model model) {
-        log.info("Loading main dashboard");
-        
-        // Get live matches
-        List<Match> liveMatches = matchRepository.findByMatchStatus("Live");
-        
-        // Get recent predictions
-        List<MatchPrediction> recentPredictions = predictionRepository.findRecentPredictions(
-            LocalDateTime.now().minusHours(24));
-        
-        // Get top players
-        List<Player> topPlayers = playerRepository.findTop10ByOrderByCurrentRankingAsc();
-        
-        // Calculate prediction accuracy
-        Double predictionAccuracy = predictionRepository.calculatePredictionAccuracy();
-        
-        model.addAttribute("liveMatches", liveMatches);
-        model.addAttribute("recentPredictions", recentPredictions);
-        model.addAttribute("topPlayers", topPlayers);
-        model.addAttribute("predictionAccuracy", predictionAccuracy != null ? predictionAccuracy : 0.0);
-        
-        return "dashboard";
-    }
+
     
     // ==================== PREDICTION ENDPOINTS ====================
     

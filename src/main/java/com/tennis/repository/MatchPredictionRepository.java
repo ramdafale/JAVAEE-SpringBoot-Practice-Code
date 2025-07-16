@@ -123,7 +123,7 @@ public interface MatchPredictionRepository extends JpaRepository<MatchPrediction
      * Calculate prediction accuracy
      * @return prediction accuracy percentage
      */
-    @Query("SELECT (COUNT(CASE WHEN mp.isCorrect = true THEN 1 END) * 100.0 / COUNT(mp)) FROM MatchPrediction mp WHERE mp.isCorrect IS NOT NULL")
+    @Query("SELECT CASE WHEN COUNT(mp) > 0 THEN (COUNT(CASE WHEN mp.isCorrect = true THEN 1 END) * 100.0 / COUNT(mp)) ELSE 0.0 END FROM MatchPrediction mp WHERE mp.isCorrect IS NOT NULL")
     Double calculatePredictionAccuracy();
     
     /**

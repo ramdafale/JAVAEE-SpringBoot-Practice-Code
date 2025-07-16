@@ -1,5 +1,6 @@
 package com.tennis.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -104,9 +105,11 @@ public class Player {
     
     // Relationships
     @OneToMany(mappedBy = "player1", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<HeadToHead> headToHeadAsPlayer1;
     
     @OneToMany(mappedBy = "player2", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<HeadToHead> headToHeadAsPlayer2;
     
     @PrePersist

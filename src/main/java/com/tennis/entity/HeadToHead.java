@@ -1,5 +1,6 @@
 package com.tennis.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,10 +25,12 @@ public class HeadToHead {
     
     @ManyToOne
     @JoinColumn(name = "player1_id", nullable = false)
+    @JsonIgnore
     private Player player1;
     
     @ManyToOne
     @JoinColumn(name = "player2_id", nullable = false)
+    @JsonIgnore
     private Player player2;
     
     @Column(name = "total_matches")

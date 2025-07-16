@@ -1,5 +1,6 @@
 package com.tennis.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -126,6 +127,7 @@ public class Match {
     
     // Relationships
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<MatchPrediction> predictions;
     
     @PrePersist
