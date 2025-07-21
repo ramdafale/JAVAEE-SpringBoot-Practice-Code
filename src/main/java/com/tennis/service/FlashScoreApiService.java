@@ -203,12 +203,12 @@ public class FlashScoreApiService {
                     // Player 1
                     JsonNode player1Node = competitors.get(0);
                     Player player1 = parsePlayerFromApiTennis(player1Node);
-                    match.setPlayer1Id(player1.getId());
+                    match.setPlayer1(player1);
                     
                     // Player 2  
                     JsonNode player2Node = competitors.get(1);
                     Player player2 = parsePlayerFromApiTennis(player2Node);
-                    match.setPlayer2Id(player2.getId());
+                    match.setPlayer2(player2);
                 }
             }
             
@@ -265,22 +265,22 @@ public class FlashScoreApiService {
             player.setWeightKg(75);
             
             // Tennis-specific statistics with defaults
-            player.setFirstServePercentage(65.0f);
-            player.setFirstServeWinRate(75.0f);
-            player.setSecondServeWinRate(55.0f);
-            player.setFirstServeReturnWinRate(35.0f);
-            player.setSecondServeReturnWinRate(45.0f);
-            player.setBreakPointsConvertedPercentage(40.0f);
-            player.setAcesPerMatch(8.0f);
-            player.setDoubleFaultsPerMatch(3.0f);
+            player.setFirstServePercentage(0.65);
+            player.setFirstServeWinRate(0.75);
+            player.setSecondServeWinRate(0.55);
+            player.setFirstServeReturnWinRate(0.35);
+            player.setSecondServeReturnWinRate(0.45);
+            player.setBreakPointsConvertedPercentage(0.40);
+            player.setAcesPerMatch(8.0);
+            player.setDoubleFaultsPerMatch(3.0);
             
             // Surface win rates
-            player.setHardCourtWinRate(65.0f);
-            player.setClayCourtWinRate(60.0f);
-            player.setGrassCourtWinRate(70.0f);
+            player.setHardCourtWinRate(0.65);
+            player.setClayCourtWinRate(0.60);
+            player.setGrassCourtWinRate(0.70);
             
             // Recent form and yearly stats
-            player.setRecentFormWinRate(70.0f);
+            player.setRecentFormWinRate(0.70);
             player.setMatchesPlayedThisYear(25);
             player.setWinsThisYear(18);
             
