@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Service to integrate with FlashScore API for live tennis data
+ * Service to integrate with SportRadar API for live tennis data
  */
 @Service
 @RequiredArgsConstructor
@@ -36,41 +36,31 @@ public class FlashScoreApiService {
     
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
-    private final MockFlashScoreService mockService;
     
     /**
-     * Fetch live tennis matches from FlashScore API
+     * Fetch live tennis matches from SportRadar API
      */
     public List<Match> fetchLiveTennisMatches() {
         try {
-            log.info("Fetching live tennis matches from FlashScore API");
+            log.info("Fetching live tennis matches from SportRadar API");
             
-            // For now, use mock data since FlashScore API might not be available
-            // In production, this would call the actual API
-            log.info("Using mock data for testing purposes");
-            return mockService.generateMockLiveMatches();
+            // SportRadar API endpoint for live tennis matches
+            String url = "https://" + apiBaseUrl + "/schedules/live/summaries.json?api_key=" + apiKey;
             
-            /* Uncomment this for actual API integration:
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("X-RapidAPI-Key", apiKey);
-            headers.set("X-RapidAPI-Host", apiBaseUrl);
-            
-            // FlashScore API endpoint for live tennis matches
-            String url = "https://" + apiBaseUrl + "/tennis/live";
-            
-            HttpEntity<String> entity = new HttpEntity<>(headers);
+            HttpEntity<String> entity = new HttpEntity<>(new HttpHeaders());
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
             
             if (response.getStatusCode().is2xxSuccessful()) {
+                log.info("Successfully fetched live matches from SportRadar API");
                 return parseLiveMatches(response.getBody());
             } else {
                 log.error("Failed to fetch live matches. Status: {}", response.getStatusCode());
                 return new ArrayList<>();
             }
-            */
             
         } catch (Exception e) {
-            log.error("Error fetching live tennis matches: {}", e.getMessage());
+            log.error("Error fetching live tennis matches: {}", e.getMessage(), e);
+            // Fallback to empty list instead of mock data
             return new ArrayList<>();
         }
     }
@@ -82,13 +72,9 @@ public class FlashScoreApiService {
         try {
             log.info("Fetching match details for ID: {}", matchId);
             
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("X-RapidAPI-Key", apiKey);
-            headers.set("X-RapidAPI-Host", apiBaseUrl);
+            String url = "https://" + apiBaseUrl + "/sport_events/" + matchId + "/summary.json?api_key=" + apiKey;
             
-            String url = "https://" + apiBaseUrl + "/tennis/match/" + matchId;
-            
-            HttpEntity<String> entity = new HttpEntity<>(headers);
+            HttpEntity<String> entity = new HttpEntity<>(new HttpHeaders());
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
             
             if (response.getStatusCode().is2xxSuccessful()) {
@@ -99,7 +85,7 @@ public class FlashScoreApiService {
             }
             
         } catch (Exception e) {
-            log.error("Error fetching match details: {}", e.getMessage());
+            log.error("Error fetching match details: {}", e.getMessage(), e);
             return Optional.empty();
         }
     }
@@ -111,13 +97,9 @@ public class FlashScoreApiService {
         try {
             log.info("Fetching player stats for ID: {}", playerId);
             
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("X-RapidAPI-Key", apiKey);
-            headers.set("X-RapidAPI-Host", apiBaseUrl);
+            String url = "https://" + apiBaseUrl + "/competitors/" + playerId + "/profile.json?api_key=" + apiKey;
             
-            String url = "https://" + apiBaseUrl + "/tennis/player/" + playerId;
-            
-            HttpEntity<String> entity = new HttpEntity<>(headers);
+            HttpEntity<String> entity = new HttpEntity<>(new HttpHeaders());
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
             
             if (response.getStatusCode().is2xxSuccessful()) {
@@ -128,13 +110,13 @@ public class FlashScoreApiService {
             }
             
         } catch (Exception e) {
-            log.error("Error fetching player stats: {}", e.getMessage());
+            log.error("Error fetching player stats: {}", e.getMessage(), e);
             return Optional.empty();
         }
     }
     
     /**
-     * Parse live matches from API response
+     * Parse live matches from SportRadar API response
      */
     private List<Match> parseLiveMatches(String responseBody) {
         List<Match> matches = new ArrayList<>();
@@ -142,21 +124,23 @@ public class FlashScoreApiService {
         try {
             JsonNode rootNode = objectMapper.readTree(responseBody);
             
-            if (rootNode.has("matches")) {
-                JsonNode matchesNode = rootNode.get("matches");
+            if (rootNode.has("summaries")) {
+                JsonNode summariesNode = rootNode.get("summaries");
                 
-                for (JsonNode matchNode : matchesNode) {
-                    Match match = parseMatchFromJson(matchNode);
-                    if (match != null) {
-                        matches.add(match);
+                for (JsonNode summaryNode : summariesNode) {
+                    if (summaryNode.has("sport_event")) {
+                        Match match = parseMatchFromSportRadar(summaryNode);
+                        if (match != null) {
+                            matches.add(match);
+                        }
                     }
                 }
             }
             
-            log.info("Parsed {} live matches from API", matches.size());
+            log.info("Parsed {} live matches from SportRadar API", matches.size());
             
         } catch (Exception e) {
-            log.error("Error parsing live matches: {}", e.getMessage());
+            log.error("Error parsing live matches: {}", e.getMessage(), e);
         }
         
         return matches;
@@ -193,7 +177,94 @@ public class FlashScoreApiService {
     }
     
     /**
-     * Parse match data from JSON
+     * Parse match data from SportRadar JSON format
+     */
+    private Match parseMatchFromSportRadar(JsonNode summaryNode) {
+        try {
+            JsonNode sportEventNode = summaryNode.get("sport_event");
+            JsonNode statusNode = summaryNode.path("sport_event_status");
+            
+            Match match = new Match();
+            
+            // Extract sport event ID
+            String eventId = sportEventNode.path("id").asText();
+            if (eventId.startsWith("sr:sport_event:")) {
+                // Extract numeric ID from SportRadar format
+                String numericId = eventId.replace("sr:sport_event:", "");
+                try {
+                    match.setId(Long.parseLong(numericId));
+                } catch (NumberFormatException e) {
+                    match.setId((long) Math.abs(eventId.hashCode())); // Fallback to hash
+                }
+            } else {
+                match.setId((long) Math.abs(eventId.hashCode()));
+            }
+            
+            // Basic match info
+            JsonNode contextNode = sportEventNode.path("sport_event_context");
+            match.setTournamentName(contextNode.path("competition").path("name").asText("Unknown Tournament"));
+            match.setMatchType(contextNode.path("mode").path("best_of").asInt(3) == 5 ? "Best of 5" : "Best of 3");
+            
+            // Venue and surface info
+            JsonNode venueNode = sportEventNode.path("venue");
+            if (venueNode.has("name")) {
+                String venueName = venueNode.path("name").asText("");
+                // Infer surface from venue name or set default
+                if (venueName.toLowerCase().contains("clay") || venueName.toLowerCase().contains("roland garros")) {
+                    match.setSurface("Clay");
+                } else if (venueName.toLowerCase().contains("grass") || venueName.toLowerCase().contains("wimbledon")) {
+                    match.setSurface("Grass");
+                } else {
+                    match.setSurface("Hard");
+                }
+            } else {
+                match.setSurface("Hard");
+            }
+            
+            // Match status
+            String status = statusNode.path("status").asText("not_started");
+            match.setMatchStatus(status.equals("live") ? "Live" : "Scheduled");
+            
+            // Parse competitors (players)
+            JsonNode competitorsNode = sportEventNode.path("competitors");
+            if (competitorsNode.isArray() && competitorsNode.size() >= 2) {
+                Player player1 = parsePlayerFromSportRadar(competitorsNode.get(0));
+                Player player2 = parsePlayerFromSportRadar(competitorsNode.get(1));
+                match.setPlayer1(player1);
+                match.setPlayer2(player2);
+            }
+            
+            // Parse scores if available
+            if (statusNode.has("period_scores")) {
+                parseSportRadarScores(match, statusNode);
+            }
+            
+            // Set timestamps
+            String startTime = sportEventNode.path("start_time").asText();
+            if (!startTime.isEmpty()) {
+                try {
+                    match.setStartTime(LocalDateTime.parse(startTime.substring(0, 19)));
+                } catch (Exception e) {
+                    match.setStartTime(LocalDateTime.now());
+                }
+            } else {
+                match.setStartTime(LocalDateTime.now());
+            }
+            
+            match.setCreatedAt(LocalDateTime.now());
+            match.setUpdatedAt(LocalDateTime.now());
+            // Live status is determined by matchStatus, not a separate field
+            
+            return match;
+            
+        } catch (Exception e) {
+            log.error("Error parsing SportRadar match JSON: {}", e.getMessage(), e);
+            return null;
+        }
+    }
+
+    /**
+     * Parse match data from JSON (legacy method)
      */
     private Match parseMatchFromJson(JsonNode matchNode) {
         try {
@@ -239,7 +310,123 @@ public class FlashScoreApiService {
     }
     
     /**
-     * Parse player data from JSON
+     * Parse player data from SportRadar competitor JSON
+     */
+    private Player parsePlayerFromSportRadar(JsonNode competitorNode) {
+        try {
+            Player player = new Player();
+            
+            // Extract competitor ID
+            String competitorId = competitorNode.path("id").asText();
+            if (competitorId.startsWith("sr:competitor:")) {
+                String numericId = competitorId.replace("sr:competitor:", "");
+                try {
+                    player.setId(Long.parseLong(numericId));
+                } catch (NumberFormatException e) {
+                    player.setId((long) Math.abs(competitorId.hashCode()));
+                }
+            } else {
+                player.setId((long) Math.abs(competitorId.hashCode()));
+            }
+            
+            player.setName(competitorNode.path("name").asText("Unknown Player"));
+            player.setCountry(competitorNode.path("country").asText("Unknown"));
+            
+            // Set default values for missing data
+            player.setCurrentRanking(competitorNode.path("ranking").asInt(999));
+            player.setCareerHighRanking(player.getCurrentRanking());
+            player.setAge(25); // Default age
+            player.setHeightCm(180);
+            player.setWeightKg(75);
+            player.setPlayingStyle("Aggressive Baseline");
+            player.setPreferredHand("Right");
+            
+            // Set default statistics
+            player.setHardCourtWinRate(0.65);
+            player.setClayCourtWinRate(0.60);
+            player.setGrassCourtWinRate(0.62);
+            player.setFirstServePercentage(0.65);
+            player.setFirstServeWinRate(0.70);
+            player.setSecondServeWinRate(0.55);
+            player.setAcesPerMatch(6.0);
+            player.setDoubleFaultsPerMatch(2.5);
+            player.setFirstServeReturnWinRate(0.35);
+            player.setSecondServeReturnWinRate(0.55);
+            player.setBreakPointsConvertedPercentage(0.40);
+            player.setRecentFormWinRate(0.65);
+            player.setMatchesPlayedThisYear(25);
+            player.setWinsThisYear(16);
+            
+            player.setCreatedAt(LocalDateTime.now());
+            player.setUpdatedAt(LocalDateTime.now());
+            
+            return player;
+            
+        } catch (Exception e) {
+            log.error("Error parsing SportRadar player JSON: {}", e.getMessage(), e);
+            return null;
+        }
+    }
+
+    /**
+     * Parse scores from SportRadar format
+     */
+    private void parseSportRadarScores(Match match, JsonNode statusNode) {
+        try {
+            // Parse set scores
+            JsonNode periodScoresNode = statusNode.path("period_scores");
+            if (periodScoresNode.isArray()) {
+                int player1Sets = 0;
+                int player2Sets = 0;
+                
+                for (JsonNode periodNode : periodScoresNode) {
+                    int homeScore = periodNode.path("home_score").asInt(0);
+                    int awayScore = periodNode.path("away_score").asInt(0);
+                    
+                    if (homeScore > awayScore) {
+                        player1Sets++;
+                    } else if (awayScore > homeScore) {
+                        player2Sets++;
+                    }
+                }
+                
+                match.setPlayer1SetsWon(player1Sets);
+                match.setPlayer2SetsWon(player2Sets);
+            }
+            
+            // Parse game state if available
+            JsonNode gameStateNode = statusNode.path("game_state");
+            if (gameStateNode.has("home_score") && gameStateNode.has("away_score")) {
+                            match.setPlayer1PointsCurrentGame(convertTennisScore(gameStateNode.path("home_score").asInt(0)));
+            match.setPlayer2PointsCurrentGame(convertTennisScore(gameStateNode.path("away_score").asInt(0)));
+            }
+            
+            // Set some default values
+            match.setCurrentSet(Math.max(1, match.getPlayer1SetsWon() + match.getPlayer2SetsWon() + 1));
+            match.setPlayer1GamesCurrentSet(0);
+            match.setPlayer2GamesCurrentSet(0);
+            match.setCurrentServer("player1");
+            
+        } catch (Exception e) {
+            log.error("Error parsing SportRadar scores: {}", e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Convert tennis score (0, 15, 30, 40) to point count
+     */
+    private int convertTennisScore(int score) {
+        switch (score) {
+            case 0: return 0;
+            case 15: return 1;
+            case 30: return 2;
+            case 40: return 3;
+            default: return score; // For tiebreak or other formats
+        }
+    }
+
+    /**
+     * Parse player data from JSON (legacy method)
      */
     private Player parsePlayerFromJson(JsonNode playerNode) {
         try {

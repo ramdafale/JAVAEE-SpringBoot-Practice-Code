@@ -11,6 +11,7 @@ com/tennis/service/DataInitializationService.class
 com/tennis/entity/Match.class
 com/tennis/entity/Player.class
 com/tennis/repository/HeadToHeadRepository.class
+com/tennis/config/RestTemplateConfig$1.class
 com/tennis/repository/PlayerRepository.class
 com/tennis/service/PredictionService.class
 com/tennis/service/MockFlashScoreService.class
