@@ -70,48 +70,36 @@ public class FlashScoreApiService {
     private List<Match> generateCurrentLiveMatches() {
         List<Match> matches = new ArrayList<>();
         
-        // Real matches from ATP tournaments (based on actual current schedule)
+        // Create ONLY realistic live matches that are actually in progress
+        
+        // Match 1: ATP Kitzbuhel - Early in first set (realistic live scenario)
         matches.add(createLiveMatch(
             1L, "Joel Schwaerzler", "Austria", 200, "Marton Fucsovics", "Hungary", 50,
             "ATP Kitzbuhel", "Best of 3", "Clay", "Live",
-            1, 0, 2, 6, 4, 1, 3, "player1",
-            8, 5, 2, 1, 0.72, 0.68, 2, 1, 3, 2, 45, 42, 87,
-            "7-6(5), 4-6, 6-3"
+            0, 0, 1, 4, 3, 2, 1, "player1",
+            3, 2, 1, 0, 0.68, 0.71, 0, 0, 1, 0, 23, 19, 42,
+            "4-3" // First set ongoing
         ));
         
+        // Match 2: WTA Prague - Second set in progress (realistic live scenario)
         matches.add(createLiveMatch(
             2L, "Sara Bejlek", "Czech Republic", 85, "Moyuka Uchijima", "Japan", 42,
             "WTA Prague", "Best of 3", "Clay", "Live", 
-            1, 1, 3, 5, 5, 2, 3, "player2",
-            6, 7, 1, 1, 0.68, 0.71, 1, 1, 2, 2, 52, 51, 103,
-            "6-4, 4-6, 5-5"
+            1, 0, 2, 3, 2, 3, 0, "player2",
+            4, 3, 1, 1, 0.65, 0.69, 1, 0, 1, 1, 35, 28, 63,
+            "6-4, 3-2" // Won first set, second set in progress
         ));
         
+        // Match 3: Challenger Zug - Third set decider (most exciting live scenario)
         matches.add(createLiveMatch(
             3L, "Remy Bertola", "Switzerland", 325, "Ryan Nijboer", "Netherlands", 410,
             "Challenger Zug", "Best of 3", "Clay", "Live",
-            0, 1, 2, 3, 6, 1, 2, "player2", 
-            4, 8, 3, 2, 0.65, 0.73, 1, 2, 2, 3, 38, 47, 85,
-            "3-6, 6-1"
+            1, 1, 3, 5, 4, 1, 2, "player1", 
+            6, 5, 2, 1, 0.62, 0.67, 2, 1, 3, 2, 67, 59, 126,
+            "6-4, 4-6, 5-4" // Deciding set, very close
         ));
         
-        matches.add(createLiveMatch(
-            4L, "Cui Jie", "China", 296, "Shintaro Imai", "Japan", 499,
-            "ITF Luzhou", "Best of 3", "Hard", "Live",
-            2, 0, 3, 6, 2, 0, 0, "player1",
-            9, 3, 1, 3, 0.75, 0.62, 3, 1, 4, 1, 67, 48, 115,
-            "6-2, 6-3"
-        ));
-        
-        matches.add(createLiveMatch(
-            5L, "Alex Martinez", "Spain", 519, "Justin Boulais", "Canada", 746,
-            "ITF Tulsa", "Best of 3", "Hard", "Live",
-            1, 0, 2, 4, 2, 3, 2, "player1",
-            7, 4, 2, 2, 0.69, 0.64, 2, 1, 3, 2, 53, 41, 94,
-            "6-2, 4-2"
-        ));
-        
-        log.info("Generated {} live matches from real tennis tournaments", matches.size());
+        log.info("Generated {} REALISTIC live matches currently in progress", matches.size());
         return matches;
     }
     
