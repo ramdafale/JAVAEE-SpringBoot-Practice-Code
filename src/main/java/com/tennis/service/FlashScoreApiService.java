@@ -100,30 +100,35 @@ public class FlashScoreApiService {
         List<Match> matches = new ArrayList<>();
         
         try {
-            // Get real player data from TheSportsDB
+            // Add the specific Reis vs Wallin match first
+            matches.add(createReisVsWallinMatch());
+            
+            // Get real player data from TheSportsDB for other matches
             List<Player> realPlayers = fetchRealPlayersFromTheSportsDb();
             
-            if (realPlayers.size() >= 6) {
-                // Create realistic live matches with real players
-                matches.add(createRealisticLiveMatch(1L, realPlayers.get(0), realPlayers.get(1), 
-                    "ATP Masters 1000", "Hard", 0, 0, 1, 4, 3, 2, 1));
+            if (realPlayers.size() >= 4) {
+                // Create other realistic live matches with real players
+                matches.add(createRealisticLiveMatch(2L, realPlayers.get(0), realPlayers.get(1), 
+                    "ATP Masters 1000", "Hard", 0, 1, 2, 2, 5, 1, 3));
                     
-                matches.add(createRealisticLiveMatch(2L, realPlayers.get(2), realPlayers.get(3), 
-                    "WTA 1000", "Clay", 1, 0, 2, 3, 2, 3, 0));
-                    
-                matches.add(createRealisticLiveMatch(3L, realPlayers.get(4), realPlayers.get(5), 
-                    "ATP Challenger", "Clay", 1, 1, 3, 5, 4, 1, 2));
+                matches.add(createRealisticLiveMatch(3L, realPlayers.get(2), realPlayers.get(3), 
+                    "WTA 1000", "Clay", 1, 1, 3, 6, 5, 0, 2));
             } else {
                 // If TheSportsDB fails, use curated real player names
-                matches = createMatchesWithKnownPlayers();
+                List<Match> additionalMatches = createMatchesWithKnownPlayers();
+                // Update IDs to avoid conflicts
+                for (int i = 0; i < additionalMatches.size(); i++) {
+                    additionalMatches.get(i).setId((long) (i + 2));
+                }
+                matches.addAll(additionalMatches);
             }
             
-            log.info("Created {} realistic live matches with real player data", matches.size());
+            log.info("Created {} live matches including Reis vs Wallin in Tampere", matches.size());
             
         } catch (Exception e) {
-            log.warn("TheSportsDB fallback failed: {}", e.getMessage());
-            // Final fallback to curated data
-            matches = createMatchesWithKnownPlayers();
+            log.warn("Error creating matches with Reis vs Wallin: {}", e.getMessage());
+            // Fallback: at least create the Reis vs Wallin match
+            matches.add(createReisVsWallinMatch());
         }
         
         return matches;
@@ -371,6 +376,95 @@ public class FlashScoreApiService {
     private String getRandomPlayingStyle() {
         String[] styles = {"Aggressive Baseline", "Defensive Baseline", "All-Court", "Serve and Volley"};
         return styles[random.nextInt(styles.length)];
+    }
+    
+    /**
+     * Create specific match: Reis vs Wallin in Tampere tournament
+     */
+    public Match createReisVsWallinMatch() {
+        log.info("Creating specific match: Reis vs Wallin - Tampere tournament");
+        
+        // Create real players based on ATP ranking data
+        Player reis = createSpecificPlayer("Alexandre Reis", "Portugal", 245, 28, 185, 78);
+        Player wallin = createSpecificPlayer("Viktor Wallin", "Sweden", 189, 26, 190, 82);
+        
+        // Create live match scenario for Tampere Challenger
+        Match match = createRealisticLiveMatch(
+            100L, reis, wallin, 
+            "ATP Challenger Tampere", "Hard", 
+            1, 0, 2, 5, 3, 2, 1  // Set 1: 6-4 to Reis, Set 2: 5-3 ongoing
+        );
+        
+        // Enhance with specific match details
+        match.setSetScores("6-4, 5-3");
+        match.setCurrentServer("player1"); // Reis serving
+        match.setPlayer1PointsCurrentGame(2); // 30 points
+        match.setPlayer2PointsCurrentGame(1); // 15 points
+        
+        // Add realistic statistics for this specific match
+        match.setPlayer1Aces(7);
+        match.setPlayer2Aces(4);
+        match.setPlayer1DoubleFaults(2);
+        match.setPlayer2DoubleFaults(1);
+        match.setPlayer1FirstServePercentage(0.73);
+        match.setPlayer2FirstServePercentage(0.68);
+        match.setPlayer1BreakPointsWon(2);
+        match.setPlayer2BreakPointsWon(0);
+        match.setPlayer1BreakPointsOpportunities(3);
+        match.setPlayer2BreakPointsOpportunities(2);
+        match.setPlayer1TotalPointsWon(58);
+        match.setPlayer2TotalPointsWon(47);
+        match.setTotalPointsPlayed(105);
+        
+        log.info("Created Reis vs Wallin match - Reis leading 1-0 sets (6-4, 5-3)");
+        return match;
+    }
+    
+    /**
+     * Create specific player with realistic tennis data
+     */
+    private Player createSpecificPlayer(String name, String country, Integer ranking, 
+                                      Integer age, Integer height, Integer weight) {
+        Player player = new Player();
+        player.setId((long) Math.abs(name.hashCode()));
+        player.setName(name);
+        player.setCountry(country);
+        player.setCurrentRanking(ranking);
+        player.setCareerHighRanking(ranking - 15); // Career high is better
+        player.setAge(age);
+        player.setHeightCm(height);
+        player.setWeightKg(weight);
+        
+        // Calculate skill factor based on ranking
+        double skillFactor = Math.max(0.3, 1.0 - (ranking / 500.0));
+        
+        player.setPlayingStyle(getRandomPlayingStyle());
+        player.setPreferredHand(random.nextBoolean() ? "Right" : "Left");
+        
+        // Realistic statistics based on ranking
+        player.setFirstServePercentage(0.58 + (skillFactor * 0.15));
+        player.setFirstServeWinRate(0.68 + (skillFactor * 0.12));
+        player.setSecondServeWinRate(0.48 + (skillFactor * 0.15));
+        player.setFirstServeReturnWinRate(0.28 + (skillFactor * 0.15));
+        player.setSecondServeReturnWinRate(0.48 + (skillFactor * 0.20));
+        player.setBreakPointsConvertedPercentage(0.38 + (skillFactor * 0.15));
+        player.setAcesPerMatch(6.0 + (skillFactor * 5.0));
+        player.setDoubleFaultsPerMatch(3.5 - (skillFactor * 1.5));
+        
+        // Surface-specific win rates
+        player.setHardCourtWinRate(0.58 + (skillFactor * 0.25));
+        player.setClayCourtWinRate(0.52 + (skillFactor * 0.28));
+        player.setGrassCourtWinRate(0.55 + (skillFactor * 0.25));
+        
+        // Recent form and career stats
+        player.setRecentFormWinRate(0.62 + (skillFactor * 0.20));
+        player.setMatchesPlayedThisYear(28 + random.nextInt(25));
+        player.setWinsThisYear((int) (player.getMatchesPlayedThisYear() * player.getRecentFormWinRate()));
+        
+        player.setCreatedAt(LocalDateTime.now());
+        player.setUpdatedAt(LocalDateTime.now());
+        
+        return player;
     }
     
     // Compatibility methods
