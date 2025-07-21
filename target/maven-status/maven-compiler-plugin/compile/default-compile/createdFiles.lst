@@ -14,6 +14,5 @@ com/tennis/repository/HeadToHeadRepository.class
 com/tennis/config/RestTemplateConfig$1.class
 com/tennis/repository/PlayerRepository.class
 com/tennis/service/PredictionService.class
-com/tennis/service/MockFlashScoreService.class
 com/tennis/repository/MatchPredictionRepository.class
 com/tennis/service/FlashScoreApiService.class
