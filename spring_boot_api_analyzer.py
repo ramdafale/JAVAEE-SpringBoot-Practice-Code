@@ -380,12 +380,180 @@ class SpringBootApiAnalyzer:
         return mappings
 
 
+class CurlCommandGenerator:
+    """Generator for CURL commands based on API endpoints"""
+    
+    def __init__(self, base_url: str = "http://localhost:8080"):
+        self.base_url = base_url.rstrip('/')
+    
+    def generate_curl_command(self, endpoint: Dict[str, Any], model_info: Dict[str, Any] = None) -> str:
+        """Generate a CURL command for an API endpoint"""
+        method = endpoint['method']
+        path = endpoint['path']
+        
+        # Build the URL
+        url = f"{self.base_url}{path}"
+        
+        # Start building the CURL command
+        curl_parts = [f"curl -X {method}"]
+        
+        # Add headers
+        headers = []
+        if endpoint.get('request_headers'):
+            for header in endpoint['request_headers']:
+                if header.lower() == 'authorization':
+                    headers.append('-H "Authorization: Bearer YOUR_TOKEN"')
+                else:
+                    headers.append(f'-H "{header}: YOUR_VALUE"')
+        
+        # Add Content-Type for requests with body
+        if endpoint.get('request_body_type') and method in ['POST', 'PUT', 'PATCH']:
+            headers.append('-H "Content-Type: application/json"')
+        
+        # Add headers to curl command
+        curl_parts.extend(headers)
+        
+        # Add request body for POST, PUT, PATCH
+        if endpoint.get('request_body_type') and method in ['POST', 'PUT', 'PATCH']:
+            sample_body = self._generate_sample_request_body(endpoint, model_info)
+            if sample_body:
+                # Format JSON properly for curl
+                json_body = json.dumps(sample_body, indent=2)
+                curl_parts.append(f"-d '{json_body}'")
+        
+        # Replace path variables with examples
+        final_url = self._replace_path_variables(url, endpoint.get('path_variables', []))
+        
+        # Add query parameters if any
+        if endpoint.get('query_parameters'):
+            query_params = self._generate_sample_query_params(endpoint['query_parameters'])
+            if query_params:
+                final_url += f"?{query_params}"
+        
+        # Add the URL
+        curl_parts.append(f'"{final_url}"')
+        
+        return ' \\\n  '.join(curl_parts)
+    
+    def _generate_sample_request_body(self, endpoint: Dict[str, Any], model_info: Dict[str, Any]) -> Dict[str, Any]:
+        """Generate a sample request body based on the model"""
+        if not endpoint.get('request_body_type') or not model_info:
+            return {}
+        
+        request_type = endpoint['request_body_type']
+        if request_type not in model_info:
+            return {}
+        
+        model = model_info[request_type]
+        sample_body = {}
+        
+        for field in model['fields']:
+            field_name = field['name']
+            field_type = field['type']
+            is_mandatory = field['is_mandatory']
+            
+            # Generate sample values based on field type and name
+            sample_value = self._generate_sample_value(field_name, field_type, is_mandatory)
+            
+            # Include mandatory fields and some optional ones for completeness
+            if is_mandatory or field_name in ['id', 'name', 'email', 'username']:
+                sample_body[field_name] = sample_value
+        
+        return sample_body
+    
+    def _generate_sample_value(self, field_name: str, field_type: str, is_mandatory: bool):
+        """Generate sample values based on field name and type"""
+        field_name_lower = field_name.lower()
+        
+        # Type-based defaults
+        if 'String' in field_type:
+            if 'email' in field_name_lower:
+                return "user@example.com"
+            elif 'name' in field_name_lower:
+                if 'first' in field_name_lower:
+                    return "John"
+                elif 'last' in field_name_lower:
+                    return "Doe"
+                else:
+                    return "Sample Name"
+            elif 'username' in field_name_lower:
+                return "sampleuser"
+            elif 'password' in field_name_lower:
+                return "securePassword123"
+            elif 'phone' in field_name_lower:
+                return "+1234567890"
+            elif 'department' in field_name_lower:
+                return "Engineering"
+            else:
+                return f"sample_{field_name_lower}"
+        
+        elif 'Long' in field_type or 'Integer' in field_type or 'int' in field_type:
+            if 'id' in field_name_lower:
+                return 1
+            elif 'age' in field_name_lower:
+                return 25
+            elif 'count' in field_name_lower or 'number' in field_name_lower:
+                return 10
+            else:
+                return 1
+        
+        elif 'boolean' in field_type or 'Boolean' in field_type:
+            if 'active' in field_name_lower or 'enabled' in field_name_lower:
+                return True
+            else:
+                return False
+        
+        elif 'LocalDateTime' in field_type or 'Date' in field_type:
+            if 'birth' in field_name_lower:
+                return "1990-01-15T00:00:00"
+            else:
+                return "2024-01-15T10:30:00"
+        
+        elif 'List' in field_type or 'Array' in field_type:
+            return []
+        
+        else:
+            return f"sample_{field_name_lower}"
+    
+    def _replace_path_variables(self, url: str, path_variables: List[str]) -> str:
+        """Replace path variables with sample values"""
+        for var in path_variables:
+            if 'id' in var.lower():
+                url = url.replace(f'{{{var}}}', '1')
+            elif 'name' in var.lower():
+                url = url.replace(f'{{{var}}}', 'sample')
+            else:
+                url = url.replace(f'{{{var}}}', f'sample_{var}')
+        return url
+    
+    def _generate_sample_query_params(self, query_params: List[str]) -> str:
+        """Generate sample query parameters"""
+        params = []
+        for param in query_params:
+            param_lower = param.lower()
+            if 'page' in param_lower:
+                params.append(f"{param}=0")
+            elif 'size' in param_lower or 'limit' in param_lower:
+                params.append(f"{param}=10")
+            elif 'query' in param_lower or 'search' in param_lower:
+                params.append(f"{param}=searchterm")
+            elif 'sort' in param_lower:
+                params.append(f"{param}=name")
+            elif 'filter' in param_lower:
+                params.append(f"{param}=active")
+            else:
+                params.append(f"{param}=samplevalue")
+        
+        return '&'.join(params)
+
+
 class SpringBootApiAgent:
     """Interactive agent for Spring Boot API analysis"""
     
-    def __init__(self, project_path: str):
+    def __init__(self, project_path: str, base_url: str = "http://localhost:8080"):
         self.analyzer = SpringBootApiAnalyzer(project_path)
         self.analysis_data = None
+        self.curl_generator = CurlCommandGenerator(base_url)
     
     def initialize(self):
         """Initialize the agent by analyzing the project"""
@@ -471,6 +639,37 @@ class SpringBootApiAgent:
         
         return impact
     
+    def get_curl_command(self, endpoint_path: str, method: str = "GET") -> str:
+        """Get CURL command for a specific endpoint"""
+        if not self.analysis_data:
+            return "No analysis data available"
+        
+        # Find the endpoint
+        endpoint = None
+        for ep in self.analysis_data["endpoints"]:
+            if ep['path'] == endpoint_path and ep['method'].upper() == method.upper():
+                endpoint = ep
+                break
+        
+        if not endpoint:
+            return f"Endpoint not found: {method} {endpoint_path}"
+        
+        return self.curl_generator.generate_curl_command(endpoint, self.analysis_data["models"])
+    
+    def get_all_curl_commands(self) -> Dict[str, str]:
+        """Get CURL commands for all endpoints"""
+        if not self.analysis_data:
+            return {}
+        
+        curl_commands = {}
+        for endpoint in self.analysis_data["endpoints"]:
+            endpoint_key = f"{endpoint['method']} {endpoint['path']}"
+            curl_commands[endpoint_key] = self.curl_generator.generate_curl_command(
+                endpoint, self.analysis_data["models"]
+            )
+        
+        return curl_commands
+
     def generate_api_documentation(self) -> str:
         """Generate comprehensive API documentation"""
         if not self.analysis_data:
@@ -505,6 +704,13 @@ class SpringBootApiAgent:
             if endpoint['query_parameters']:
                 doc.append(f"- **Query Parameters:** {', '.join(endpoint['query_parameters'])}")
             
+            # Add CURL command
+            curl_command = self.curl_generator.generate_curl_command(endpoint, self.analysis_data["models"])
+            doc.append(f"\n**CURL Command:**")
+            doc.append("```bash")
+            doc.append(curl_command)
+            doc.append("```")
+            
             doc.append("")
         
         # Models
@@ -523,6 +729,17 @@ class SpringBootApiAgent:
                 doc.append(f"  - `{field['name']}`: {field['type']}{mandatory}{validations}")
             
             doc.append("")
+        
+        # CURL Commands Section
+        doc.append("## CURL Commands\n")
+        doc.append("Ready-to-use CURL commands for all endpoints:\n")
+        
+        curl_commands = self.get_all_curl_commands()
+        for endpoint_key, curl_command in curl_commands.items():
+            doc.append(f"### {endpoint_key}")
+            doc.append("```bash")
+            doc.append(curl_command)
+            doc.append("```\n")
         
         return "\n".join(doc)
 

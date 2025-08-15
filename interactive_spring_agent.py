@@ -15,9 +15,10 @@ from typing import Dict, Any, List
 class InteractiveSpringBootAgent:
     """Interactive interface for Spring Boot API analysis"""
     
-    def __init__(self, project_path: str):
-        self.agent = SpringBootApiAgent(project_path)
+    def __init__(self, project_path: str, base_url: str = "http://localhost:8080"):
+        self.agent = SpringBootApiAgent(project_path, base_url)
         self.project_path = project_path
+        self.base_url = base_url
         
     def start(self):
         """Start the interactive session"""
@@ -58,6 +59,8 @@ class InteractiveSpringBootAgent:
                     self._handle_request_response_query(user_input)
                 elif user_input.lower().startswith('response'):
                     self._handle_request_response_query(user_input)
+                elif user_input.lower().startswith('curl'):
+                    self._handle_curl_query(user_input)
                 elif user_input.lower() == 'docs':
                     self._generate_documentation()
                 else:
@@ -87,6 +90,8 @@ class InteractiveSpringBootAgent:
   • mandatory <model>           - Get mandatory fields for a model
   • request <endpoint>          - Get request info for an endpoint
   • response <endpoint>         - Get response info for an endpoint
+  • curl <endpoint> <method>    - Get CURL command for an endpoint
+  • curl all                    - Get all CURL commands
   • impact <model> <field> <action> - Analyze impact of field changes
 
 💬 Natural Language:
@@ -95,6 +100,8 @@ class InteractiveSpringBootAgent:
   • "What does the POST /users endpoint expect?"
   • "What happens if I add a new field to UserDTO?"
   • "Show me all GET endpoints"
+  • "Give me the CURL command for POST /users"
+  • "Show me all CURL commands"
 
 🚪 Exit:
   • quit, exit, q              - Exit the agent
@@ -216,6 +223,47 @@ class InteractiveSpringBootAgent:
         else:
             print(f"❌ No information found for endpoint: {method} {endpoint_path}")
     
+    def _handle_curl_query(self, query: str):
+        """Handle CURL command queries"""
+        parts = query.split()
+        
+        if len(parts) < 2:
+            print("❌ Usage: curl <endpoint_path> <method> OR curl all")
+            return
+        
+        if parts[1].lower() == 'all':
+            # Show all CURL commands
+            curl_commands = self.agent.get_all_curl_commands()
+            if curl_commands:
+                print("\n🌐 CURL Commands for All Endpoints:")
+                print("=" * 50)
+                for endpoint_key, curl_command in curl_commands.items():
+                    print(f"\n📡 {endpoint_key}")
+                    print("```bash")
+                    print(curl_command)
+                    print("```")
+            else:
+                print("❌ No endpoints found")
+        else:
+            # Show CURL for specific endpoint
+            endpoint_path = parts[1]
+            method = parts[2] if len(parts) > 2 else "GET"
+            
+            curl_command = self.agent.get_curl_command(endpoint_path, method)
+            
+            if "not found" in curl_command.lower():
+                print(f"❌ {curl_command}")
+            else:
+                print(f"\n📡 CURL Command for {method} {endpoint_path}:")
+                print("```bash")
+                print(curl_command)
+                print("```")
+                print("\n💡 Tips:")
+                print("  • Replace YOUR_TOKEN with actual authorization token")
+                print("  • Replace YOUR_VALUE with actual header values")
+                print("  • Modify sample values in request body as needed")
+                print(f"  • Base URL is set to: {self.base_url}")
+    
     def _handle_natural_language_query(self, query: str):
         """Handle natural language queries"""
         query_lower = query.lower()
@@ -251,6 +299,12 @@ class InteractiveSpringBootAgent:
         
         elif "add" in query_lower and "field" in query_lower:
             print("ℹ️  To analyze field addition impact, use: impact <ModelName> <fieldName> add")
+        
+        elif "curl" in query_lower and ("command" in query_lower or "show" in query_lower):
+            if "all" in query_lower:
+                self._handle_curl_query("curl all")
+            else:
+                print("ℹ️  To get CURL commands, use: curl <endpoint> <method> or curl all")
         
         else:
             print("🤔 I didn't understand that query. Try 'help' to see available commands.")
@@ -395,12 +449,15 @@ class InteractiveSpringBootAgent:
 
 def main():
     """Main function"""
-    if len(sys.argv) != 2:
-        print("Usage: python interactive_spring_agent.py <spring_boot_project_path>")
+    if len(sys.argv) < 2:
+        print("Usage: python interactive_spring_agent.py <spring_boot_project_path> [base_url]")
+        print("Example: python interactive_spring_agent.py /path/to/project http://localhost:8080")
         sys.exit(1)
     
     project_path = sys.argv[1]
-    agent = InteractiveSpringBootAgent(project_path)
+    base_url = sys.argv[2] if len(sys.argv) > 2 else "http://localhost:8080"
+    
+    agent = InteractiveSpringBootAgent(project_path, base_url)
     agent.start()
 
 
