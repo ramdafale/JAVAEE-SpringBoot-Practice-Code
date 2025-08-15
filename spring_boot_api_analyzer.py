@@ -46,6 +46,9 @@ class ApiEndpoint:
     path_variables: List[str] = None
     query_parameters: List[str] = None
     request_headers: List[str] = None
+    endpoint_type: str = "REST"  # REST or GraphQL
+    graphql_operation: Optional[str] = None  # query, mutation, subscription
+    graphql_fields: List[str] = None
     
     def __post_init__(self):
         if self.path_variables is None:
@@ -54,6 +57,27 @@ class ApiEndpoint:
             self.query_parameters = []
         if self.request_headers is None:
             self.request_headers = []
+        if self.graphql_fields is None:
+            self.graphql_fields = []
+
+
+@dataclass
+class GraphQLSchema:
+    """Information about GraphQL schema"""
+    queries: List[Dict[str, Any]] = None
+    mutations: List[Dict[str, Any]] = None
+    subscriptions: List[Dict[str, Any]] = None
+    types: Dict[str, Dict[str, Any]] = None
+    
+    def __post_init__(self):
+        if self.queries is None:
+            self.queries = []
+        if self.mutations is None:
+            self.mutations = []
+        if self.subscriptions is None:
+            self.subscriptions = []
+        if self.types is None:
+            self.types = {}
 
 
 @dataclass
@@ -77,6 +101,7 @@ class SpringBootApiAnalyzer:
         self.project_path = Path(project_path)
         self.models: Dict[str, ModelInfo] = {}
         self.endpoints: List[ApiEndpoint] = []
+        self.graphql_schema: Optional[GraphQLSchema] = None
         self.validation_annotations = {
             '@NotNull', '@NotEmpty', '@NotBlank', '@Valid', '@Required',
             '@Min', '@Max', '@Size', '@Pattern', '@Email', '@Positive',
@@ -94,6 +119,9 @@ class SpringBootApiAnalyzer:
         for java_file in java_files:
             self._analyze_java_file(java_file)
         
+        # Analyze GraphQL schema files
+        self._analyze_graphql_schema()
+        
         # Generate comprehensive report
         return self._generate_report()
     
@@ -104,7 +132,10 @@ class SpringBootApiAnalyzer:
                 content = f.read()
             
             # Determine file type and analyze accordingly
-            if self._is_controller(content):
+            # Check GraphQL first since GraphQL controllers are also regular controllers
+            if self._is_graphql_controller(content):
+                self._analyze_graphql_controller(content, file_path)
+            elif self._is_controller(content):
                 self._analyze_controller(content, file_path)
             elif self._is_model_or_dto(content):
                 self._analyze_model(content, file_path)
@@ -120,6 +151,20 @@ class SpringBootApiAnalyzer:
             r'@RequestMapping'
         ]
         return any(re.search(pattern, content) for pattern in controller_patterns)
+    
+    def _is_graphql_controller(self, content: str) -> bool:
+        """Check if the file is a GraphQL controller"""
+        graphql_patterns = [
+            r'@QueryMapping',
+            r'@MutationMapping',
+            r'@SubscriptionMapping',
+            r'@SchemaMapping',
+            r'@Controller.*GraphQL',
+            r'GraphQLQueryResolver',
+            r'GraphQLMutationResolver',
+            r'GraphQLSubscriptionResolver'
+        ]
+        return any(re.search(pattern, content) for pattern in graphql_patterns)
     
     def _is_model_or_dto(self, content: str) -> bool:
         """Check if the file is a model or DTO"""
@@ -178,6 +223,197 @@ class SpringBootApiAnalyzer:
                 self._analyze_method_parameters(method_content, endpoint)
                 
                 self.endpoints.append(endpoint)
+    
+    def _analyze_graphql_controller(self, content: str, file_path: Path):
+        """Analyze a GraphQL controller"""
+        # Extract class name
+        class_match = re.search(r'class\s+(\w+)', content)
+        if not class_match:
+            return
+        
+        class_name = class_match.group(1)
+        
+        # Find GraphQL operations
+        graphql_patterns = [
+            (r'@QueryMapping\s*(?:\([^)]*\))?\s*(?:public\s+)?(\w+(?:<[^>]+>)?)\s+(\w+)\s*\([^)]*\)', 'query'),
+            (r'@MutationMapping\s*(?:\([^)]*\))?\s*(?:public\s+)?(\w+(?:<[^>]+>)?)\s+(\w+)\s*\([^)]*\)', 'mutation'),
+            (r'@SubscriptionMapping\s*(?:\([^)]*\))?\s*(?:public\s+)?(\w+(?:<[^>]+>)?)\s+(\w+)\s*\([^)]*\)', 'subscription'),
+            (r'@SchemaMapping\s*(?:\([^)]*\))?\s*(?:public\s+)?(\w+(?:<[^>]+>)?)\s+(\w+)\s*\([^)]*\)', 'query')
+        ]
+        
+        for pattern, operation_type in graphql_patterns:
+            matches = re.finditer(pattern, content, re.DOTALL)
+            for match in matches:
+                return_type = match.group(1)
+                method_name = match.group(2)
+                
+                # Extract method details
+                method_start = match.start()
+                method_content = self._extract_method_content(content, method_start)
+                
+                # Create GraphQL endpoint
+                endpoint = ApiEndpoint(
+                    path="/graphql",  # Standard GraphQL endpoint
+                    method="POST",
+                    controller_class=class_name,
+                    method_name=method_name,
+                    response_type=return_type,
+                    endpoint_type="GraphQL",
+                    graphql_operation=operation_type
+                )
+                
+                # Extract GraphQL-specific information
+                self._analyze_graphql_method_parameters(method_content, endpoint)
+                
+                self.endpoints.append(endpoint)
+    
+    def _analyze_graphql_method_parameters(self, method_content: str, endpoint: ApiEndpoint):
+        """Analyze GraphQL method parameters"""
+        # Extract @Argument parameters
+        arguments = re.findall(r'@Argument(?:\s*\(\s*["\']([^"\']+)["\']\s*\))?\s+\w+\s+(\w+)', method_content)
+        for arg in arguments:
+            arg_name = arg[0] if arg[0] else arg[1]
+            endpoint.graphql_fields.append(arg_name)
+        
+        # Extract return type fields (simplified)
+        if endpoint.response_type:
+            # This would ideally parse the actual GraphQL schema
+            # For now, we'll extract basic field information
+            endpoint.graphql_fields.extend(self._extract_graphql_return_fields(endpoint.response_type))
+    
+    def _extract_graphql_return_fields(self, return_type: str) -> List[str]:
+        """Extract fields from GraphQL return type"""
+        # This is a simplified implementation
+        # In a real scenario, you'd parse the actual GraphQL schema
+        common_fields = {
+            'User': ['id', 'username', 'email', 'firstName', 'lastName'],
+            'UserDTO': ['id', 'username', 'email', 'firstName', 'lastName'],
+            'CreateUserRequest': ['username', 'email', 'firstName', 'lastName', 'password'],
+            'String': [],
+            'Boolean': [],
+            'Int': [],
+            'ID': []
+        }
+        
+        # Remove generic types
+        clean_type = re.sub(r'<[^>]+>', '', return_type)
+        clean_type = re.sub(r'List|Optional|ResponseEntity', '', clean_type).strip()
+        
+        return common_fields.get(clean_type, [])
+    
+    def _analyze_graphql_schema(self):
+        """Analyze GraphQL schema files"""
+        # Look for .graphqls, .gql, or schema files
+        schema_files = []
+        schema_files.extend(list(self.project_path.rglob("*.graphqls")))
+        schema_files.extend(list(self.project_path.rglob("*.gql")))
+        schema_files.extend(list(self.project_path.rglob("**/schema.graphql")))
+        schema_files.extend(list(self.project_path.rglob("**/schema/**/*.graphql")))
+        
+        if not schema_files:
+            return
+        
+        self.graphql_schema = GraphQLSchema()
+        
+        for schema_file in schema_files:
+            try:
+                with open(schema_file, 'r', encoding='utf-8') as f:
+                    schema_content = f.read()
+                
+                self._parse_graphql_schema_content(schema_content)
+                
+            except Exception as e:
+                print(f"⚠️  Error analyzing GraphQL schema {schema_file}: {e}")
+    
+    def _parse_graphql_schema_content(self, content: str):
+        """Parse GraphQL schema content"""
+        if not self.graphql_schema:
+            return
+        
+        # Extract Query type
+        query_match = re.search(r'type\s+Query\s*\{([^}]+)\}', content, re.DOTALL)
+        if query_match:
+            query_fields = self._extract_graphql_fields(query_match.group(1))
+            self.graphql_schema.queries.extend(query_fields)
+        
+        # Extract Mutation type
+        mutation_match = re.search(r'type\s+Mutation\s*\{([^}]+)\}', content, re.DOTALL)
+        if mutation_match:
+            mutation_fields = self._extract_graphql_fields(mutation_match.group(1))
+            self.graphql_schema.mutations.extend(mutation_fields)
+        
+        # Extract Subscription type
+        subscription_match = re.search(r'type\s+Subscription\s*\{([^}]+)\}', content, re.DOTALL)
+        if subscription_match:
+            subscription_fields = self._extract_graphql_fields(subscription_match.group(1))
+            self.graphql_schema.subscriptions.extend(subscription_fields)
+        
+        # Extract custom types
+        type_matches = re.finditer(r'type\s+(\w+)\s*\{([^}]+)\}', content, re.DOTALL)
+        for type_match in type_matches:
+            type_name = type_match.group(1)
+            if type_name not in ['Query', 'Mutation', 'Subscription']:
+                type_fields = self._extract_graphql_fields(type_match.group(2))
+                self.graphql_schema.types[type_name] = {
+                    'fields': type_fields,
+                    'kind': 'OBJECT'
+                }
+        
+        # Extract input types
+        input_matches = re.finditer(r'input\s+(\w+)\s*\{([^}]+)\}', content, re.DOTALL)
+        for input_match in input_matches:
+            input_name = input_match.group(1)
+            input_fields = self._extract_graphql_fields(input_match.group(2))
+            self.graphql_schema.types[input_name] = {
+                'fields': input_fields,
+                'kind': 'INPUT_OBJECT'
+            }
+    
+    def _extract_graphql_fields(self, fields_content: str) -> List[Dict[str, Any]]:
+        """Extract fields from GraphQL type definition"""
+        fields = []
+        
+        # Match field definitions: fieldName(args): ReturnType
+        field_pattern = r'(\w+)(?:\s*\([^)]*\))?\s*:\s*([^!\n]+)(!?)'
+        
+        for match in re.finditer(field_pattern, fields_content):
+            field_name = match.group(1)
+            field_type = match.group(2).strip()
+            is_required = bool(match.group(3))
+            
+            fields.append({
+                'name': field_name,
+                'type': field_type,
+                'required': is_required,
+                'args': self._extract_field_arguments(fields_content, field_name)
+            })
+        
+        return fields
+    
+    def _extract_field_arguments(self, content: str, field_name: str) -> List[Dict[str, str]]:
+        """Extract arguments for a GraphQL field"""
+        # Look for field with arguments: fieldName(arg1: Type, arg2: Type): ReturnType
+        pattern = rf'{field_name}\s*\(([^)]+)\)\s*:'
+        match = re.search(pattern, content)
+        
+        if not match:
+            return []
+        
+        args_content = match.group(1)
+        args = []
+        
+        # Parse arguments: argName: ArgType
+        arg_pattern = r'(\w+)\s*:\s*([^,)]+)'
+        for arg_match in re.finditer(arg_pattern, args_content):
+            arg_name = arg_match.group(1)
+            arg_type = arg_match.group(2).strip()
+            
+            args.append({
+                'name': arg_name,
+                'type': arg_type
+            })
+        
+        return args
     
     def _extract_method_content(self, content: str, start_pos: int) -> str:
         """Extract the full method content including annotations"""
@@ -307,11 +543,12 @@ class SpringBootApiAnalyzer:
     
     def _generate_report(self) -> Dict[str, Any]:
         """Generate comprehensive analysis report"""
-        return {
+        report = {
             "summary": {
                 "total_endpoints": len(self.endpoints),
                 "total_models": len(self.models),
                 "endpoints_by_method": self._count_endpoints_by_method(),
+                "endpoints_by_type": self._count_endpoints_by_type(),
             },
             "endpoints": [asdict(endpoint) for endpoint in self.endpoints],
             "models": {name: asdict(model) for name, model in self.models.items()},
@@ -321,12 +558,32 @@ class SpringBootApiAnalyzer:
                 "endpoint_request_response_mapping": self._get_endpoint_mappings()
             }
         }
+        
+        # Add GraphQL schema information if available
+        if self.graphql_schema:
+            report["graphql_schema"] = asdict(self.graphql_schema)
+            report["summary"]["graphql_operations"] = {
+                "queries": len(self.graphql_schema.queries),
+                "mutations": len(self.graphql_schema.mutations),
+                "subscriptions": len(self.graphql_schema.subscriptions),
+                "types": len(self.graphql_schema.types)
+            }
+        
+        return report
     
     def _count_endpoints_by_method(self) -> Dict[str, int]:
         """Count endpoints by HTTP method"""
         counts = {}
         for endpoint in self.endpoints:
             counts[endpoint.method] = counts.get(endpoint.method, 0) + 1
+        return counts
+    
+    def _count_endpoints_by_type(self) -> Dict[str, int]:
+        """Count endpoints by type (REST vs GraphQL)"""
+        counts = {}
+        for endpoint in self.endpoints:
+            endpoint_type = endpoint.endpoint_type
+            counts[endpoint_type] = counts.get(endpoint_type, 0) + 1
         return counts
     
     def _get_mandatory_fields_by_model(self) -> Dict[str, List[str]]:
@@ -386,12 +643,17 @@ class CurlCommandGenerator:
     def __init__(self, base_url: str = "http://localhost:8080"):
         self.base_url = base_url.rstrip('/')
     
-    def generate_curl_command(self, endpoint: Dict[str, Any], model_info: Dict[str, Any] = None) -> str:
+    def generate_curl_command(self, endpoint: Dict[str, Any], model_info: Dict[str, Any] = None, graphql_schema: Dict[str, Any] = None) -> str:
         """Generate a CURL command for an API endpoint"""
         method = endpoint['method']
         path = endpoint['path']
+        endpoint_type = endpoint.get('endpoint_type', 'REST')
         
-        # Build the URL
+        # Handle GraphQL endpoints differently
+        if endpoint_type == 'GraphQL':
+            return self._generate_graphql_curl_command(endpoint, model_info, graphql_schema)
+        
+        # Build the URL for REST endpoints
         url = f"{self.base_url}{path}"
         
         # Start building the CURL command
@@ -434,6 +696,145 @@ class CurlCommandGenerator:
         curl_parts.append(f'"{final_url}"')
         
         return ' \\\n  '.join(curl_parts)
+    
+    def _generate_graphql_curl_command(self, endpoint: Dict[str, Any], model_info: Dict[str, Any] = None, graphql_schema: Dict[str, Any] = None) -> str:
+        """Generate a CURL command for a GraphQL endpoint"""
+        operation_type = endpoint.get('graphql_operation', 'query')
+        method_name = endpoint['method_name']
+        response_type = endpoint.get('response_type', 'String')
+        
+        # Build GraphQL query/mutation
+        graphql_query = self._build_graphql_query(operation_type, method_name, endpoint, graphql_schema)
+        
+        # Build the CURL command
+        curl_parts = ["curl -X POST"]
+        
+        # Add headers
+        curl_parts.append('-H "Content-Type: application/json"')
+        curl_parts.append('-H "Accept: application/json"')
+        
+        # Add GraphQL query as JSON payload
+        graphql_payload = {
+            "query": graphql_query,
+            "variables": self._generate_graphql_variables(endpoint, graphql_schema)
+        }
+        
+        json_body = json.dumps(graphql_payload, indent=2)
+        curl_parts.append(f"-d '{json_body}'")
+        
+        # Add the GraphQL endpoint URL
+        graphql_url = f"{self.base_url}/graphql"
+        curl_parts.append(f'"{graphql_url}"')
+        
+        return ' \\\n  '.join(curl_parts)
+    
+    def _build_graphql_query(self, operation_type: str, method_name: str, endpoint: Dict[str, Any], graphql_schema: Dict[str, Any] = None) -> str:
+        """Build a GraphQL query/mutation string"""
+        # Get field information
+        fields = endpoint.get('graphql_fields', [])
+        response_type = endpoint.get('response_type', 'String')
+        
+        # Generate return fields based on response type
+        return_fields = self._generate_graphql_return_fields(response_type, graphql_schema)
+        
+        # Generate arguments
+        args = self._generate_graphql_arguments(endpoint, graphql_schema)
+        
+        # Build the query string
+        if operation_type == 'mutation':
+            query = f"mutation {{\n  {method_name}"
+        elif operation_type == 'subscription':
+            query = f"subscription {{\n  {method_name}"
+        else:  # query
+            query = f"query {{\n  {method_name}"
+        
+        # Add arguments if any
+        if args:
+            query += f"({args})"
+        
+        # Add return fields
+        if return_fields:
+            query += f" {{\n{return_fields}\n  }}"
+        
+        query += "\n}"
+        
+        return query
+    
+    def _generate_graphql_arguments(self, endpoint: Dict[str, Any], graphql_schema: Dict[str, Any] = None) -> str:
+        """Generate GraphQL arguments string"""
+        fields = endpoint.get('graphql_fields', [])
+        
+        if not fields:
+            return ""
+        
+        args = []
+        for field in fields:
+            # Generate sample values based on field name
+            if 'id' in field.lower():
+                args.append(f'{field}: $id')
+            elif 'email' in field.lower():
+                args.append(f'{field}: $email')
+            elif 'name' in field.lower():
+                args.append(f'{field}: $name')
+            else:
+                args.append(f'{field}: ${field}')
+        
+        return ', '.join(args)
+    
+    def _generate_graphql_variables(self, endpoint: Dict[str, Any], graphql_schema: Dict[str, Any] = None) -> Dict[str, Any]:
+        """Generate GraphQL variables"""
+        fields = endpoint.get('graphql_fields', [])
+        variables = {}
+        
+        for field in fields:
+            if 'id' in field.lower():
+                variables['id'] = "1"
+            elif 'email' in field.lower():
+                variables['email'] = "user@example.com"
+            elif 'username' in field.lower():
+                variables['username'] = "sampleuser"
+            elif 'name' in field.lower():
+                if 'first' in field.lower():
+                    variables['firstName'] = "John"
+                elif 'last' in field.lower():
+                    variables['lastName'] = "Doe"
+                else:
+                    variables['name'] = "Sample Name"
+            elif 'password' in field.lower():
+                variables['password'] = "securePassword123"
+            else:
+                variables[field] = f"sample_{field.lower()}"
+        
+        return variables
+    
+    def _generate_graphql_return_fields(self, response_type: str, graphql_schema: Dict[str, Any] = None) -> str:
+        """Generate GraphQL return fields"""
+        # Remove generic types and clean up
+        clean_type = re.sub(r'<[^>]+>', '', response_type)
+        clean_type = re.sub(r'List|Optional|ResponseEntity', '', clean_type).strip()
+        
+        # Common field mappings
+        field_mappings = {
+            'User': ['id', 'username', 'email', 'firstName', 'lastName'],
+            'UserDTO': ['id', 'username', 'email', 'firstName', 'lastName'],
+            'CreateUserRequest': ['username', 'email', 'firstName', 'lastName'],
+            'String': [],
+            'Boolean': [],
+            'Int': [],
+            'ID': []
+        }
+        
+        fields = field_mappings.get(clean_type, ['id', 'name'])
+        
+        if not fields:
+            return ""
+        
+        # Format fields with proper indentation
+        formatted_fields = []
+        for field in fields:
+            formatted_fields.append(f"    {field}")
+        
+        return '\n'.join(formatted_fields)
     
     def _generate_sample_request_body(self, endpoint: Dict[str, Any], model_info: Dict[str, Any]) -> Dict[str, Any]:
         """Generate a sample request body based on the model"""
@@ -654,7 +1055,8 @@ class SpringBootApiAgent:
         if not endpoint:
             return f"Endpoint not found: {method} {endpoint_path}"
         
-        return self.curl_generator.generate_curl_command(endpoint, self.analysis_data["models"])
+        graphql_schema_data = asdict(self.analyzer.graphql_schema) if self.analyzer.graphql_schema else None
+        return self.curl_generator.generate_curl_command(endpoint, self.analysis_data["models"], graphql_schema_data)
     
     def get_all_curl_commands(self) -> Dict[str, str]:
         """Get CURL commands for all endpoints"""
@@ -662,10 +1064,15 @@ class SpringBootApiAgent:
             return {}
         
         curl_commands = {}
+        graphql_schema_data = asdict(self.analyzer.graphql_schema) if self.analyzer.graphql_schema else None
+        
         for endpoint in self.analysis_data["endpoints"]:
             endpoint_key = f"{endpoint['method']} {endpoint['path']}"
+            if endpoint.get('endpoint_type') == 'GraphQL':
+                endpoint_key = f"GraphQL {endpoint.get('graphql_operation', 'query')} {endpoint['method_name']}"
+            
             curl_commands[endpoint_key] = self.curl_generator.generate_curl_command(
-                endpoint, self.analysis_data["models"]
+                endpoint, self.analysis_data["models"], graphql_schema_data
             )
         
         return curl_commands

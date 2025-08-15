@@ -284,6 +284,17 @@
                         <li>"Generate curl command for POST users"</li>
                         <li>"Show curl for GET user by ID"</li>
                         <li>"Give me all curl commands"</li>
+                        <li>"GraphQL curl command for create user"</li>
+                    </ul>
+                </div>
+
+                <div class="example-card">
+                    <h4>🔮 GraphQL Queries</h4>
+                    <ul>
+                        <li>"Show GraphQL schema"</li>
+                        <li>"List GraphQL queries"</li>
+                        <li>"Show GraphQL mutations"</li>
+                        <li>"GraphQL subscriptions available"</li>
                     </ul>
                 </div>
 
@@ -532,6 +543,87 @@ curl -X POST \\
                     `,
                     speech: "Found 6 total integrations: 3 RestTemplate calls, 1 WebClient call, and 2 external API integrations. The system integrates with notification service, audit logging, user preferences, and external validation services."
                 };
+            }
+            
+            else if (command.includes('graphql') || command.includes('graph ql')) {
+                if (command.includes('schema')) {
+                    return {
+                        html: `
+                            <div class="success">
+                                <h3>🔮 GraphQL Schema Overview</h3>
+                                <p><strong>Schema Summary:</strong></p>
+                                <ul>
+                                    <li><strong>Queries:</strong> 3 operations</li>
+                                    <li><strong>Mutations:</strong> 3 operations</li>
+                                    <li><strong>Subscriptions:</strong> 2 operations</li>
+                                    <li><strong>Custom Types:</strong> 6 types</li>
+                                </ul>
+                                <p><strong>Available Operations:</strong></p>
+                                <ul>
+                                    <li>🔍 <strong>Queries:</strong> users, user, searchUsers</li>
+                                    <li>✏️ <strong>Mutations:</strong> createUser, updateUser, deleteUser</li>
+                                    <li>📡 <strong>Subscriptions:</strong> userUpdates, userCreated</li>
+                                </ul>
+                            </div>
+                        `,
+                        speech: "GraphQL schema contains 3 queries, 3 mutations, 2 subscriptions, and 6 custom types. Available queries include users, user, and searchUsers. Mutations include createUser, updateUser, and deleteUser."
+                    };
+                } else if (command.includes('curl') || command.includes('command')) {
+                    return {
+                        html: `
+                            <div class="success">
+                                <h3>🔮 GraphQL CURL Command</h3>
+                                <div class="curl-display">
+curl -X POST \\
+  -H "Content-Type: application/json" \\
+  -H "Accept: application/json" \\
+  -d '{
+  "query": "mutation {\\n  createUser(input: $input) {\\n    id\\n    username\\n    email\\n    firstName\\n    lastName\\n  }\\n}",
+  "variables": {
+    "input": {
+      "username": "sampleuser",
+      "email": "user@example.com",
+      "firstName": "John",
+      "lastName": "Doe",
+      "password": "securePassword123"
+    }
+  }
+}' \\
+  "http://localhost:8080/graphql"
+                                </div>
+                                <p><strong>💡 GraphQL Tips:</strong></p>
+                                <ul>
+                                    <li>All GraphQL operations use POST to /graphql endpoint</li>
+                                    <li>Query and variables are sent as JSON payload</li>
+                                    <li>Specify exactly which fields you want returned</li>
+                                    <li>Use variables for dynamic values</li>
+                                </ul>
+                            </div>
+                        `,
+                        speech: "GraphQL CURL command generated. All GraphQL operations use POST to the /graphql endpoint with query and variables in JSON format. You can specify exactly which fields to return in the response."
+                    };
+                } else {
+                    return {
+                        html: `
+                            <div class="success">
+                                <h3>🔮 GraphQL Operations</h3>
+                                <p><strong>Available Queries:</strong></p>
+                                <ul>
+                                    <li><strong>users(first: Int, filter: String):</strong> Get paginated user list</li>
+                                    <li><strong>user(id: ID!):</strong> Get single user by ID</li>
+                                    <li><strong>searchUsers(query: String!):</strong> Search users by query</li>
+                                </ul>
+                                <p><strong>Available Mutations:</strong></p>
+                                <ul>
+                                    <li><strong>createUser(input: CreateUserInput!):</strong> Create new user</li>
+                                    <li><strong>updateUser(id: ID!, input: UpdateUserInput!):</strong> Update existing user</li>
+                                    <li><strong>deleteUser(id: ID!):</strong> Delete user by ID</li>
+                                </ul>
+                            </div>
+                        `,
+                        speech: "GraphQL API provides 3 queries and 3 mutations. Queries include users with pagination, single user lookup, and user search. Mutations allow creating, updating, and deleting users."
+                    };
+                }
             }
             
             else if (command.includes('endpoint') || command.includes('api')) {

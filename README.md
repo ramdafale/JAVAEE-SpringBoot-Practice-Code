@@ -11,7 +11,8 @@ A comprehensive Python-based agent that analyzes Spring Boot applications to pro
 - **Impact Analysis**: Analyzes the impact of adding, removing, or modifying fields
 - **Interactive Interface**: Natural language queries and command-based interface
 - **Voice Commands**: Speech recognition and text-to-speech for hands-free interaction
-- **CURL Command Generation**: Ready-to-use CURL commands for all endpoints
+- **CURL Command Generation**: Ready-to-use CURL commands for REST and GraphQL endpoints
+- **GraphQL Support**: Complete GraphQL schema analysis and CURL generation
 - **Internal API Integration Detection**: Analyzes RestTemplate, WebClient, and Feign client usage
 - **Documentation Generation**: Automatic API documentation generation
 
@@ -119,10 +120,15 @@ You can also ask questions in natural language:
 - "Show me all GET endpoints"
 - "Give me the CURL command for POST /users"
 - "Show me all CURL commands"
+- "Generate GraphQL CURL command"
+- "Show GraphQL schema structure"
 
 ### 🎤 Voice Commands (Voice Mode & Web Interface)
 - "Show me the project summary" - Get project overview
 - "Generate curl command for POST users" - Get CURL commands
+- "Show GraphQL schema" - See GraphQL structure
+- "List GraphQL queries" - Available GraphQL queries
+- "GraphQL mutations available" - Available mutations
 - "What fields are in User DTO" - See model structure
 - "Show mandatory fields for create user request" - Required fields
 - "Show internal integrations" - API dependencies
@@ -165,6 +171,40 @@ You can also ask questions in natural language:
   • Ensure no client dependencies on this field
   • Consider deprecation period before removal
   • Update API documentation
+```
+
+### GraphQL CURL Commands
+```bash
+# GraphQL Query Example
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+  "query": "query {\n  users(first: $first, filter: $filter) {\n    id\n    username\n    email\n    firstName\n    lastName\n  }\n}",
+  "variables": {
+    "first": 10,
+    "filter": "active"
+  }
+}' \
+  "http://localhost:8080/graphql"
+
+# GraphQL Mutation Example
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+  "query": "mutation {\n  createUser(input: $input) {\n    id\n    username\n    email\n  }\n}",
+  "variables": {
+    "input": {
+      "username": "newuser",
+      "email": "user@example.com",
+      "firstName": "John",
+      "lastName": "Doe",
+      "password": "securePassword123"
+    }
+  }
+}' \
+  "http://localhost:8080/graphql"
 ```
 
 ## 🏗️ Architecture

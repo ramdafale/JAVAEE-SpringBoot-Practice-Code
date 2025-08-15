@@ -149,6 +149,10 @@ class VoiceSpringBootAgent:
             elif "curl" in command or "command" in command:
                 return self._process_curl_query(command)
             
+            # GraphQL queries
+            elif "graphql" in command or "graph ql" in command:
+                return self._process_graphql_query(command)
+            
             # Field queries
             elif "field" in command or "parameter" in command:
                 return self._process_field_query(command)
@@ -183,6 +187,9 @@ class VoiceSpringBootAgent:
         Say 'summary' for project overview.
         Say 'show endpoints' to list all API endpoints.
         Say 'curl command for post users' to get curl commands.
+        Say 'graphql schema' to see GraphQL structure.
+        Say 'graphql queries' to list available queries.
+        Say 'graphql mutations' to list available mutations.
         Say 'fields for user model' to see model fields.
         Say 'mandatory fields for create user request' for required fields.
         Say 'internal integrations' to see API dependencies.
@@ -246,6 +253,52 @@ class VoiceSpringBootAgent:
                 return f"Endpoint {method} {endpoint_path} not found."
         
         return "Please specify the endpoint and method for the curl command."
+    
+    def _process_graphql_query(self, command: str) -> str:
+        """Process GraphQL-related queries"""
+        if not self.agent.analysis_data:
+            return "No analysis data available."
+        
+        # Check if GraphQL schema exists
+        graphql_schema = self.agent.analysis_data.get("graphql_schema")
+        if not graphql_schema:
+            return "No GraphQL schema found in the project."
+        
+        if "schema" in command or "structure" in command:
+            # Provide schema overview
+            queries = len(graphql_schema.get("queries", []))
+            mutations = len(graphql_schema.get("mutations", []))
+            subscriptions = len(graphql_schema.get("subscriptions", []))
+            types = len(graphql_schema.get("types", {}))
+            
+            return f"GraphQL schema contains {queries} queries, {mutations} mutations, {subscriptions} subscriptions, and {types} custom types."
+        
+        elif "query" in command or "queries" in command:
+            queries = graphql_schema.get("queries", [])
+            if queries:
+                query_names = [q.get("name", "unknown") for q in queries[:3]]
+                return f"Available GraphQL queries: {', '.join(query_names)}. Total: {len(queries)} queries."
+            else:
+                return "No GraphQL queries found."
+        
+        elif "mutation" in command or "mutations" in command:
+            mutations = graphql_schema.get("mutations", [])
+            if mutations:
+                mutation_names = [m.get("name", "unknown") for m in mutations[:3]]
+                return f"Available GraphQL mutations: {', '.join(mutation_names)}. Total: {len(mutations)} mutations."
+            else:
+                return "No GraphQL mutations found."
+        
+        elif "curl" in command or "command" in command:
+            # Get GraphQL CURL commands
+            graphql_endpoints = [ep for ep in self.agent.analysis_data["endpoints"] if ep.get("endpoint_type") == "GraphQL"]
+            if graphql_endpoints:
+                return f"Found {len(graphql_endpoints)} GraphQL operations. CURL commands generated with proper GraphQL query format. Check console for details."
+            else:
+                return "No GraphQL endpoints found."
+        
+        else:
+            return "Ask about GraphQL schema, queries, mutations, or CURL commands."
     
     def _process_field_query(self, command: str) -> str:
         """Process field-related queries"""
