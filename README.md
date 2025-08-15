@@ -1,251 +1,243 @@
-# 🎾 Tennis Match Prediction Application
+# Spring Boot API Analyzer Agent
 
-A comprehensive Spring Boot application that provides real-time tennis match predictions using AI algorithms. The application analyzes player statistics, head-to-head records, surface performance, and live match data to predict match winners, current game winners, and current set winners.
+A comprehensive Python-based agent that analyzes Spring Boot applications to provide detailed information about API endpoints, request/response structures, mandatory fields, validation rules, and impact analysis for field changes.
 
 ## 🚀 Features
 
-### Core Prediction Capabilities
-- **Match Winner Prediction**: Predicts the overall winner of a tennis match
-- **Current Game Winner Prediction**: Predicts who will win the current game
-- **Current Set Winner Prediction**: Predicts who will win the current set
+- **API Endpoint Analysis**: Automatically discovers and analyzes all REST endpoints
+- **Request/Response Mapping**: Detailed analysis of request bodies, response types, path variables, and query parameters
+- **Mandatory Field Detection**: Identifies required fields based on validation annotations
+- **Validation Rules Analysis**: Extracts and analyzes all validation constraints
+- **Impact Analysis**: Analyzes the impact of adding, removing, or modifying fields
+- **Interactive Interface**: Natural language queries and command-based interface
+- **Documentation Generation**: Automatic API documentation generation
 
-### Advanced Analytics
-- **Player Statistics**: Comprehensive player profiles including rankings, surface performance, and recent form
-- **Head-to-Head Records**: Historical match data between players
-- **Live Match Data**: Real-time statistics and score tracking
-- **Surface Analysis**: Performance analysis on different court surfaces (Hard, Clay, Grass)
+## 📋 Requirements
 
-### Technical Features
-- **RESTful API**: Complete API for all prediction and data operations
-- **Real-time Updates**: Auto-refreshing dashboard with live match data
-- **Modern UI**: Beautiful, responsive web interface
-- **H2 Database**: In-memory database with sample data
-- **Prediction Accuracy Tracking**: Monitor prediction success rates
+- Python 3.7+
+- A Spring Boot project with Java source files
 
-## 🛠️ Technology Stack
+## 🛠️ Installation
 
-- **Backend**: Spring Boot 3.2.0
-- **Database**: H2 (In-memory)
-- **Frontend**: Thymeleaf, Bootstrap 5, JavaScript
-- **Build Tool**: Maven
-- **Java Version**: 17
+1. Clone or download the analyzer files:
+   ```bash
+   # Download the main analyzer
+   wget https://raw.githubusercontent.com/your-repo/spring_boot_api_analyzer.py
+   
+   # Download the interactive interface
+   wget https://raw.githubusercontent.com/your-repo/interactive_spring_agent.py
+   ```
 
-## 📋 Prerequisites
+2. Install Python dependencies:
+   ```bash
+   pip install pathlib dataclasses
+   ```
 
-- Java 17 or higher
-- Maven 3.6 or higher
-- Modern web browser
+## 🎯 Usage
 
-## 🚀 Quick Start
+### Command Line Analysis
 
-### 1. Clone and Navigate
 ```bash
-cd tennis-prediction-app
+# Analyze a Spring Boot project and output JSON report
+python spring_boot_api_analyzer.py /path/to/your/spring-boot-project
+
+# Generate markdown documentation
+python spring_boot_api_analyzer.py /path/to/your/spring-boot-project --format markdown
+
+# Save output to file
+python spring_boot_api_analyzer.py /path/to/your/spring-boot-project --output analysis_report.json
 ```
 
-### 2. Build the Application
+### Interactive Mode
+
 ```bash
-mvn clean install
+# Start interactive agent
+python interactive_spring_agent.py /path/to/your/spring-boot-project
 ```
 
-### 3. Run the Application
-```bash
-mvn spring-boot:run
+## 🤖 Interactive Commands
+
+Once in interactive mode, you can use these commands:
+
+### General Queries
+- `summary` - Show project summary with endpoint and model counts
+- `endpoints` - List all API endpoints
+- `models` - List all data models/DTOs
+- `docs` - Generate complete API documentation
+
+### Specific Queries
+- `endpoints GET` - Filter endpoints by HTTP method
+- `endpoints /users` - Find endpoints containing specific path
+- `models UserDTO` - Get details about a specific model
+- `mandatory UserDTO` - Get mandatory fields for a model
+- `request /users POST` - Get request information for an endpoint
+- `response /users GET` - Get response information for an endpoint
+- `impact UserDTO email remove` - Analyze impact of field changes
+
+### Natural Language Queries
+You can also ask questions in natural language:
+- "What are the mandatory fields for User model?"
+- "What does the POST /users endpoint expect?"
+- "What happens if I add a new field to UserDTO?"
+- "Show me all GET endpoints"
+
+## 📊 Example Output
+
+### Endpoint Analysis
+```
+🌐 POST /api/users
+   Controller: UserController.createUser
+   Request Body: CreateUserRequest
+   Response: ResponseEntity<UserDTO>
+   Required Headers: Authorization
 ```
 
-### 4. Access the Application
-Open your browser and navigate to:
-- **Main Dashboard**: http://localhost:8080/tennis-prediction/
-- **H2 Database Console**: http://localhost:8080/tennis-prediction/h2-console
-  - JDBC URL: `jdbc:h2:mem:tennisdb`
-  - Username: `sa`
-  - Password: `password`
-
-## 📊 Sample Data
-
-The application comes pre-loaded with:
-
-### Top 10 ATP Players (2024 Rankings)
-1. Novak Djokovic (Serbia)
-2. Carlos Alcaraz (Spain)
-3. Daniil Medvedev (Russia)
-4. Jannik Sinner (Italy)
-5. Andrey Rublev (Russia)
-6. Stefanos Tsitsipas (Greece)
-7. Alexander Zverev (Germany)
-8. Holger Rune (Denmark)
-9. Hubert Hurkacz (Poland)
-10. Taylor Fritz (USA)
-
-### Sample Matches
-- Live matches with real-time statistics
-- Completed matches with full results
-- Scheduled matches for future predictions
-
-### Head-to-Head Records
-- Historical match data between all players
-- Surface-specific performance records
-- Recent match outcomes
-
-## 🔧 API Endpoints
-
-### Predictions
-- `POST /api/predictions/match-winner/{matchId}` - Predict match winner
-- `POST /api/predictions/game-winner/{matchId}` - Predict current game winner
-- `POST /api/predictions/set-winner/{matchId}` - Predict current set winner
-- `GET /api/predictions/match/{matchId}` - Get all predictions for a match
-- `GET /api/predictions/latest/{matchId}/{predictionType}` - Get latest prediction
-- `GET /api/predictions/accuracy` - Get prediction accuracy statistics
-
-### Matches
-- `GET /api/matches` - Get all matches
-- `GET /api/matches/live` - Get live matches
-- `GET /api/matches/{matchId}` - Get match by ID
-- `GET /api/matches/tournament/{tournamentName}` - Get matches by tournament
-- `GET /api/matches/surface/{surface}` - Get matches by surface
-- `POST /api/matches` - Create new match
-- `PUT /api/matches/{matchId}` - Update match
-
-### Players
-- `GET /api/players` - Get all players
-- `GET /api/players/{playerId}` - Get player by ID
-- `GET /api/players/name/{playerName}` - Get player by name
-- `GET /api/players/top` - Get top ranked players
-- `GET /api/players/country/{country}` - Get players by country
-- `GET /api/players/surface/{surface}` - Get players by surface performance
-- `GET /api/players/search/{namePattern}` - Search players by name
-- `POST /api/players` - Create new player
-- `PUT /api/players/{playerId}` - Update player
-
-### Head-to-Head
-- `GET /api/head-to-head/{player1Id}/{player2Id}` - Get head-to-head record
-- `GET /api/head-to-head/player/{playerId}` - Get player's head-to-head records
-
-### Statistics
-- `GET /api/statistics` - Get application statistics
-
-## 🎯 Prediction Algorithm
-
-The prediction system uses a weighted algorithm that considers:
-
-### Factors and Weights
-- **Player Rankings** (15%): Current ATP rankings
-- **Head-to-Head Records** (20%): Historical performance against opponent
-- **Surface Performance** (15%): Win rates on specific surfaces
-- **Recent Form** (15%): Recent match performance
-- **Live Statistics** (25%): Current match statistics
-- **Match Momentum** (10%): Current match flow and score
-
-### Prediction Types
-1. **Match Winner**: Overall match outcome prediction
-2. **Game Winner**: Current game prediction (focuses on serving and immediate momentum)
-3. **Set Winner**: Current set prediction (considers set score and match momentum)
-
-## 🎨 User Interface
-
-### Dashboard Features
-- **Real-time Statistics**: Live match count, prediction accuracy, player rankings
-- **Live Matches**: Current matches with real-time scores and statistics
-- **Top Players**: Ranked list of top players with performance metrics
-- **Recent Predictions**: Latest predictions with confidence scores and reasoning
-- **Auto-refresh**: Dashboard updates every 30 seconds
-
-### Interactive Elements
-- **Prediction Buttons**: One-click predictions for match, game, and set winners
-- **Confidence Indicators**: Visual confidence levels for predictions
-- **Detailed Reasoning**: Explanation of prediction factors
-- **Responsive Design**: Works on desktop, tablet, and mobile devices
-
-## 🔍 Database Schema
-
-### Entities
-- **Player**: Comprehensive player profiles with statistics
-- **Match**: Live match data and scores
-- **HeadToHead**: Historical match records between players
-- **MatchPrediction**: Prediction results with confidence scores
-
-### Key Relationships
-- Players have multiple matches (as player1 or player2)
-- Matches have multiple predictions (different types)
-- Players have head-to-head records with other players
-
-## 🚀 Deployment
-
-### Local Development
-```bash
-# Run with Maven
-mvn spring-boot:run
-
-# Or build and run JAR
-mvn clean package
-java -jar target/tennis-prediction-app-1.0.0.jar
+### Mandatory Fields Analysis
+```
+🔒 Mandatory fields for CreateUserRequest:
+  • username
+  • email
+  • firstName
+  • lastName
+  • password
 ```
 
-### Production Deployment
-1. Build the application: `mvn clean package`
-2. Deploy the JAR file to your server
-3. Configure database connection (switch from H2 to production database)
-4. Set up external API keys for live data feeds
+### Impact Analysis
+```
+🔍 Impact Analysis: Remove field 'email' in UserDTO
 
-## 🔧 Configuration
+🌐 Affected Endpoints:
+  • POST /api/users
+  • PUT /api/users/{id}
 
-### Application Properties
-```properties
-# Server Configuration
-server.port=8080
-server.servlet.context-path=/tennis-prediction
+⚠️  Validation Impact:
+  • Removing mandatory field - will break validation
 
-# Database Configuration
-spring.datasource.url=jdbc:h2:mem:tennisdb
-spring.datasource.username=sa
-spring.datasource.password=password
-
-# Prediction Settings
-tennis.prediction.model.threshold=0.6
-tennis.prediction.update-interval=30000
+💡 Recommendations:
+  • Ensure no client dependencies on this field
+  • Consider deprecation period before removal
+  • Update API documentation
 ```
 
-## 📈 Future Enhancements
+## 🏗️ Architecture
 
-### Planned Features
-- **Machine Learning Integration**: Advanced ML models for better predictions
-- **External API Integration**: Real-time data from FlashScore, ATP, etc.
-- **User Authentication**: User accounts and personalized predictions
-- **Mobile App**: Native mobile application
-- **Advanced Analytics**: Detailed statistical analysis and visualizations
-- **Tournament Brackets**: Tournament prediction and bracket management
+The analyzer consists of several key components:
 
-### Technical Improvements
-- **Microservices Architecture**: Split into separate services
-- **Real-time WebSocket**: Live updates via WebSocket
-- **Caching Layer**: Redis for improved performance
-- **Containerization**: Docker support for easy deployment
+### Core Classes
+
+- **`SpringBootApiAnalyzer`**: Main analysis engine that parses Java files
+- **`SpringBootApiAgent`**: High-level interface for querying analysis results
+- **`InteractiveSpringBootAgent`**: Interactive command-line interface
+- **`ApiEndpoint`**: Data structure for endpoint information
+- **`ModelInfo`**: Data structure for model/DTO information
+- **`FieldInfo`**: Data structure for field details and validation rules
+
+### Analysis Process
+
+1. **File Discovery**: Recursively finds all `.java` files in the project
+2. **Classification**: Identifies controllers vs models/DTOs using annotations and patterns
+3. **Controller Analysis**: Extracts endpoint mappings, HTTP methods, and parameter information
+4. **Model Analysis**: Parses field declarations, validation annotations, and inheritance
+5. **Relationship Mapping**: Links endpoints to their request/response models
+6. **Report Generation**: Compiles comprehensive analysis data
+
+## 🔍 Supported Annotations
+
+### Controller Annotations
+- `@RestController`, `@Controller`
+- `@RequestMapping`, `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping`, `@PatchMapping`
+- `@RequestBody`, `@PathVariable`, `@RequestParam`, `@RequestHeader`
+
+### Validation Annotations
+- `@NotNull`, `@NotEmpty`, `@NotBlank`
+- `@Size`, `@Min`, `@Max`
+- `@Pattern`, `@Email`
+- `@Past`, `@Future`, `@PastOrPresent`, `@FutureOrPresent`
+- `@Positive`, `@PositiveOrZero`, `@Negative`, `@NegativeOrZero`
+
+### Model Annotations
+- `@Entity`, `@Document`, `@Embeddable`
+- `@Valid`, `@Required`
+
+## 🎯 Use Cases
+
+### API Documentation
+Generate comprehensive documentation for your Spring Boot APIs automatically.
+
+### Code Review
+Quickly understand API structure and identify potential issues before code review.
+
+### Impact Analysis
+Assess the impact of model changes on existing endpoints and client integrations.
+
+### Onboarding
+Help new team members understand the API structure and requirements.
+
+### Testing
+Identify all endpoints and their requirements for comprehensive test coverage.
+
+### Client Integration
+Provide detailed information about API contracts for frontend/mobile developers.
+
+## 🔧 Example Project Structure
+
+The analyzer works with standard Spring Boot project structures:
+
+```
+src/
+├── main/
+│   └── java/
+│       └── com/
+│           └── example/
+│               └── demo/
+│                   ├── controller/
+│                   │   └── UserController.java
+│                   ├── dto/
+│                   │   ├── UserDTO.java
+│                   │   └── CreateUserRequest.java
+│                   └── entity/
+│                       └── User.java
+```
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Submit a pull request
+Contributions are welcome! Please feel free to submit issues, feature requests, or pull requests.
 
-## 📝 License
+### Areas for Enhancement
+- Support for additional validation frameworks
+- GraphQL endpoint analysis
+- OpenAPI/Swagger integration
+- Database schema analysis
+- Security annotation analysis
+
+## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🆘 Support
+## 🆘 Troubleshooting
 
-For support and questions:
-- Create an issue in the repository
-- Check the API documentation
-- Review the sample data and configurations
+### Common Issues
 
-## 🎯 Quick Test
+**Issue**: "No endpoints found"
+- **Solution**: Ensure your controllers use standard Spring annotations (`@RestController`, `@RequestMapping`, etc.)
 
-1. Start the application
-2. Navigate to http://localhost:8080/tennis-prediction/
-3. View the live matches
-4. Click "Predict Winner" on any live match
-5. See the prediction with confidence score and reasoning
+**Issue**: "Model not found"
+- **Solution**: Check that your DTOs/entities are in the analyzed directory and use proper Java class syntax
 
-The application is ready to use immediately with sample data and working predictions!
+**Issue**: "Validation rules not detected"
+- **Solution**: Ensure you're using standard JSR-303/JSR-380 validation annotations
+
+### Debug Mode
+
+Run with verbose output to see detailed parsing information:
+```bash
+python spring_boot_api_analyzer.py /path/to/project --verbose
+```
+
+## 📞 Support
+
+For questions, issues, or feature requests, please create an issue in the GitHub repository or contact the maintainers.
+
+---
+
+**Happy API Analysis!** 🎉
