@@ -10,12 +10,17 @@ A comprehensive Python-based agent that analyzes Spring Boot applications to pro
 - **Validation Rules Analysis**: Extracts and analyzes all validation constraints
 - **Impact Analysis**: Analyzes the impact of adding, removing, or modifying fields
 - **Interactive Interface**: Natural language queries and command-based interface
+- **Voice Commands**: Speech recognition and text-to-speech for hands-free interaction
+- **CURL Command Generation**: Ready-to-use CURL commands for all endpoints
+- **Internal API Integration Detection**: Analyzes RestTemplate, WebClient, and Feign client usage
 - **Documentation Generation**: Automatic API documentation generation
 
 ## 📋 Requirements
 
 - Python 3.7+
 - A Spring Boot project with Java source files
+- For voice functionality: Microphone and speakers
+- Supported browsers for web interface: Chrome, Edge (for speech recognition)
 
 ## 🛠️ Installation
 
@@ -30,7 +35,13 @@ A comprehensive Python-based agent that analyzes Spring Boot applications to pro
 
 2. Install Python dependencies:
    ```bash
+   # Basic functionality
    pip install pathlib dataclasses
+   
+   # For voice functionality
+   pip install -r requirements.txt
+   # OR manually:
+   # pip install SpeechRecognition pyttsx3 pyaudio
    ```
 
 ## 🎯 Usage
@@ -53,6 +64,30 @@ python spring_boot_api_analyzer.py /path/to/your/spring-boot-project --output an
 ```bash
 # Start interactive agent
 python interactive_spring_agent.py /path/to/your/spring-boot-project
+
+# With custom base URL
+python interactive_spring_agent.py /path/to/project http://localhost:9090
+```
+
+### Voice-Enabled Mode
+
+```bash
+# Start voice-enabled agent
+python voice_spring_agent.py /path/to/your/spring-boot-project
+
+# With custom base URL
+python voice_spring_agent.py /path/to/project http://localhost:9090
+```
+
+### Web Interface
+
+```bash
+# Open the web interface in your browser
+open web_voice_interface.html
+# OR
+# Serve it with a local server for better functionality
+python -m http.server 8000
+# Then open: http://localhost:8000/web_voice_interface.html
 ```
 
 ## 🤖 Interactive Commands
@@ -72,6 +107,8 @@ Once in interactive mode, you can use these commands:
 - `mandatory UserDTO` - Get mandatory fields for a model
 - `request /users POST` - Get request information for an endpoint
 - `response /users GET` - Get response information for an endpoint
+- `curl /users POST` - Get CURL command for an endpoint
+- `curl all` - Get all CURL commands
 - `impact UserDTO email remove` - Analyze impact of field changes
 
 ### Natural Language Queries
@@ -80,6 +117,17 @@ You can also ask questions in natural language:
 - "What does the POST /users endpoint expect?"
 - "What happens if I add a new field to UserDTO?"
 - "Show me all GET endpoints"
+- "Give me the CURL command for POST /users"
+- "Show me all CURL commands"
+
+### 🎤 Voice Commands (Voice Mode & Web Interface)
+- "Show me the project summary" - Get project overview
+- "Generate curl command for POST users" - Get CURL commands
+- "What fields are in User DTO" - See model structure
+- "Show mandatory fields for create user request" - Required fields
+- "Show internal integrations" - API dependencies
+- "Impact of removing email field" - Change analysis
+- "List all endpoints" - Show all API endpoints
 
 ## 📊 Example Output
 

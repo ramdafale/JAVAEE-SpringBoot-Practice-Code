@@ -1,0 +1,461 @@
+{
+  "summary": {
+    "total_endpoints": 3,
+    "total_models": 2,
+    "endpoints_by_method": {
+      "GET": 1,
+      "PUT": 1,
+      "DELETE": 1
+    }
+  },
+  "endpoints": [
+    {
+      "path": "/api/users/{id}",
+      "method": "GET",
+      "controller_class": "UserController",
+      "method_name": "getUserById",
+      "request_body_type": null,
+      "response_type": "ResponseEntity<UserDTO>",
+      "path_variables": [],
+      "query_parameters": [],
+      "request_headers": []
+    },
+    {
+      "path": "/api/users/{id}",
+      "method": "PUT",
+      "controller_class": "UserController",
+      "method_name": "updateUser",
+      "request_body_type": null,
+      "response_type": "ResponseEntity<UserDTO>",
+      "path_variables": [],
+      "query_parameters": [],
+      "request_headers": []
+    },
+    {
+      "path": "/api/users/{id}",
+      "method": "DELETE",
+      "controller_class": "UserController",
+      "method_name": "deleteUser",
+      "request_body_type": null,
+      "response_type": "ResponseEntity<Void>",
+      "path_variables": [],
+      "query_parameters": [],
+      "request_headers": []
+    }
+  ],
+  "models": {
+    "UserDTO": {
+      "class_name": "UserDTO",
+      "package": "com.example.demo.dto",
+      "fields": [
+        {
+          "name": "id",
+          "type": "Long",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "username",
+          "type": "String",
+          "is_mandatory": false,
+          "validation_rules": [
+            "@Size"
+          ],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "email",
+          "type": "String",
+          "is_mandatory": false,
+          "validation_rules": [
+            "@Email"
+          ],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "firstName",
+          "type": "String",
+          "is_mandatory": true,
+          "validation_rules": [
+            "@NotBlank"
+          ],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "lastName",
+          "type": "String",
+          "is_mandatory": true,
+          "validation_rules": [
+            "@NotBlank"
+          ],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "department",
+          "type": "String",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "birthDate",
+          "type": "LocalDateTime",
+          "is_mandatory": false,
+          "validation_rules": [
+            "@Past"
+          ],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "phoneNumber",
+          "type": "String",
+          "is_mandatory": false,
+          "validation_rules": [
+            "@Pattern"
+          ],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": "true",
+          "description": ""
+        },
+        {
+          "name": "createdAt",
+          "type": "LocalDateTime",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "updatedAt",
+          "type": "LocalDateTime",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "id",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "username",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "email",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "firstName",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "lastName",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "department",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "birthDate",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "phoneNumber",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "active",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "createdAt",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "updatedAt",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        }
+      ],
+      "parent_class": null,
+      "annotations": [
+        "NotBlank",
+        "Size",
+        "NotBlank",
+        "Email",
+        "NotBlank",
+        "NotBlank",
+        "Past",
+        "Pattern"
+      ]
+    },
+    "CreateUserRequest": {
+      "class_name": "CreateUserRequest",
+      "package": "com.example.demo.dto",
+      "fields": [
+        {
+          "name": "username",
+          "type": "String",
+          "is_mandatory": false,
+          "validation_rules": [
+            "@Size"
+          ],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "email",
+          "type": "String",
+          "is_mandatory": false,
+          "validation_rules": [
+            "@Email"
+          ],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "firstName",
+          "type": "String",
+          "is_mandatory": false,
+          "validation_rules": [
+            "@Size"
+          ],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "lastName",
+          "type": "String",
+          "is_mandatory": false,
+          "validation_rules": [
+            "@Size"
+          ],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "password",
+          "type": "String",
+          "is_mandatory": false,
+          "validation_rules": [
+            "@Size"
+          ],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "department",
+          "type": "String",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "birthDate",
+          "type": "LocalDateTime",
+          "is_mandatory": false,
+          "validation_rules": [
+            "@Past"
+          ],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "phoneNumber",
+          "type": "String",
+          "is_mandatory": false,
+          "validation_rules": [
+            "@Pattern"
+          ],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "username",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "email",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "firstName",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "lastName",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "password",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "department",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "birthDate",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        },
+        {
+          "name": "phoneNumber",
+          "type": "return",
+          "is_mandatory": false,
+          "validation_rules": [],
+          "default_value": null,
+          "description": ""
+        }
+      ],
+      "parent_class": null,
+      "annotations": [
+        "NotBlank",
+        "Size",
+        "NotBlank",
+        "Email",
+        "NotBlank",
+        "Size",
+        "NotBlank",
+        "Size",
+        "NotBlank",
+        "Size",
+        "Past",
+        "Pattern"
+      ]
+    }
+  },
+  "analysis": {
+    "mandatory_fields_by_model": {
+      "UserDTO": [
+        "firstName",
+        "lastName"
+      ],
+      "CreateUserRequest": []
+    },
+    "validation_summary": {
+      "validation_rule_usage": {
+        "@Size": 5,
+        "@Email": 2,
+        "@NotBlank": 2,
+        "@Past": 2,
+        "@Pattern": 2
+      },
+      "models_with_validation": 2
+    },
+    "endpoint_request_response_mapping": [
+      {
+        "endpoint": "GET /api/users/{id}",
+        "request_body": null,
+        "response_type": "ResponseEntity<UserDTO>",
+        "path_variables": [],
+        "query_parameters": [],
+        "request_headers": []
+      },
+      {
+        "endpoint": "PUT /api/users/{id}",
+        "request_body": null,
+        "response_type": "ResponseEntity<UserDTO>",
+        "path_variables": [],
+        "query_parameters": [],
+        "request_headers": []
+      },
+      {
+        "endpoint": "DELETE /api/users/{id}",
+        "request_body": null,
+        "response_type": "ResponseEntity<Void>",
+        "path_variables": [],
+        "query_parameters": [],
+        "request_headers": []
+      }
+    ]
+  }
+}

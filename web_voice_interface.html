@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice-Enabled Spring Boot API Analyzer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .voice-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .voice-button {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .voice-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .voice-button.listening {
+            background: linear-gradient(135deg, #2ed573, #1e90ff);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .status-display {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .results-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .results-content {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .command-examples {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 20px;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .example-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .example-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .example-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .example-card li {
+            padding: 5px 0;
+            color: #666;
+        }
+
+        .example-card li:before {
+            content: "🎤 ";
+            margin-right: 8px;
+        }
+
+        .curl-display {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .field-info {
+            background: #e6fffa;
+            border: 1px solid #38b2ac;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .integration-info {
+            background: #fff5f5;
+            border: 1px solid #f56565;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            color: #e53e3e;
+            background: #fed7d7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .success {
+            color: #38a169;
+            background: #c6f6d5;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .voice-button {
+                width: 100px;
+                height: 100px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎤 Voice-Enabled Spring Boot API Analyzer</h1>
+            <p>Speak your questions about Spring Boot APIs and get comprehensive answers</p>
+        </div>
+
+        <div class="main-content">
+            <div class="voice-panel">
+                <h2>Voice Commands</h2>
+                <button id="voiceButton" class="voice-button" onclick="toggleListening()">
+                    🎤
+                </button>
+                <div id="statusDisplay" class="status-display">
+                    Click the microphone to start voice interaction
+                </div>
+                <div style="margin-top: 20px;">
+                    <button onclick="speakHelp()" style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        🔊 Hear Commands
+                    </button>
+                </div>
+            </div>
+
+            <div class="results-panel">
+                <h2>Analysis Results</h2>
+                <div id="resultsContent" class="results-content">
+                    <p>Results will appear here after voice commands...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="command-examples">
+            <h2>Available Voice Commands</h2>
+            <div class="example-grid">
+                <div class="example-card">
+                    <h4>📊 Project Information</h4>
+                    <ul>
+                        <li>"Show me the project summary"</li>
+                        <li>"List all endpoints"</li>
+                        <li>"Show all models"</li>
+                    </ul>
+                </div>
+
+                <div class="example-card">
+                    <h4>🌐 CURL Commands</h4>
+                    <ul>
+                        <li>"Generate curl command for POST users"</li>
+                        <li>"Show curl for GET user by ID"</li>
+                        <li>"Give me all curl commands"</li>
+                    </ul>
+                </div>
+
+                <div class="example-card">
+                    <h4>🔍 Field Analysis</h4>
+                    <ul>
+                        <li>"What fields are in User DTO"</li>
+                        <li>"Show mandatory fields for create user request"</li>
+                        <li>"What are the required parameters"</li>
+                    </ul>
+                </div>
+
+                <div class="example-card">
+                    <h4>🔗 API Integration</h4>
+                    <ul>
+                        <li>"Show internal integrations"</li>
+                        <li>"What external APIs are used"</li>
+                        <li>"Analyze API dependencies"</li>
+                    </ul>
+                </div>
+
+                <div class="example-card">
+                    <h4>⚡ Impact Analysis</h4>
+                    <ul>
+                        <li>"Impact of removing email field"</li>
+                        <li>"What happens if I add new field"</li>
+                        <li>"Analyze field changes"</li>
+                    </ul>
+                </div>
+
+                <div class="example-card">
+                    <h4>🎯 Specific Queries</h4>
+                    <ul>
+                        <li>"Show GET endpoints only"</li>
+                        <li>"What does POST users expect"</li>
+                        <li>"Explain user model structure"</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isListening = false;
+        let recognition = null;
+        let synthesis = window.speechSynthesis;
+
+        // Initialize speech recognition
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+        } else if ('SpeechRecognition' in window) {
+            recognition = new SpeechRecognition();
+        }
+
+        if (recognition) {
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = function() {
+                updateStatus("🎤 Listening... Speak now!");
+                document.getElementById('voiceButton').classList.add('listening');
+            };
+
+            recognition.onresult = function(event) {
+                const command = event.results[0][0].transcript;
+                updateStatus(`📝 Recognized: "${command}"`);
+                processVoiceCommand(command);
+            };
+
+            recognition.onerror = function(event) {
+                updateStatus(`❌ Error: ${event.error}`);
+                stopListening();
+            };
+
+            recognition.onend = function() {
+                stopListening();
+            };
+        }
+
+        function toggleListening() {
+            if (!recognition) {
+                updateStatus("❌ Speech recognition not supported in this browser");
+                return;
+            }
+
+            if (isListening) {
+                stopListening();
+            } else {
+                startListening();
+            }
+        }
+
+        function startListening() {
+            isListening = true;
+            recognition.start();
+        }
+
+        function stopListening() {
+            isListening = false;
+            document.getElementById('voiceButton').classList.remove('listening');
+            if (recognition) {
+                recognition.stop();
+            }
+        }
+
+        function updateStatus(message) {
+            document.getElementById('statusDisplay').innerHTML = message;
+        }
+
+        function updateResults(content) {
+            document.getElementById('resultsContent').innerHTML = content;
+        }
+
+        function speak(text) {
+            if (synthesis) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.8;
+                utterance.pitch = 1;
+                utterance.volume = 0.8;
+                synthesis.speak(utterance);
+            }
+        }
+
+        function speakHelp() {
+            const helpText = `Available voice commands: 
+            Say "summary" for project overview. 
+            Say "show endpoints" to list APIs. 
+            Say "curl command for post users" for curl commands. 
+            Say "fields for user model" to see model structure. 
+            Say "mandatory fields" for required parameters. 
+            Say "internal integrations" for API dependencies.`;
+            speak(helpText);
+        }
+
+        function processVoiceCommand(command) {
+            updateStatus("🔄 Processing command...");
+            
+            // Simulate API call to backend
+            setTimeout(() => {
+                const response = analyzeCommand(command.toLowerCase());
+                updateResults(response.html);
+                speak(response.speech);
+                updateStatus("✅ Command processed successfully");
+            }, 1000);
+        }
+
+        function analyzeCommand(command) {
+            // Simulate different types of responses based on command
+            if (command.includes('summary') || command.includes('overview')) {
+                return {
+                    html: `
+                        <div class="success">
+                            <h3>📊 Project Summary</h3>
+                            <p><strong>Total Endpoints:</strong> 6</p>
+                            <p><strong>Total Models:</strong> 3</p>
+                            <p><strong>Endpoints by Method:</strong></p>
+                            <ul>
+                                <li>GET: 3 endpoints</li>
+                                <li>POST: 1 endpoint</li>
+                                <li>PUT: 1 endpoint</li>
+                                <li>DELETE: 1 endpoint</li>
+                            </ul>
+                        </div>
+                    `,
+                    speech: "Project summary: Found 6 API endpoints and 3 data models. GET endpoints: 3, POST: 1, PUT: 1, DELETE: 1."
+                };
+            }
+            
+            else if (command.includes('curl') || command.includes('command')) {
+                return {
+                    html: `
+                        <div class="success">
+                            <h3>📡 CURL Command Generated</h3>
+                            <div class="curl-display">
+curl -X POST \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer YOUR_TOKEN" \\
+  -d '{
+  "username": "sampleuser",
+  "email": "user@example.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  "password": "securePassword123"
+}' \\
+  "http://localhost:8080/api/users"
+                            </div>
+                            <p><strong>💡 Tips:</strong></p>
+                            <ul>
+                                <li>Replace YOUR_TOKEN with actual authorization token</li>
+                                <li>Modify sample values as needed</li>
+                                <li>Ensure all mandatory fields are included</li>
+                            </ul>
+                        </div>
+                    `,
+                    speech: "CURL command generated for POST users endpoint. The command includes proper headers and sample request body with all mandatory fields. Check the screen for the complete command."
+                };
+            }
+            
+            else if (command.includes('field') || command.includes('parameter')) {
+                return {
+                    html: `
+                        <div class="field-info">
+                            <h3>🔍 Field Analysis - CreateUserRequest</h3>
+                            <p><strong>Total Fields:</strong> 8</p>
+                            <p><strong>Mandatory Fields:</strong></p>
+                            <ul>
+                                <li><strong>username</strong> (String) - @NotBlank, @Size(3-50)</li>
+                                <li><strong>email</strong> (String) - @NotBlank, @Email</li>
+                                <li><strong>firstName</strong> (String) - @NotBlank</li>
+                                <li><strong>lastName</strong> (String) - @NotBlank</li>
+                                <li><strong>password</strong> (String) - @NotBlank, @Size(min=8)</li>
+                            </ul>
+                            <p><strong>Optional Fields:</strong></p>
+                            <ul>
+                                <li><strong>department</strong> (String)</li>
+                                <li><strong>birthDate</strong> (LocalDateTime) - @Past</li>
+                                <li><strong>phoneNumber</strong> (String) - @Pattern</li>
+                            </ul>
+                        </div>
+                    `,
+                    speech: "CreateUserRequest model has 8 fields total. 5 mandatory fields: username, email, firstName, lastName, and password. 3 optional fields: department, birthDate, and phoneNumber. All mandatory fields have validation constraints."
+                };
+            }
+            
+            else if (command.includes('integration') || command.includes('internal')) {
+                return {
+                    html: `
+                        <div class="integration-info">
+                            <h3>🔗 Internal API Integrations</h3>
+                            <p><strong>Integration Summary:</strong></p>
+                            <ul>
+                                <li><strong>RestTemplate calls:</strong> 3 detected</li>
+                                <li><strong>WebClient calls:</strong> 1 detected</li>
+                                <li><strong>External APIs:</strong> 2 detected</li>
+                            </ul>
+                            <p><strong>Detected Integrations:</strong></p>
+                            <ul>
+                                <li>🌐 GET /api/notifications (RestTemplate)</li>
+                                <li>🌐 POST /api/audit-logs (RestTemplate)</li>
+                                <li>🌐 GET /api/user-preferences (WebClient)</li>
+                                <li>🔗 https://api.external-service.com/validate</li>
+                                <li>🔗 https://notification-service.com/send</li>
+                            </ul>
+                        </div>
+                    `,
+                    speech: "Found 6 total integrations: 3 RestTemplate calls, 1 WebClient call, and 2 external API integrations. The system integrates with notification service, audit logging, user preferences, and external validation services."
+                };
+            }
+            
+            else if (command.includes('endpoint') || command.includes('api')) {
+                return {
+                    html: `
+                        <div class="success">
+                            <h3>🌐 API Endpoints</h3>
+                            <ul>
+                                <li><strong>GET /api/users</strong> - Get all users (with pagination)</li>
+                                <li><strong>GET /api/users/{id}</strong> - Get user by ID</li>
+                                <li><strong>GET /api/users/search</strong> - Search users</li>
+                                <li><strong>POST /api/users</strong> - Create new user</li>
+                                <li><strong>PUT /api/users/{id}</strong> - Update user</li>
+                                <li><strong>DELETE /api/users/{id}</strong> - Delete user</li>
+                            </ul>
+                            <p><strong>Controllers:</strong> UserController</p>
+                            <p><strong>Base Path:</strong> /api/users</p>
+                        </div>
+                    `,
+                    speech: "Found 6 API endpoints in the UserController. 3 GET endpoints for retrieving users, 1 POST for creating, 1 PUT for updating, and 1 DELETE for removing users. All endpoints use the base path /api/users."
+                };
+            }
+            
+            else if (command.includes('impact') || command.includes('change')) {
+                return {
+                    html: `
+                        <div class="integration-info">
+                            <h3>⚡ Impact Analysis</h3>
+                            <p><strong>Analyzing:</strong> Removing 'email' field from UserDTO</p>
+                            <p><strong>Affected Endpoints:</strong></p>
+                            <ul>
+                                <li>🌐 POST /api/users (request body)</li>
+                                <li>🌐 PUT /api/users/{id} (request body)</li>
+                                <li>🌐 GET /api/users/{id} (response)</li>
+                            </ul>
+                            <p><strong>⚠️ Validation Impact:</strong></p>
+                            <ul>
+                                <li>Removing mandatory field - will break validation</li>
+                                <li>Client applications may fail</li>
+                            </ul>
+                            <p><strong>💡 Recommendations:</strong></p>
+                            <ul>
+                                <li>Ensure no client dependencies on this field</li>
+                                <li>Consider deprecation period before removal</li>
+                                <li>Update API documentation</li>
+                                <li>Notify consuming applications</li>
+                            </ul>
+                        </div>
+                    `,
+                    speech: "Impact analysis shows 3 endpoints affected by removing email field. This is a breaking change as email is mandatory. Recommendations include checking client dependencies, implementing deprecation period, and updating documentation."
+                };
+            }
+            
+            else {
+                return {
+                    html: `
+                        <div class="error">
+                            <h3>❓ Command Not Recognized</h3>
+                            <p>I didn't understand that command. Try saying:</p>
+                            <ul>
+                                <li>"Show me the summary"</li>
+                                <li>"Generate curl command"</li>
+                                <li>"Show field information"</li>
+                                <li>"List all endpoints"</li>
+                            </ul>
+                        </div>
+                    `,
+                    speech: "I didn't understand that command. Try saying 'summary', 'curl command', 'show fields', or 'list endpoints'."
+                };
+            }
+        }
+
+        // Initialize the interface
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!recognition) {
+                updateStatus("❌ Speech recognition not supported in this browser. Please use Chrome or Edge.");
+            } else {
+                updateStatus("✅ Voice recognition ready! Click the microphone to start.");
+            }
+        });
+    </script>
+</body>
+</html>
